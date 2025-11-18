@@ -1,26 +1,58 @@
+@import "tailwindcss/preflight";
+@import "tailwindcss/theme";
+@import "tailwindcss/utilities";
 @import "tailwindcss";
+@source "./components/**/*.{js,ts,jsx,tsx}";
+
+@theme {
+  --background-secondary: #121212;
+  --background: black;
+  --foreground: #171717;
+  --color-green: #25A26A;
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #CCCCCC;
+  --font-inter: 'Inter', sans-serif;
+  --font-opensans: 'Open Sans', sans-serif;
+}
 
 :root {
-  --background: #ffffff;
+  --background-secondary: #121212;
+  --background: black;
   --foreground: #171717;
+  --color-green: #25A26A;
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #CCCCCC;
+  --font-inter: 'Inter', sans-serif;
+  --font-opensans: 'Open Sans', sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
 
 body {
   background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--color-text-primary);
+  font-family: var(--font-inter);
+  scroll-behavior: smooth;
+}
+
+.base-button {
+  padding: 5px 15px; 
+  border-radius: 0.375rem; 
+  background: var(--color-green);
+  color: white;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.base-button:hover {
+  background: #2ECC71;
+  color: #0a0a0a;
+  box-shadow: 0 0 12px rgba(46, 204, 113, 0.4);
+}
+
+.base-button:active {
+  transform: scale(0.95);
+}
+
+.scrollbar-hidden {
+    scrollbar-width: none;
 }
