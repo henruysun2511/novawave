@@ -1,4 +1,3 @@
-
 export default function AdvertisementBanner() {
     return (
         <div className="relative w-full h-100 md:h-100 rounded-2xl overflow-hidden shadow-lg">
@@ -17,8 +16,11 @@ export default function AdvertisementBanner() {
                 </h1>
 
                 <h3 className="text-sm text-text-secondary md:text-lg font-medium max-w-3xl opacity-90 mb-6 color-[var(--text-secondary)]">
-                    Volna là nền tảng phát nhạc trực tuyến được thiết kế để đưa bạn đắm chìm vào một thế giới âm thanh không giới hạn. Với thư viện khổng lồ gồm hàng triệu bài hát từ mọi thể loại, từ Pop, Rock đến Lo-fi và nhạc Cổ điển, Volna đảm bảo bạn sẽ luôn tìm thấy "con sóng" âm nhạc phù hợp với tâm trạng của mình.
+                    Volna là nền tảng phát nhạc trực tuyến được thiết kế để đưa bạn đắm chìm vào một thế giới âm thanh không giới hạn.
+                    Với thư viện khổng lồ gồm hàng triệu bài hát từ mọi thể loại, từ Pop, Rock đến Lo-fi và nhạc Cổ điển,
+                    Volna đảm bảo bạn sẽ luôn tìm thấy &quot;con sóng&quot; âm nhạc phù hợp với tâm trạng của mình.
                 </h3>
+
                 <div className="flex gap-4 mt-4">
                     <div className="base-button">Khám phá ngay</div>
                     <div className="base-button !bg-gray-500">Nghe nhạc nào</div>
