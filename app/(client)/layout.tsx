@@ -1,36 +1,64 @@
+"use client";
 import Header from "@/components/client/header/header";
 import SideBar from "@/components/client/sidebar/sidebar";
 import SongBar from "@/components/client/SongBar/song-bar";
 import SongInfo from "@/components/client/SongInfo/song-info";
 import { Splitter } from "antd";
+import { useState } from "react";
 
 
-export default function ClientLayout({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
+export default function ClientLayout({ children }: { children: React.ReactNode }) {
+    const [isPlayingView, setIsPlayingView] = useState(true);
+    const [middleSize, setMiddleSize] = useState("70%");
+
+    const togglePlayingView = () => {
+        setIsPlayingView(prev => {
+            const newValue = !prev;
+            setMiddleSize(newValue ? "70%" : "85%");
+            return newValue;
+        });
+    };
+
     return (
         <>
-            <Header />
-            <Splitter lazy style={{ gap: "5px", height: "100vh", boxShadow: '0 0 10px rgba(0,0,0,0.1)' }}>
-                <Splitter.Panel>
-                    <SideBar />
-                </Splitter.Panel>
+            <div className="pb-16">
+                <Header />
 
-                <Splitter.Panel defaultSize="70%" min="65%" max="70%">
-                    <div className="h-full p-6 bg-[var(--background-secondary)] rounded-2xl overflow-y-auto scrollbar-hidden">
-                        {children}
-                    </div>
-                </Splitter.Panel>
+                <Splitter
+                    lazy
+                    style={{
+                        height: "100vh",
+                        gap: "5px",
+                    }}
+                    key={middleSize} // để render lại khi size thay đổi
+                >
+                    {/* Panel Sidebar */}
+                    <Splitter.Panel min="10%">
+                        <SideBar />
+                    </Splitter.Panel>
 
-                <Splitter.Panel>
-                    <SongInfo />
-                </Splitter.Panel>
+                    {/* Panel chính */}
+                    <Splitter.Panel defaultSize={middleSize} min="65%">
+                        <div className="h-full p-6 bg-custom-gradient rounded-2xl overflow-y-auto scrollbar-hidden">
+                            {children}
+                        </div>
+                    </Splitter.Panel>
 
-            </Splitter>
+                    {/* Panel Song Info */}
+                    {isPlayingView && (
+                        <Splitter.Panel min="15%">
+                            <SongInfo
+                                setIsPlayingView={setIsPlayingView}
+                                setMiddleSize={setMiddleSize}
+                            />
+                        </Splitter.Panel>
+                    )}
+                </Splitter>
 
-            <SongBar />
+                <SongBar togglePlayingView={togglePlayingView} />
+            </div>
+
         </>
     );
 }
+

@@ -25,6 +25,7 @@ export default function HomePage() {
                 <SwiperSlide><AdvertisementBanner /></SwiperSlide>
                 <SwiperSlide><AdvertisementBanner /></SwiperSlide>
             </Swiper>
+            
         </>
     )
 }

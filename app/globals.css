@@ -13,10 +13,13 @@
   --color-text-secondary: #CCCCCC;
   --font-inter: 'Inter', sans-serif;
   --font-opensans: 'Open Sans', sans-serif;
+  --background-tertiary: #1F1F1F;
+  --background-gradient: linear-gradient(180deg, #1e1e1e 0%, #3a3a3a 100%);
 }
 
 :root {
   --background-secondary: #121212;
+  --background-tertiary: #1F1F1F;
   --background: black;
   --foreground: #171717;
   --color-green: #25A26A;
@@ -24,8 +27,20 @@
   --color-text-secondary: #CCCCCC;
   --font-inter: 'Inter', sans-serif;
   --font-opensans: 'Open Sans', sans-serif;
+  --background-gradient: linear-gradient(180deg,
+      /* Góc 180 độ: Chuyển màu từ Trên xuống Dưới */
+      #113320 0%,
+      /* Màu xanh lá đậm (TOP) */
+      #268d7c 10%,
+      /* Màu xanh ngọc (GIỮA) */
+      black 60%
+      /* Màu đen đậm (BOTTOM) */
+    );
 }
 
+.bg-custom-gradient {
+  background: var(--background-gradient);
+}
 
 body {
   background: var(--background);
@@ -35,8 +50,8 @@ body {
 }
 
 .base-button {
-  padding: 5px 15px; 
-  border-radius: 0.375rem; 
+  padding: 5px 15px;
+  border-radius: 0.375rem;
   background: var(--color-green);
   color: white;
   transition: 0.2s;
@@ -54,5 +69,5 @@ body {
 }
 
 .scrollbar-hidden {
-    scrollbar-width: none;
+  scrollbar-width: none;
 }
