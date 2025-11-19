@@ -58,7 +58,7 @@ export default function SongInfo({
                         </div>
                         <p className="text-sm text-text-primary mb-2">843.599 lượt nghe hàng tháng</p>
                         <p className="text-sm text-gray-400 line-clamp-5">
-                            Quân A.P, tên thật là Phạm Anh Quân, là một nam ca sĩ người Việt sinh năm 1997 tại Hà Nội. Anh nổi tiếng với những bản hit như "Bông Hoa Đẹp Nhất", "Tự Nắm Tay Mình" và được biết đến với biệt danh "hotboy cover" nhờ những video cover ca khúc triệu view trước khi chính thức ra mắt. Quân A.P từng theo học tại trường Đại học Văn hóa Nghệ thuật Quân đội và là một trong những gương mặt nổi bật trong chương trình "Anh trai say hi" năm 2024.
+                            Quân A.P, tên thật là Phạm Anh Quân, là một nam ca sĩ người Việt sinh năm 1997 tại Hà Nội. Anh nổi tiếng với những bản hit như &quot;Bông Hoa Đẹp Nhất&quot;, &quot;Tự Nắm Tay Mình&quot; và được biết đến với biệt danh &quot;hotboy cover&quot; nhờ những video cover ca khúc triệu view trước khi chính thức ra mắt. Quân A.P từng theo học tại trường Đại học Văn hóa Nghệ thuật Quân đội và là một trong những gương mặt nổi bật trong chương trình &quot;Anh trai say hi&quot; năm 2024.
                         </p>
                     </div>
 
