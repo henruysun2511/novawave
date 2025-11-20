@@ -72,21 +72,7 @@ body {
   scrollbar-width: none;
 }
 
-.custom-scrollbar::-webkit-scrollbar {
-  width: 6px; /* mỏng */
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent; /* nền trong suốt hoặc màu nhạt */
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #22c55e; /* màu xanh lá Tailwind: green-500 */
-  border-radius: 9999px; /* bo tròn */
-}
-
-.custom-scrollbar {
-  scrollbar-width: thin; /* Firefox */
-  scrollbar-color: #22c55e transparent; /* Firefox */
+.spin-slow {
+  animation: spin 8s linear infinite;
 }
 
