@@ -1,0 +1,22 @@
+.custom-search .ant-input {
+  background-color: var(--background-secondary);
+  color: var(--text-primary);
+}
+
+.custom-search .ant-input::placeholder {
+  color: #9ca3af; 
+}
+
+.custom-search .ant-input-affix-wrapper {
+  background-color: var(--background-secondary) !important;
+  border: 1px solid #333 !important;
+}
+
+.custom-search .ant-input-affix-wrapper:hover {
+  border-color: var(--color-green) !important; 
+}
+
+.custom-search .ant-input-affix-wrapper-focused {
+  border-color: var(--color-green) !important;
+  box-shadow: 0 0 0 2px #4ade8040 !important;
+}

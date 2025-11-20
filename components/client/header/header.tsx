@@ -1,6 +1,7 @@
 "use client";
 import { Input } from 'antd';
 import Image from "next/image";
+import "./header.css";
 const { Search } = Input;
 
 export default function Header() {
@@ -13,7 +14,7 @@ export default function Header() {
                     width={180}
                     height={180}
                 />
-                <Search placeholder="Tìm kiếm nhạc, nghệ sĩ, playlist,..." allowClear style={{ width: 550 }} />
+                <Search className="custom-search" size='large' placeholder="Tìm kiếm nhạc, nghệ sĩ, playlist,..." allowClear style={{ width: 550 }} />
                 <div>Hello</div>
             </div>
         </>
