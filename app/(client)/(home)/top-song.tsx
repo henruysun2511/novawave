@@ -160,6 +160,30 @@ export default function TopSong() {
                     </div>
                 </SwiperSlide>
 
+                <SwiperSlide>
+                    <div className="group">
+                        <div className="relative w-auto h-[350px] cursor-pointer">
+                            <img className="w-full h-full rounded-xl object-cover" src="https://scontent.fhan2-5.fna.fbcdn.net/v/t39.30808-1/546617141_1496590621689993_3736762245137912437_n.jpg?stp=c0.626.1149.1149a_dst-jpg_s480x480_tt6&_nc_cat=104&ccb=1-7&_nc_sid=e99d92&_nc_eui2=AeFDYMVR_8W1H05y5TM9axv5jkpvJLNB6d-OSm8ks0Hp30CFB7ORln1Pzfoo2bELwLC-VeLn0D7Xm1fcS7dDNK_j&_nc_ohc=HAkv9Z2G-UwQ7kNvwG3m8xZ&_nc_oc=AdlOKWKOsvhBoNSU6i2Pt1Z7qAtA3tQL_NGwrSqyOLo5WqH7hUm8tBazlrNLSt6cgR67GO3_SFCSxyndqpFrDb5W&_nc_zt=24&_nc_ht=scontent.fhan2-5.fna&_nc_gid=j9QrJDYoVzh7v7aB3i-LFw&oh=00_AfggHcF_0A4Ph20VaxR61bQeugoh_USMylH6XOkFScc7ng&oe=692506AB" alt="" />
+
+                            <div className="absolute inset-0  bg-black/40 rounded-xl opacity-0  group-hover:opacity-100 transition"></div>
+
+                            <div className="absolute inset-0 flex items-center justify-center opacity-0  group-hover:opacity-100 transition">
+                                <div className="w-12 h-12 rounded-full bg-green flex items-center justify-center shadow-lg">
+                                    <CaretRightFilled className="text-3xl" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center gap-4">
+                            <h1 className="text-6xl font-extrabold text-green">#6</h1>
+                            <div>
+                                <h3 className="text-lg font-semibold mt-2 text-text-primary">Tương tư nàng nhân viên</h3>
+                                <p className="text-text-secondary">TuTaiLen</p>
+                            </div>
+                        </div>
+                    </div>
+                </SwiperSlide>
+
             </Swiper>
         </>
     );
