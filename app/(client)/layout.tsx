@@ -39,7 +39,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
                     {/* Panel chính */}
                     <Splitter.Panel defaultSize={middleSize} min="65%">
-                        <div className="h-full p-6 bg-custom-gradient rounded-2xl overflow-y-auto scrollbar-hidden">
+                        <div className="h-full bg-custom-gradient rounded-2xl overflow-y-auto scrollbar-hidden">
                             {children}
                         </div>
                     </Splitter.Panel>

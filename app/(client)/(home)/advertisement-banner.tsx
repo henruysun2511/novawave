@@ -5,7 +5,7 @@ export default function AdvertisementBanner() {
                 <img
                     className="w-full h-full object-cover"
                     src="https://i.pinimg.com/1200x/29/a7/68/29a768352314cb44d1c9984eacdef30b.jpg"
-                    alt="Volna Music Background"
+                    alt="Novawave Music Background"
                 />
             </div>
 
@@ -16,9 +16,9 @@ export default function AdvertisementBanner() {
                 </h1>
 
                 <h3 className="text-sm text-text-secondary md:text-lg font-medium max-w-3xl opacity-90 mb-6 color-[var(--text-secondary)]">
-                    Volna là nền tảng phát nhạc trực tuyến được thiết kế để đưa bạn đắm chìm vào một thế giới âm thanh không giới hạn.
+                    Novawave là nền tảng phát nhạc trực tuyến được thiết kế để đưa bạn đắm chìm vào một thế giới âm thanh không giới hạn.
                     Với thư viện khổng lồ gồm hàng triệu bài hát từ mọi thể loại, từ Pop, Rock đến Lo-fi và nhạc Cổ điển,
-                    Volna đảm bảo bạn sẽ luôn tìm thấy &quot;con sóng&quot; âm nhạc phù hợp với tâm trạng của mình.
+                    Novawave đảm bảo bạn sẽ luôn tìm thấy &quot;con sóng&quot; âm nhạc phù hợp với tâm trạng của mình.
                 </h3>
 
                 <div className="flex gap-4 mt-4">
