@@ -1,15 +1,11 @@
 "use client";
+import { useSidebarStore } from "@/stores/useSidebarStore";
 import { MenuFoldOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
-import React from "react";
 
-export default function SongInfo({
-    setIsPlayingView,
-    setMiddleSize
-}: {
-    setIsPlayingView: React.Dispatch<React.SetStateAction<boolean>>;
-    setMiddleSize: React.Dispatch<React.SetStateAction<string>>;
-}) {
+export default function SongInfo() {
+    const hidePanel = useSidebarStore((s) => s.hideRightPanel);
+
     return (
         <div className="bg-[var(--background-secondary)] rounded-2xl overflow-scroll scrollbar-hidden w-full h-full">
             {/* Video nền */}
@@ -27,10 +23,7 @@ export default function SongInfo({
                 <Tooltip title="Ẩn chế độ xem Đang phát" placement="right">
                     <MenuFoldOutlined
                         className="absolute top-5 left-5 z-20 text-white cursor-pointer"
-                        onClick={() => {
-                            setIsPlayingView(false);
-                            setMiddleSize("85%");
-                        }}
+                        onClick={hidePanel}
                     />
                 </Tooltip>
             </div>
@@ -72,7 +65,7 @@ export default function SongInfo({
                             Theo dõi
                         </button>
                     </div>
-                     <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center justify-between mb-3">
                         <h3 className="text-base text-text-primary">Đặng Tú</h3>
                         <button className="px-3 py-1 bg-green text-white rounded-full text-sm cursor-pointer">
                             Theo dõi

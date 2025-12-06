@@ -5,3 +5,18 @@
 .ant-menu-item:hover {
     background-color: rgba(168, 207, 168, 0.777) !important;
 }
+
+
+.ant-segmented {
+  background-color: transparent;
+}
+
+.ant-segmented-item {
+  color: white;
+  font-weight: 500;
+}
+
+.ant-segmented-item-selected {
+  background-color: var(--color-green); 
+  color: black;
+}

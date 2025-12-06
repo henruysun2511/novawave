@@ -1,0 +1,109 @@
+"use client";
+
+import { useLoginMutation } from "@/queries/useAuth";
+import { LoginDto } from "@/types/body.type";
+import { Button, Form, Input, message } from "antd";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+
+export default function LoginPage() {
+    const router = useRouter();
+    const { mutate, isPending } = useLoginMutation();
+
+
+    const handleLogin = (values: LoginDto) => {
+        mutate(values, {
+            onSuccess: () => {
+                message.success("Đăng nhập thành công!");
+                router.push("/");
+            },
+            onError: (err: any) => {
+                const msg =
+                    err?.response?.data?.message || "Đăng nhập thất bại, vui lòng thử lại";
+                message.error(msg);
+            },
+        });
+    };
+
+    return (
+        <>
+            <div className="flex w-screen h-screen justify-center items-center bg-[var(--background-primary)]">
+                <div className="bg-black p-10 w-full max-w-md flex flex-col items-center gap-4 rounded-3xl shadow-2xl">
+
+                    {/* Logo */}
+                    <Image
+                        src="/images/logo.png"
+                        alt="Logo"
+                        width={180}
+                        height={180}
+                        className="mb-5"
+                    />
+
+                    {/* Form */}
+                    <Form
+                        name="basic"
+                        layout="vertical"
+                        style={{ width: "100%" }}
+                        initialValues={{ remember: true }}
+                        onFinish={handleLogin}
+                        autoComplete="off"
+                        className="space-y-2"
+                    >
+                        <Form.Item<LoginDto>
+
+                            name="username"
+                            rules={[{ required: true, message: 'Vui lòng nhập username!' }]}
+                        >
+                            <Input
+                                placeholder="Nhập username..."
+                                className="h-11 rounded-xl"
+                            />
+                        </Form.Item>
+
+                        <Form.Item<LoginDto>
+
+                            name="password"
+                            rules={[{ required: true, message: 'Vui lòng nhập password!' }]}
+                        >
+                            <Input.Password
+                                placeholder="Nhập mật khẩu..."
+                                className="h-11 rounded-xl"
+                            />
+                        </Form.Item>
+
+                        <Button
+                            className="w-full h-11 bg-green hover:bg-green/90 font-semibold rounded-xl"
+                            size="large"
+                            type="primary"
+                            htmlType="submit"
+                        >
+                            Đăng nhập
+                        </Button>
+                    </Form>
+
+                    {/* Divider */}
+                    <div className="flex items-center gap-3 my-6 w-full">
+                        <div className="h-[1px] flex-1 bg-gray-300/30" />
+                        <p className="text-sm text-gray-400">Hoặc</p>
+                        <div className="h-[1px] flex-1 bg-gray-300/30" />
+                    </div>
+
+                    {/* Google login */}
+                    <div className="flex gap-3 items-center justify-center w-full p-3 rounded-xl bg-white hover:bg-gray-100 transition cursor-pointer">
+                        <img
+                            className="w-[22px] h-[22px]"
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJBW9gugHuiK0748qr9vZHrlIqdiDdfuEYVw&s"
+                            alt=""
+                        />
+                        <p className="text-sm text-black font-semibold">Đăng nhập với Google</p>
+                    </div>
+
+                    <p>Chưa có tài khoản? <span className="text-green cursor-pointer">Đăng ký</span></p>
+
+                </div>
+            </div>
+
+
+        </>
+    );
+}

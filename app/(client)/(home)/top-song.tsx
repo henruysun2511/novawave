@@ -175,7 +175,7 @@ export default function TopSong() {
                         </div>
 
                         <div className="flex items-center gap-4">
-                            <h1 className="text-6xl font-extrabold text-green">#6</h1>
+                            <h1 className="text-6xl font-extrabold text-green">#7</h1>
                             <div>
                                 <h3 className="text-lg font-semibold mt-2 text-text-primary">Tương tư nàng nhân viên</h3>
                                 <p className="text-text-secondary">TuTaiLen</p>
