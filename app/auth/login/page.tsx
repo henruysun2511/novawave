@@ -16,12 +16,7 @@ export default function LoginPage() {
             onSuccess: () => {
                 message.success("Đăng nhập thành công!");
                 router.push("/");
-            },
-            onError: (err: any) => {
-                const msg =
-                    err?.response?.data?.message || "Đăng nhập thất bại, vui lòng thử lại";
-                message.error(msg);
-            },
+            }
         });
     };
 
