@@ -6,6 +6,10 @@ import axios, {
   AxiosResponse,
 } from "axios";
 
+interface RetryAxiosRequestConfig extends AxiosRequestConfig {
+  _retry?: boolean;
+}
+
 const baseURL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000/api";
 
 const axiosClient: AxiosInstance = axios.create({
@@ -18,7 +22,7 @@ const axiosClient: AxiosInstance = axios.create({
 let isRefreshing = false;
 
 let failedQueue: {
-  resolve: (value?: AxiosResponse) => void;
+  resolve: (value: Promise<AxiosResponse>) => void;
   reject: (err: any) => void;
   config: AxiosRequestConfig;
 }[] = [];
@@ -56,7 +60,7 @@ axiosClient.interceptors.request.use((config) => {
 // Refresh on 401
 axiosClient.interceptors.response.use(
   (res) => res,
-  async (error: AxiosError & { config?: AxiosRequestConfig }) => {
+  async (error: AxiosError & { config?: RetryAxiosRequestConfig }) => {
     const originalConfig = error.config;
     if (!originalConfig) return Promise.reject(error);
 
