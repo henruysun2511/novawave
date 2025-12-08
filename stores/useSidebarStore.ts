@@ -1,4 +1,4 @@
-import { PlayerState } from "@/types/state";
+import { PlayerState } from "@/types/state.type";
 import { create } from "zustand";
 
 export const useSidebarStore = create<PlayerState>((set) => ({

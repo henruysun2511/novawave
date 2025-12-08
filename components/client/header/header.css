@@ -20,3 +20,32 @@
   border-color: var(--color-green) !important;
   box-shadow: 0 0 0 2px #4ade8040 !important;
 }
+
+
+.dark-dropdown .ant-dropdown-menu {
+  background-color: var(--background-tertiary) !important;
+  border-radius: 12px;
+}
+
+/* Text mặc định */
+.dark-dropdown .ant-dropdown-menu-item,
+.dark-dropdown .ant-dropdown-menu-item span,
+.dark-dropdown .ant-dropdown-menu-title-content {
+  color: #ffffff !important;
+}
+
+/* Hover */
+.dark-dropdown .ant-dropdown-menu-item:hover,
+.dark-dropdown .ant-dropdown-menu-item-active {
+  background-color: #0f172a !important;
+}
+
+.dark-dropdown .ant-dropdown-menu-item:hover span,
+.dark-dropdown .ant-dropdown-menu-item-active span {
+  color: #ffffff !important;
+}
+
+.dark-dropdown .ant-dropdown-menu-item:hover {
+  background-color: #0f172a !important;
+  color: white;
+}

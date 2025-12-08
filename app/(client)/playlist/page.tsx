@@ -3,7 +3,7 @@ export default function PlaylistPage() {
         <>
             <div className="relative w-full h-[450px]">
                 <img
-                    src="https://i.pinimg.com/1200x/d2/db/46/d2db46bec14fd1ad56d883140f4ddd64.jpg"
+                    src="https://i.pinimg.com/1200x/84/5b/c7/845bc74d9403f7bf2a77ead71d01a9a7.jpg"
                     alt="Logo"
                     className="w-full h-full object-cover rounded-2xl"
                 />

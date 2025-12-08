@@ -1,40 +1,47 @@
 "use client";
 
 import { useAuthStore } from "@/stores/useAuthStore";
+import { JwtPayload } from "@/types/body.type";
+import { jwtDecode, } from "jwt-decode";
 import { useEffect, useState } from "react";
+
 
 export default function AuthInitializer({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const setAccessToken = useAuthStore((s) => s.setAccessToken);
-  const setUser = useAuthStore((s) => s.setUser);
-
+  const { setAuth, logout } = useAuthStore();
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
     const token = sessionStorage.getItem("accessToken");
+
     if (!token) {
       setReady(true);
       return;
     }
 
-    // Set token vào Zustand
-    setAccessToken(token);
+    try {
+      const user = jwtDecode<JwtPayload>(token);
 
-    // Fetch thông tin người dùng
-    // authService
-    //   .me()
-    //   .then((user) => {
-    //     setUser(user);
-    //   })
-    //   .finally(() => {
-    //     setReady(true);
-    //   });
-  }, []);
+      if (user.exp * 1000 < Date.now() + 30_000) {
+        logout();
+        sessionStorage.removeItem("accessToken");
+        setReady(true);
+        return;
+      }
 
-  if (!ready) return null; 
+      setAuth(token, user);
+    } catch {
+      logout();
+      sessionStorage.removeItem("accessToken");
+    } finally {
+      setReady(true);
+    }
+  }, [setAuth, logout]);
+
+  if (!ready) return null; // hoặc loading
 
   return <>{children}</>;
 }

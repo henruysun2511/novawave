@@ -1,5 +1,5 @@
 "use client";
-import { BookOutlined, CalendarOutlined, FormatPainterOutlined, HomeOutlined, PlayCircleOutlined, ProductOutlined, SettingOutlined, UserOutlined } from "@ant-design/icons";
+import { BookOutlined, FormatPainterOutlined, HomeOutlined, PlayCircleOutlined, SettingOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Menu, MenuProps } from "antd";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -54,22 +54,6 @@ export default function SideBar() {
             ]
         },
         {
-            key: '4', icon: <CalendarOutlined />, label: <span className="text-lg font-semibold">Sự kiện</span>, children: [
-                {
-                    key: '/admin/profile', label: <span className="text-lg font-semibold">Tổng quan</span>
-                },
-                {
-                    key: '/admin/account', label: <span className="text-lg font-semibold">Quản lý sự kiện</span>
-                },
-                {
-                    key: '/admin/account', label: <span className="text-lg font-semibold">Quản lý thể loại vé</span>
-                },
-                {
-                    key: '/admin/account', label: <span className="text-lg font-semibold">Quản lý hóa đơn vé</span>
-                }
-            ]
-        },
-        {
             key: '5', icon: <BookOutlined />, label: <span className="text-lg font-semibold">Bài viết</span>, children: [
                 {
                     key: '/admin/profile', label: <span className="text-lg font-semibold">Tổng quan</span>
@@ -86,22 +70,6 @@ export default function SideBar() {
                 },
                 {
                     key: '/admin/account', label: <span className="text-lg font-semibold">Quản lý quảng cáo</span>
-                }
-            ]
-        },
-        {
-            key: '7', icon: <ProductOutlined />, label: <span className="text-lg font-semibold">Sản phẩm</span>, children: [
-                {
-                    key: '/admin/profile', label: <span className="text-lg font-semibold">Tổng quan</span>
-                },
-                {
-                    key: '/admin/account', label: <span className="text-lg font-semibold">Quản lý sản phẩm</span>
-                },
-                {
-                    key: '/admin/account', label: <span className="text-lg font-semibold">Quản lý thể loại sản phẩm</span>
-                },
-                {
-                    key: '/admin/account', label: <span className="text-lg font-semibold">Quản lý đơn hàng</span>
                 }
             ]
         },

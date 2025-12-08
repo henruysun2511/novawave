@@ -1,3 +1,5 @@
+import { JwtPayload } from "jwt-decode";
+
 type RightPanelMode = "info" | "queue" | "hidden";
 
 export interface PlayerState {
@@ -9,18 +11,11 @@ export interface PlayerState {
   hideRightPanel: () => void;
 }
 
-export type User = {
-  id: string;
-  name?: string;
-  email?: string;
-  [k: string]: any;
-};
 
 export interface AuthState {
+  isAuthenticated: boolean,
   accessToken: string | null;
-  user: User | null;
-  setAuth: (accessToken: string, user?: User | null) => void;
-  setAccessToken: (token: string | null) => void;
-  setUser: (user: User | null) => void;
+  user: JwtPayload | null;
+  setAuth: (token: string, user: JwtPayload) => void;
   logout: () => void;
 }

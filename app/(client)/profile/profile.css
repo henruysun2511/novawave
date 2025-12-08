@@ -1,0 +1,44 @@
+.profile-tabs {
+  padding: 0 24px;
+}
+
+/* Nav */
+.profile-tabs .ant-tabs-nav {
+  margin-bottom: 24px;
+}
+
+/* Tab item */
+.profile-tabs .ant-tabs-tab {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 18px;
+  font-weight: 600;
+  padding: 12px 24px;
+  transition: all 0.3s;
+}
+
+/* Hover */
+.profile-tabs .ant-tabs-tab:hover {
+  color: var(--color-green);
+}
+
+/* Active */
+.profile-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: var(--color-green);;
+}
+
+/* Ink bar */
+.profile-tabs .ant-tabs-ink-bar {
+  background: var(--color-green);;
+  height: 3px;
+  border-radius: 999px;
+}
+
+/* Remove bottom border */
+.profile-tabs .ant-tabs-nav::before {
+  border-bottom: none;
+}
+
+/* Content */
+.profile-tabs .ant-tabs-content {
+  color: white;
+}

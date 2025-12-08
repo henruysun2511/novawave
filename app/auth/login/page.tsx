@@ -1,21 +1,28 @@
 "use client";
 
-import { useLoginMutation } from "@/queries/useAuth";
+import { useToast } from "@/libs/toast";
+import { useLoginMutation } from "@/queries/useAuthQuery";
 import { LoginDto } from "@/types/body.type";
-import { Button, Form, Input, message } from "antd";
+import { Button, Form, Input } from "antd";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
     const router = useRouter();
     const { mutate, isPending } = useLoginMutation();
-
+    const toast = useToast();
 
     const handleLogin = (values: LoginDto) => {
         mutate(values, {
             onSuccess: () => {
-                message.success("Đăng nhập thành công!");
-                router.push("/");
+                toast.success("Đăng nhập thành công");
+                setTimeout(() => {
+                    router.push("/");
+                }, 2000);
+            },
+            onError: (error) => {
+                const err = error as any;
+                toast.error(err?.response?.data?.message);
             }
         });
     };
@@ -72,7 +79,7 @@ export default function LoginPage() {
                             type="primary"
                             htmlType="submit"
                         >
-                            Đăng nhập
+                            {isPending ? "Đang tiến hành đăng nhập" : "Đăng nhập"}
                         </Button>
                     </Form>
 

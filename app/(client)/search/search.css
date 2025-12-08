@@ -1,0 +1,44 @@
+.pill-tabs .ant-tabs-nav {
+  margin-bottom: 0;
+}
+
+.pill-tabs .ant-tabs-ink-bar {
+  display: none;
+}
+
+.pill-tabs .ant-tabs-tab {
+  background: #2a2a2a;
+  color: white;
+  border-radius: 999px;
+  padding: 6px 16px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.pill-tabs .ant-tabs-tab:hover {
+  background: #3a3a3a;
+  color: var(--color-green);
+}
+
+/* Tab đang chọn */
+.pill-tabs .ant-tabs-tab.ant-tabs-tab-active {
+  background: white;
+}
+
+.pill-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: black;
+}
+
+.pill-tabs .ant-tabs-ink-bar {
+  display: none !important;
+}
+
+/* Bỏ border dưới của thanh tab */
+.pill-tabs .ant-tabs-nav::before {
+  border-bottom: none !important;
+}
+
+/* Optional: bỏ margin mặc định */
+.pill-tabs .ant-tabs-nav {
+  margin-bottom: 0;
+}
