@@ -1,6 +1,5 @@
 import http from "@/libs/http";
-import { LoginDto, LoginRes } from "@/types/body.type";
-import { ApiResponse } from './../../lexo-fe/src/types/api-response';
+import { ApiResponse, LoginDto, LoginRes } from "@/types/body.type";
 
 
 
