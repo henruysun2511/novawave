@@ -4,12 +4,14 @@ import SideBar from "@/components/client/sidebar/sidebar";
 import SongBar from "@/components/client/SongBar/song-bar";
 import SongInfo from "@/components/client/SongInfo/song-info";
 import SongQueue from "@/components/client/SongQueue/song-queue";
+import { useAuthStore } from "@/stores/useAuthStore";
 import { useSidebarStore } from "@/stores/useSidebarStore";
 
 import { Splitter } from "antd";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const { rightPanelMode, middleSize } = useSidebarStore();
+  const { isAuthenticated } = useAuthStore();
 
   return (
     <>
@@ -37,15 +39,19 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
           </Splitter.Panel>
 
           {/* Song Info */}
-          {rightPanelMode !== "hidden" && (
+          {isAuthenticated && rightPanelMode !== "hidden" && (
             <Splitter.Panel min="15%">
               {rightPanelMode === "info" && <SongInfo />}
               {rightPanelMode === "queue" && <SongQueue />}
             </Splitter.Panel>
           )}
+
         </Splitter>
 
-        <SongBar />
+        {
+          isAuthenticated && (<SongBar />)
+        }
+
       </div>
     </>
   );

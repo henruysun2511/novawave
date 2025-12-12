@@ -1,4 +1,3 @@
-import Header from "@/components/admin/header/header";
 import SideBar from "@/components/admin/sidebar/sidebar";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
@@ -10,8 +9,10 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
                     <SideBar />
                 </div>
                 <div className="w-[85%]">
-                    <Header />
-                    {children}
+                    {/* <Header /> */}
+                    <div className="px-10 py-15 bg-custom-gradient">
+                        {children}
+                    </div>
                 </div>
             </div>
         </>

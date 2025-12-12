@@ -10,7 +10,7 @@ interface RetryAxiosRequestConfig extends AxiosRequestConfig {
   _retry?: boolean;
 }
 
-const baseURL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001/api/v1";
+const baseURL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000/api";
 
 const axiosClient: AxiosInstance = axios.create({
   baseURL,
@@ -77,7 +77,7 @@ axiosClient.interceptors.response.use(
 
       try {
         const res = await axios.post(
-          `${baseURL}/auth/refresh`,
+          `${baseURL}/auth/refreshToken`,
           {},
           { withCredentials: true }
         );

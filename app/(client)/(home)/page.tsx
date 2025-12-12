@@ -6,7 +6,7 @@ import NewsList from "@/components/client/NewsList/news-list";
 import NewSongList from "@/components/client/NewSongList/newsong-list";
 import Vinyl from "@/components/client/SongInfo/vinyl";
 import SongList from "@/components/client/SongList/song-list";
-import Title from "@/components/client/ui/title";
+import Title from "@/components/ui/title";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Autoplay, Navigation } from "swiper/modules";

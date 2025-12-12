@@ -5,12 +5,14 @@ import { useLoginMutation } from "@/queries/useAuthQuery";
 import { LoginDto } from "@/types/body.type";
 import { Button, Form, Input } from "antd";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
     const router = useRouter();
     const { mutate, isPending } = useLoginMutation();
     const toast = useToast();
+    const baseURL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001/api/v1";
 
     const handleLogin = (values: LoginDto) => {
         mutate(values, {
@@ -26,6 +28,10 @@ export default function LoginPage() {
             }
         });
     };
+
+    const handleGoogleLogin = () => {
+        window.location.href = `${baseURL}/auth/google`;
+    }
 
     return (
         <>
@@ -72,6 +78,14 @@ export default function LoginPage() {
                                 className="h-11 rounded-xl"
                             />
                         </Form.Item>
+                        <div className="text-right">
+                            <Link
+                                href="/auth/forgotPassword"
+                                className="text-red-500 text-sm"
+                            >
+                                Quên mật khẩu?
+                            </Link>
+                        </div>
 
                         <Button
                             className="w-full h-11 bg-green hover:bg-green/90 font-semibold rounded-xl"
@@ -91,7 +105,7 @@ export default function LoginPage() {
                     </div>
 
                     {/* Google login */}
-                    <div className="flex gap-3 items-center justify-center w-full p-3 rounded-xl bg-white hover:bg-gray-100 transition cursor-pointer">
+                    <div onClick={handleGoogleLogin} className="flex gap-3 items-center justify-center w-full p-3 rounded-xl bg-white hover:bg-gray-100 transition cursor-pointer">
                         <img
                             className="w-[22px] h-[22px]"
                             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJBW9gugHuiK0748qr9vZHrlIqdiDdfuEYVw&s"
@@ -100,7 +114,8 @@ export default function LoginPage() {
                         <p className="text-sm text-black font-semibold">Đăng nhập với Google</p>
                     </div>
 
-                    <p>Chưa có tài khoản? <span className="text-green cursor-pointer">Đăng ký</span></p>
+                    <p className="text-text-primary">Chưa có tài khoản? <span className="text-green cursor-pointer">
+                        <Link href={'/auth/register'}>Đăng ký</Link></span></p>
 
                 </div>
             </div>

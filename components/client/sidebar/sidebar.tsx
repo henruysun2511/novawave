@@ -1,5 +1,5 @@
 "use client"
-import { Segmented, SegmentedProps, TabsProps } from "antd";
+import { Segmented, SegmentedProps } from "antd";
 import { useState } from "react";
 import MenuBar from "../MenuBar/menu-bar";
 import MyPlaylist from "../MyPlaylist/my-playlist";
@@ -8,19 +8,6 @@ import "./sidebar.css";
 type SegmentedValue = string | number;
 
 export default function SideBar() {
-    const items: TabsProps['items'] = [
-        {
-            key: '1',
-            label: 'Menu',
-            children: <MenuBar />,
-        },
-        {
-            key: '2',
-            label: 'Tab 2',
-            children: 'Content of Tab Pane 2',
-        }
-    ];
-
     const [active, setActive] = useState<SegmentedValue>("menu");
     const options: SegmentedProps["options"] = [
         { label: "Menu", value: "menu" },

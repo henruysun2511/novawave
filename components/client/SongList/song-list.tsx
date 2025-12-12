@@ -2,24 +2,24 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { Autoplay, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import SongCard from "./song-card";
+import { default as SongCard, default as SongCardUi } from "./song-card-ui";
 
 export default function SongList() {
     return (
         <>
             <div className="flex flex-wrap gap-4">
-                <SongCard />
-                <SongCard />
-                <SongCard />
-                <SongCard />
-                <SongCard />
-                <SongCard />
-                <SongCard />
-                <SongCard />
-                <SongCard />
-                <SongCard />
-                <SongCard />
-                <SongCard />
+                <SongCardUi />
+                <SongCardUi />
+                <SongCardUi />
+                <SongCardUi />
+                <SongCardUi />
+                <SongCardUi />
+                <SongCardUi />
+                <SongCardUi />
+                <SongCardUi />
+                <SongCardUi />
+                <SongCardUi />
+                <SongCardUi />
             </div>
 
             <Swiper

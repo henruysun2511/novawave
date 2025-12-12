@@ -16,6 +16,10 @@ const http = {
     return axiosClient.post<T>(url, data, { params: options?.params, headers: options?.headers, ...options?.config });
   },
 
+  patch<T = any>(url: string, data?: any, options?: HttpOptions) {
+    return axiosClient.patch<T>(url, data, { params: options?.params, headers: options?.headers, ...options?.config });
+  },
+
   put<T = any>(url: string, data?: any, options?: HttpOptions) {
     return axiosClient.put<T>(url, data, { params: options?.params, headers: options?.headers, ...options?.config });
   },

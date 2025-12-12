@@ -1,16 +1,47 @@
 "use client";
+import { useToast } from "@/libs/toast";
+import { useRegisterMutation } from "@/queries/useAuthQuery";
+import { Gender } from "@/types/constant.type";
 import { Button, DatePicker, Form, Input, Select } from "antd";
+import type { Dayjs } from "dayjs";
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-type FieldType = {
-    username?: string;
-    password?: string;
-    rePassword?: string;
-};
+interface RegisterFormValues {
+  username: string;
+  email: string;
+  password: string;
+  birthday: Dayjs;
+  gender: Gender;
+}
 
 export default function RegisterPage() {
-    const handleRegister = (values: FieldType) => {
-        console.log('Success:', values);
+    const router = useRouter();
+    const { mutate, isPending } = useRegisterMutation();
+    const toast = useToast();
+
+    const handleRegister = (values: RegisterFormValues) => {
+        const payload = {
+            username: values.username,
+            email: values.email,
+            password: values.password,
+            gender: values.gender,
+            birthday: values.birthday.format("YYYY-MM-DD"),
+        };
+
+        mutate(payload, {
+            onSuccess: () => {
+                toast.success("Đăng kí thành công");
+                setTimeout(() => {
+                    router.push("/auth/login");
+                }, 2000);
+            },
+            onError: (error) => {
+                const err = error as any;
+                toast.error(err?.response?.data?.message);
+            }
+        });
     }
 
     return (
@@ -37,8 +68,7 @@ export default function RegisterPage() {
                         autoComplete="off"
                         className="space-y-2"
                     >
-                        {/* Username */}
-                        <Form.Item<FieldType>
+                        <Form.Item
                             name="username"
                             rules={[{ required: true, message: 'Vui lòng nhập username!' }]}
                         >
@@ -48,7 +78,6 @@ export default function RegisterPage() {
                             />
                         </Form.Item>
 
-                        {/* Email */}
                         <Form.Item
                             name="email"
                             rules={[
@@ -62,8 +91,7 @@ export default function RegisterPage() {
                             />
                         </Form.Item>
 
-                        {/* Password */}
-                        <Form.Item<FieldType>
+                        <Form.Item
                             name="password"
                             rules={[{ required: true, message: 'Vui lòng nhập password!' }]}
                         >
@@ -73,8 +101,7 @@ export default function RegisterPage() {
                             />
                         </Form.Item>
 
-                        {/* Re Password */}
-                        <Form.Item<FieldType>
+                        <Form.Item
                             name="rePassword"
                             dependencies={['password']}
                             rules={[
@@ -96,14 +123,13 @@ export default function RegisterPage() {
                         </Form.Item>
 
 
-                        {/* Date of birth */}
                         <Form.Item
-                            name="birth"
+                            name="birthday"
                         >
                             <DatePicker placeholder="Chọn ngày sinh" className="w-full rounded-xl h-11" />
                         </Form.Item>
 
-                        {/* Gender */}
+
                         <Form.Item
                             name="gender"
                             rules={[{ required: true, message: 'Vui lòng chọn giới tính!' }]}
@@ -112,15 +138,13 @@ export default function RegisterPage() {
                                 placeholder="Chọn giới tính"
                                 className="h-11"
                                 options={[
-                                    { value: 'Nam', label: 'Nam' },
-                                    { value: 'Nữ', label: 'Nữ' },
-                                    { value: 'Khác', label: 'Khác' }
+                                    { value: Gender.MALE, label: 'Nam' },
+                                    { value: Gender.FEMALE, label: 'Nữ' },
+                                    { value: Gender.OTHER, label: 'Khác' }
                                 ]}
                             />
                         </Form.Item>
 
-
-                        {/* Submit */}
                         <Button
                             className="w-full h-11 bg-green hover:bg-green/90 font-semibold rounded-xl"
                             size="large"
@@ -149,7 +173,9 @@ export default function RegisterPage() {
                         <p className="text-sm text-black font-semibold">Đăng ký với Google</p>
                     </div>
 
-                    <p>Đã có tài khoản? <span className="text-green cursor-pointer">Đăng nhập</span></p>
+                    <p className="text-text-primary">Đã có tài khoản? <span className="text-green cursor-pointer">
+                        <Link href={"/auth/login"}> Đăng nhập</Link>
+                    </span></p>
 
                 </div>
             </div>

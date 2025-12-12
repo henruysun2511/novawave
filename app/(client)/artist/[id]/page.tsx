@@ -1,6 +1,6 @@
 "use client";
 import Footer from "@/components/client/footer/footer";
-import Title from "@/components/client/ui/title";
+import Title from "@/components/ui/title";
 import { CaretRightFilled } from "@ant-design/icons";
 import "swiper/css";
 import "swiper/css/navigation";

@@ -1,6 +1,6 @@
 "use client";
 
-import Title from "@/components/client/ui/title";
+import Title from "@/components/ui/title";
 import { CaretRightFilled, HeartFilled, PlusOutlined } from "@ant-design/icons";
 import { Input } from 'antd';
 import LyricsPreview from "../lyrics-preview";

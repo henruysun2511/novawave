@@ -3,7 +3,7 @@ import { create } from "zustand";
 
 export const useSidebarStore = create<PlayerState>((set) => ({
   rightPanelMode: "info",
-  middleSize: "70%",
+  middleSize: "85%",
 
   showInfo: () =>
     set({
@@ -18,6 +18,12 @@ export const useSidebarStore = create<PlayerState>((set) => ({
     }),
 
   hideRightPanel: () =>
+    set({
+      rightPanelMode: "hidden",
+      middleSize: "85%",
+    }),
+
+  resetLayout: () =>
     set({
       rightPanelMode: "hidden",
       middleSize: "85%",

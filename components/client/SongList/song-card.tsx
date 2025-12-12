@@ -1,6 +1,11 @@
+import { Song } from "@/types/object.type";
 import { CaretRightFilled } from "@ant-design/icons";
 
-export default function SongCard() {
+interface Props {
+    song: Song;
+}
+
+export default function SongCard({song}: Props) {
     return (
         <>
             <div className="group flex flex-col cursor-pointer my-2 w-[180px] rounded-xl hover:bg-[var(--background-tertiary)] p-2 transition">
@@ -9,9 +14,9 @@ export default function SongCard() {
                 <div className="relative w-full h-full">
 
                     <img
-                        className="w-full h-full object-cover rounded-xl"
-                        src="https://photo-resize-zmp3.zadn.vn/w600_r1x1_jpeg/cover/8/c/1/6/8c166e2b9a0e45ca9a6c7bef40a81f74.jpg"
-                        alt=""
+                        className="w-[180px] h-[180px] object-cover rounded-xl"
+                        src={song.imageUrl}
+                        alt={song.name}
                     />
 
                     {/* Overlay mờ khi hover */}
@@ -28,9 +33,9 @@ export default function SongCard() {
 
                 {/* Text */}
                 <a className="text-base text-text-primary font-bold mt-2">
-                    Mất kết nối
+                    {song.name}
                 </a>
-                <a className="text-sm text-gray-400">Dương Domic</a>
+                <a className="text-sm text-gray-400">{song.artistId.name}</a>
 
             </div>
         </>

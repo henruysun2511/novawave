@@ -1,4 +1,5 @@
 export default function ArtistPage() {
+    
     return (
         <>
             <div className="relative w-full h-[450px]">
@@ -20,7 +21,7 @@ export default function ArtistPage() {
                 </div>
             </div>
 
-            <h2 className="text-2xl font-bold mb-4 p-6">Trang nghệ sĩ</h2>
+            
         </>
     );
 }
