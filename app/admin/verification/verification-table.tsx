@@ -83,8 +83,8 @@ export function VerificationTable({ data, loading, pagination }: Props) {
             title: "Ảnh CCCD",
             render: (r: any) => (
                 <Space>
-                    <Image width={60} src={r.identityImages.front} />
-                    <Image width={60} src={r.identityImages.back} />
+                    <Image width={60} src={r.identityImages?.front} />
+                    <Image width={60} src={r.identityImages?.back} />
                 </Space>
             ),
         },

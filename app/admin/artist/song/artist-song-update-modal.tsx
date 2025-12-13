@@ -70,7 +70,7 @@ export default function ArtistSongUpdateModal({
 
 
     useEffect(() => {
-        if (!songData?.data || !open) return;
+        if (!songData?.data || !open || !albumOptions?.length) return;
 
         const s = songData.data;
 
@@ -87,9 +87,10 @@ export default function ArtistSongUpdateModal({
         setArtistOptions(featOptions);
 
         form.setFieldsValue({
+            
             name: s.name,
             genreNames: s.genreNames || [],
-            albumId: s.albumId?._id,
+            albumId: s.album?._id,
             featArtistIds: featOptions.map(o => o.value),
             lyrics: s.lyrics,
             releaseAt: s.releaseAt ? dayjs(s.releaseAt) : null,

@@ -55,27 +55,30 @@ export interface Verification {
 }
 
 export interface Song {
-  _id: string;
-  name: string;
-  artist: Artist;
-  artistId: string | Artist;
-  mp3Link: string;
-  lyrics?: string;
-  imageUrl: string;
-  genreNames: string[];
-  featArtists: Artist[];
-  featArtistIds: any;
-  albumId?: Album;
-  duration: number;
-  explicit: boolean;
-  releaseStatus: SongReleseStatus;
-  releseStatus: SongReleseStatus;
-  releaseAt: Date;
-  status: SongStatus;
-  likesCount: number;
-  popularity: number;
-  createdAt: string;
-  updatedAt: string;
+  _id: string,
+  name: string,
+  artist: Artist,
+  artistId: string | Artist,
+  mp3Link: string,
+  lyrics?: string,
+  imageUrl: string,
+  genreNames: string[],
+  featArtists: Artist[],
+  featArtistIds: any,
+  albumId?: Album,
+  duration: number,
+  explicit: boolean,
+  releaseStatus: SongReleseStatus,
+  releseStatus: SongReleseStatus,
+  releaseAt: Date,
+  status: SongStatus,
+  likesCount: number,
+  popularity: number,
+  createdAt: string,
+  updatedAt: string,
+  likeCount: number,
+  playCount?: number,
+  album?: Album
 }
 
 export interface Album {

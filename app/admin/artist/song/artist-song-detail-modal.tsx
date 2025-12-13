@@ -48,7 +48,7 @@ export default function ArtistSongDetailModal({
                     <Divider />
                     <p><b>Album:</b></p>
                     <div className="flex gap-2 flex-wrap">
-                        <Tag>{song?.albumId?.name ? song.albumId.name : "Chưa gán album"}</Tag>
+                        <Tag>{song?.album?.name ? song.album.name : "Chưa gán album"}</Tag>
                     </div>
 
                     <Divider />

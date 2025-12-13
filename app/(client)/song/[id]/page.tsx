@@ -1,5 +1,6 @@
 "use client";
 
+import { WavePlayer } from "@/components/client/WavePlayer/wave-player";
 import Title from "@/components/ui/title";
 import { useSongDetail } from "@/queries/useSongQuery";
 import { CaretRightFilled, HeartFilled, PlusOutlined } from "@ant-design/icons";
@@ -12,6 +13,10 @@ export default function SongDetailPage() {
     const { id } = useParams<{ id: string }>();
     const { data, isLoading } = useSongDetail(id);
 
+    if (isLoading) return <div>Loading...</div>;
+    if (!data?.data) return <div>Không tìm thấy bài hát</div>;
+
+    const song = data.data;
     const lyrics = ""
 
     return (
@@ -22,17 +27,18 @@ export default function SongDetailPage() {
                 <div className="absolute inset-0 bg-black/10"></div>
 
                 <div className="absolute inset-0 z-10 gap-5 flex items-center p-4">
-                    <img className="w-[280px] h-[280px] rounded-xl" src="https://photo-resize-zmp3.zadn.vn/w600_r1x1_jpeg/cover/9/7/f/a/97fa122b55eefd723d7b97f887ee8786.jpg" alt="" />
+                    <img className="w-[300px] h-[300px] rounded-xl" src={song?.imageUrl || "/images/default-cover.png"} alt="" />
                     <div className="relative z-20">
                         <div className="text-base text-white mt-5 mb-3">
                             Đĩa đơn
                         </div>
                         <h3 className="uppercase text-6xl font-extrabold text-white mb-1 hover:text-green transition">
-                            Hết thương cạn nhớ
+                            {song?.name || "Đang cập nhật"}
                         </h3>
                         <div className="text-base text-white mb-3 font-bold">
-                            Đức Phúc
+                            {song?.artist.name}
                         </div>
+                        <WavePlayer url="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" />
                     </div>
                 </div>
             </div>
@@ -61,10 +67,13 @@ export default function SongDetailPage() {
 
                     <div className="flex items-center gap-5 mb-10 text-text-secondary text-base">
                         <div>
-                            <CaretRightFilled className="mr-1" /> 53.6K
+                            <CaretRightFilled className="mr-2" />
+                            {song?.playCount ?? "Đang cập nhật"}
                         </div>
+
                         <div>
-                            <HeartFilled className="mr-1" /> 574
+                            <HeartFilled className="mr-2" />
+                            {song?.likesCount ?? "Đang cập nhật"}
                         </div>
                     </div>
                 </div>
@@ -85,21 +94,46 @@ export default function SongDetailPage() {
                     <tbody>
                         <tr className="hover:bg-[var(--background-tertiary)] transition text-text-primary">
                             <td className="py-3">1</td>
+
                             <td className="py-3 flex items-center gap-4">
-                                <img className="w-[50px] h-[50px] object-cover" src="https://i.scdn.co/image/ab67616d0000b273741fd4807f442af3f7359316" alt="" />
-                                <p>Seven</p>
+                                <img
+                                    className="w-[50px] h-[50px] object-cover"
+                                    src={song?.imageUrl || "/images/default-cover.png"}
+                                    alt=""
+                                />
+                                <p>{song?.name || "Đang cập nhật"}</p>
                             </td>
-                            <td className="py-3">Golden</td>
-                            <td className="py-3">Đức phúc</td>
-                            <td className="py-3">03:55</td>
-                            <td className="py-3">23/07/2025</td>
+
+                            <td className="py-3">
+                                {song?.album?.name || "Đang cập nhật"}
+                            </td>
+
+                            <td className="py-3">
+                                {song?.artist?.name || "Đang cập nhật"}
+                            </td>
+
+                            <td className="py-3">
+                                {song?.duration
+                                    ? `${Math.floor(song.duration / 60)}:${String(Math.floor(song.duration % 60)).padStart(2, "0")}`
+                                    : "Đang cập nhật"}
+                            </td>
+
+                            <td className="py-3">
+                                {song?.createdAt
+                                    ? new Date(song.createdAt).toLocaleDateString("vi-VN")
+                                    : "Đang cập nhật"}
+                            </td>
                         </tr>
                     </tbody>
                 </table>
 
                 <div className="my-10"></div>
+                <Title>Nghệ sĩ cùng tham gia</Title>
+                 {song?.featArtistIds?.map((a: any) => a.name).join(", ") || "Không có nghệ sĩ khác tham gia"}
+
+                <div className="my-10"></div>
                 <Title>Lời bài hát</Title>
-                <LyricsPreview lyrics={lyrics} />
+                <LyricsPreview lyrics={song?.lyrics || "Đang cập nhật"} />
 
                 <div className="my-10"></div>
                 <Title>Bình luận</Title>

@@ -41,7 +41,7 @@ export default function HomePage() {
     });
     const songBallads = songBalladData?.data || [];
 
-    console.log(songPopData);
+    console.log(songBallads);
     return (
         <>
             <div className="p-6">
