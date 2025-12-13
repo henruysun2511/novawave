@@ -49,6 +49,9 @@ export default function SideBar() {
                     key: '/admin/verification', label: <span className="text-lg font-semibold">Kiểm duyệt nghệ sĩ</span>
                 },
                 {
+                    key: '/admin/song', label: <span className="text-lg font-semibold">Quản lý bài hát</span>
+                },
+                {
                     key: '/admin/genre', label: <span className="text-lg font-semibold">Quản lý thể loại</span>
                 },
                 {
@@ -111,17 +114,14 @@ export default function SideBar() {
 
     return (
         <>
-            <div
-                style={{ width: "100%", background: "var(--background-secondary)" }}
-                className="h-screen pt-3 px-0.5 flex flex-col"
-            >
-                <div>
+            <div className="h-screen flex flex-col  bg-[var(--background-secondary)]overflow-hidden">
+                <div className="flex-1 overflow-y-auto scrollbar-hidden pt-3 px-1">
                     <Image
                         src="/images/logo2.png"
                         alt="Logo"
                         width={150}
                         height={130}
-                        className="rounded-2xl text-center mx-auto mb-2"
+                        className="rounded-2xl mx-auto mb-4"
                     />
 
                     <Menu
@@ -134,9 +134,14 @@ export default function SideBar() {
                     />
                 </div>
 
-                <Button onClick={handleLogout} className="mt-auto mb-4 mx-2 bg-red-500 hover:!bg-red-600 text-white hover:!text-white border border-none">
-                    Đăng xuất
-                </Button>
+                <div className="p-3">
+                    <Button
+                        onClick={handleLogout}
+                        className="w-full bg-red-500 hover:!bg-red-600 text-white border-none"
+                    >
+                        Đăng xuất
+                    </Button>
+                </div>
             </div>
         </>
     );

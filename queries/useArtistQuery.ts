@@ -28,6 +28,16 @@ export const useArtistProfile = () =>
         queryFn: async () => (await ArtistService.getProfile()).data,
     });
 
+export const useUpdateArtistProfile = () => {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: ArtistService.updateProfile,
+        onSuccess: () => {
+            qc.invalidateQueries({ queryKey: ARTIST_PROFILE_QUERY_KEY });
+        },
+    });
+};
+
 export const useArtistDetail = (id: string) =>
     useQuery({
         queryKey: [...ARTIST_QUERY_KEY, id],

@@ -12,13 +12,13 @@ export const AlbumService = {
         return http.get<ApiResponse<Album[]>>(`/${prefix}/${artistId}`);
     },
     getDetail(id: string) {
-        return http.get<ApiResponse<Album>>(`/${prefix}/${id}`);
+        return http.get<ApiResponse<Album>>(`/${prefix}/detail/${id}`);
     },
-    create(payload: Partial<Album>) {
+    create(payload: FormData) {
         return http.post<ApiResponse<Album>>(`/${prefix}`, payload);
     },
-    update(id: string, payload: Partial<Album>) {
-        return http.patch<ApiResponse<Album>>(`/${prefix}/${id}`, payload);
+    update(id: string, payload: FormData) {
+        return http.put<ApiResponse<Album>>(`/${prefix}/${id}`, payload);
     },
     delete(id: string) {
         return http.delete<ApiResponse<null>>(`/${prefix}/${id}`);

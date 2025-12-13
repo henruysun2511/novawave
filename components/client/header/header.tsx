@@ -22,8 +22,7 @@ export default function Header() {
     //Lấy thông tin người dùng
     const { isAuthenticated, user, roleName } = useAuthStore();
     const isPrenium = user?.isPremium;
-    const finalRoleName = roleName || JSON.parse(localStorage.getItem("roleName") || "null");
-    console.log(finalRoleName);
+    const finalRoleName = roleName || localStorage.getItem("roleName") || "null";
 
 
     const logoutMutation = useLogoutMutation();

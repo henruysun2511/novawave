@@ -1,4 +1,4 @@
-import { Gender, UserStatus, VerificationStatus } from "./constant.type";
+import { Gender, SongReleseStatus, SongStatus, UserStatus, VerificationStatus } from "./constant.type";
 
 export interface Role {
   _id: string,
@@ -20,7 +20,14 @@ export interface User {
 
 export interface Artist {
   _id: string,
-  name: string
+  name: string,
+  followers: number,
+  createdAt: Date,
+  updatedAt: Date,
+  bannerUrl: string,
+  avatarUrl: string,
+  biography: string,
+  country: string
 }
 
 export interface Verification {
@@ -48,17 +55,40 @@ export interface Verification {
 }
 
 export interface Song {
-  _id: string,
-  name: string
-  artistId: Artist
-  imageUrl: string
+  _id: string;
+  name: string;
+  artist: Artist;
+  artistId: string | Artist;
+  mp3Link: string;
+  lyrics?: string;
+  imageUrl: string;
+  genreNames: string[];
+  featArtists: Artist[];
+  featArtistIds: any;
+  albumId?: Album;
+  duration: number;
+  explicit: boolean;
+  releaseStatus: SongReleseStatus;
+  releseStatus: SongReleseStatus;
+  releaseAt: Date;
+  status: SongStatus;
+  likesCount: number;
+  popularity: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Album {
   _id: string,
   img: string,
+  name: string,
   release_date?: Date,
-  artists: string[]
+  artists: string[],
+  createAt: Date,
+  updateAt: Date,
+  album_type: string,
+  label: string,
+  total_songs: number
 }
 
 

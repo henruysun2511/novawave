@@ -6,7 +6,10 @@ import NewsList from "@/components/client/NewsList/news-list";
 import NewSongList from "@/components/client/NewSongList/newsong-list";
 import Vinyl from "@/components/client/SongInfo/vinyl";
 import SongList from "@/components/client/SongList/song-list";
+import SongList2 from "@/components/client/SongList/song-list-2";
+import SquareSkeleton from "@/components/ui/skeleton";
 import Title from "@/components/ui/title";
+import { useSongList } from "@/queries/useSongQuery";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Autoplay, Navigation } from "swiper/modules";
@@ -15,6 +18,30 @@ import AdvertisementBanner from "./advertisement-banner";
 import TopSong from "./top-song";
 
 export default function HomePage() {
+    const { data: songData, isPending } = useSongList({
+        size: 8
+    });
+    const songs = songData?.data || [];
+
+    const { data: songPopData, isPending: isPopPending } = useSongList({
+        size: 8,
+        genreNames: ["Pop"]
+    });
+    const songPops = songPopData?.data || [];
+
+    const { data: songRockData, isPending: isRockPending } = useSongList({
+        size: 8,
+        genreNames: ["Rock"]
+    });
+    const songRocks = songRockData?.data || [];
+
+    const { data: songBalladData, isPending: isBalladPending } = useSongList({
+        size: 8,
+        genreNames: ["Ballad"]
+    });
+    const songBallads = songBalladData?.data || [];
+
+    console.log(songPopData);
     return (
         <>
             <div className="p-6">
@@ -39,7 +66,60 @@ export default function HomePage() {
                 <div className="mt-16">
                     <Title>Dành cho bạn</Title>
                 </div>
-                <SongList />
+                {
+                    songData
+                        ? (
+                            isPending
+                                ? <SquareSkeleton />
+                                : <SongList2 songs={songs} />
+                        )
+                        : <div className="text-text-primary text-base">Chưa có bài hát nào</div>
+                }
+
+
+                <div className="mt-16 flex justify-between items-center">
+                    <Title>Nhạc Pop trẻ trung năng động</Title>
+                    <a className="text-base text-text-secondary">Xem tất cả</a>
+                </div>
+                {
+                    songPops
+                        ? (
+                            isPopPending
+                                ? <SquareSkeleton />
+                                : <SongList songs={songPops} />
+                        )
+                        : <div className="text-text-primary text-base">Chưa có bài hát nào thuộc thể loại này</div>
+                }
+
+                <div className="mt-16 flex justify-between items-center">
+                    <Title>Cháy cùng rock</Title>
+                    <a className="text-base text-text-secondary">Xem tất cả</a>
+                </div>
+                {
+                    songRocks
+                        ? (
+                            isRockPending
+                                ? <SquareSkeleton />
+                                : <SongList songs={songRocks} />
+                        )
+                        : <div className="text-text-primary text-base">Chưa có bài hát nào thuộc thể loại này</div>
+                }
+
+                <div className="mt-16 flex justify-between items-center">
+                    <Title>Thất tình à? Mở Ballad nghe nhé!</Title>
+                    <a className="text-base text-text-secondary">Xem tất cả</a>
+                </div>
+                {
+                    songBallads
+                        ? (
+                            isBalladPending
+                                ? <SquareSkeleton />
+                                : <SongList songs={songBallads} />
+                        )
+                        : <div className="text-text-primary text-base">Chưa có bài hát nào thuộc thể loại này</div>
+                }
+
+
 
                 <div className="mt-16 flex justify-between items-center">
                     <Title>Mới phát hành</Title>
@@ -64,8 +144,6 @@ export default function HomePage() {
                     <img src="https://yt3.googleusercontent.com/JQX_ukIzqNX53iRAnrs7EbDfrWqs5uhyxg_xpoIaERGvIdXz5nh-0c2k9ea_9EQijmmF-gy3Ew=w2276-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj" alt="" />
                 </div>
 
-
-
                 <div className="mt-16 flex justify-between items-center">
                     <Title>Sự kiện âm nhạc sắp tới</Title>
                     <a className="text-base text-text-secondary">Xem tất cả</a>
@@ -87,9 +165,9 @@ export default function HomePage() {
 
                 <div className="mt-16 flex justify-between items-center">
                     <Title>Không có video thì hiện cái này</Title>
-                      <Vinyl />
+                    <Vinyl />
                 </div>
-              
+
 
             </div>
 

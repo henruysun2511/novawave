@@ -25,9 +25,10 @@ export enum VerificationStatus {
 }
 
 export enum SongStatus {
-  ACTIVED = 'active',
-  INACTIVE = 'inactive'
+    ACTIVE = "active",
+    INACTIVE = "inactive",
 }
+
 export enum SongReleseStatus {
   DRAFT = 'draft',
   SCHEDULED = 'scheduled',

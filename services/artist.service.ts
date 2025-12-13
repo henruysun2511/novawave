@@ -20,6 +20,18 @@ export const ArtistService = {
         return http.get<ApiResponse<Artist>>(`/${prefix}/profile`);
     },
 
+    updateProfile(payload: FormData) {
+        return http.put<ApiResponse<Artist>>(
+            `/${prefix}`,
+            payload,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                }
+            }
+        );
+    },
+
     getDetail(id: string) {
         return http.get<ApiResponse<Artist>>(`/${prefix}/detail/${id}`);
     },

@@ -23,8 +23,30 @@ export const SongService = {
         return http.get<ApiResponse<Song[]>>(`/${prefix}?${query.toString()}`);
     },
 
+    getListByAdmin(params: SongParam) {
+        const query = new URLSearchParams();
+
+        // genreNames luôn gửi ít nhất 2 param
+        if (params.genreNames && params.genreNames.length > 0) {
+            params.genreNames.forEach((g) => query.append("genreNames", g));
+            if (params.genreNames.length === 1) {
+                query.append("genreNames", ""); // thêm param rỗng nếu chỉ có 1
+            }
+        }
+        
+        if (params.page) query.append("page", params.page.toString());
+        if (params.size) query.append("size", params.size.toString());
+        if (params.name) query.append("name", params.name);
+
+        return http.get<ApiResponse<Song[]>>(`/admin/${prefix}?${query.toString()}`);
+    },
+
+    getListByArtist(artistId: string) {
+        return http.get<ApiResponse<Song[]>>(`/${prefix}/${artistId}`);
+    },
+
     getDetail(id: string) {
-        return http.get<ApiResponse<Song>>(`/${prefix}/${id}`);
+        return http.get<ApiResponse<Song>>(`/${prefix}/detail/${id}`);
     },
     create(payload: FormData) {
         return http.post<ApiResponse<Song>>(`/${prefix}`, payload);
@@ -35,7 +57,10 @@ export const SongService = {
     delete(id: string) {
         return http.delete<ApiResponse<null>>(`/${prefix}/${id}`);
     },
-    updateStatus(id: string) {
-        return http.patch<ApiResponse<Song>>(`/${prefix}/update-status/${id}`);
+    deleteByAdmin(id: string) {
+        return http.delete<ApiResponse<null>>(`/admin/${prefix}/${id}`);
+    },
+    updateStatus(body: any) {
+        return http.patch<ApiResponse<Song>>(`/${prefix}/update-status`, body);
     },
 };

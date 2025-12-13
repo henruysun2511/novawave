@@ -16,6 +16,8 @@ export const useAlbumListByArtist = (artistId: string) =>
         enabled: !!artistId, 
     });
 
+
+
 export const useAlbumDetail = (id: string) =>
     useQuery({
         queryKey: [...ALBUM_QUERY_KEY, id],
@@ -23,15 +25,32 @@ export const useAlbumDetail = (id: string) =>
         enabled: !!id,
     });
 
-const albumMutation = (fn: any) => {
+export const useCreateAlbum = () => {
     const qc = useQueryClient();
     return useMutation({
-        mutationFn: fn,
-        onSuccess: () => qc.invalidateQueries({ queryKey: ALBUM_QUERY_KEY }),
+        mutationFn: AlbumService.create, 
+        onSuccess: () => {
+            qc.invalidateQueries({ queryKey: ALBUM_QUERY_KEY });
+        },
     });
 };
 
-export const useCreateAlbum = () => albumMutation(AlbumService.create);
-export const useUpdateAlbum = () =>
-    albumMutation(({ id, data }: any) => AlbumService.update(id, data));
-export const useDeleteAlbum = () => albumMutation(AlbumService.delete);
+export const useUpdateAlbum = () => {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: ({ id, data }: {id: string, data: FormData}) => AlbumService.update(id, data),
+        onSuccess: () => {
+            qc.invalidateQueries({ queryKey: ALBUM_QUERY_KEY });
+        },
+    });
+};
+
+export const useDeleteAlbum = () => {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: (id: string) => AlbumService.delete(id),
+        onSuccess: () => {
+            qc.invalidateQueries({ queryKey: ALBUM_QUERY_KEY });
+        },
+    });
+};

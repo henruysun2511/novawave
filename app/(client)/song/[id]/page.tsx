@@ -1,36 +1,23 @@
 "use client";
 
 import Title from "@/components/ui/title";
+import { useSongDetail } from "@/queries/useSongQuery";
 import { CaretRightFilled, HeartFilled, PlusOutlined } from "@ant-design/icons";
 import { Input } from 'antd';
+import { useParams } from "next/navigation";
 import LyricsPreview from "../lyrics-preview";
 const { TextArea } = Input;
 
 export default function SongDetailPage() {
-    const lyrics = `
-Em à anh đã biết là tình yêu này chẳng cần thiết
-Em cần nơi bình yên chứ không phải anh kế bên
-Em đừng giữ lại anh khi trái tim vụn vỡ chưa lành
-Điều ban nãy anh vừa thấy là gì đây
-Em đã vừa ghì hôn ai cận kề bên tai tựa đầu lên vai
-Thấy em đang đắm say chắc em chẳng hay đôi mình chưa chia tay
-Đôi khi tình yêu sẽ hoá nhạt nhoà khi vô tình một trong hai
-Cuốn lấy sai trái đến khi vỡ lỡ cả hai huỷ hoại tương lai
-Chẳng cần một ai nữa bất kể ai cũng dư thừa
-Một mình đứng khóc giữa mưa nén cơn đau vào từng hơi thở
-Một người mình chẳng ngưng nhớ nhưng lại quay bước giả vờ
-Bảo rằng mình cũng như em hết thương cạn nhớ
-Sự thật là chỉ mỗi em hết thương cạn nhớ
-`;
+    const { id } = useParams<{ id: string }>();
+    const { data, isLoading } = useSongDetail(id);
+
+    const lyrics = ""
 
     return (
         <>
             <div className="relative w-full h-[350px]">
-                {/* <div className="absolute inset-0 
-  bg-gradient-to-r 
-  from-[#7f1d1d] 
-  via-[#991b1b] 
-  to-[#7c2d12]" /> */}
+                {/* <div className="absolute inset-0 bg-gradient-to-r from-[#7f1d1d] via-[#991b1b] to-[#7c2d12]" /> */}
 
                 <div className="absolute inset-0 bg-black/10"></div>
 
