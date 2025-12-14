@@ -2,7 +2,7 @@ import { useToast } from "@/libs/toast";
 import { useDeleteAlbum } from "@/queries/useAlbumQuery"; // Giả định hook
 import { Album } from "@/types/object.type"; // Giả định type Album
 import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
-import { Button, Popconfirm, Space, Table } from "antd";
+import { Button, Image, Popconfirm, Space, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs"; // Import dayjs
 import { useState } from "react";
@@ -19,9 +19,9 @@ interface Props {
 export default function ArtistAlbumTable({ data, loading, pagination }: Props) {
     const toast = useToast();
     const { mutate } = useDeleteAlbum();
-    
 
-    const [editingAlbum, setEditingAlbum] = useState<Album | null>(null); 
+
+    const [editingAlbum, setEditingAlbum] = useState<Album | null>(null);
     const [detailAlbumId, setDetailAlbumId] = useState<string | null>(null);
 
     const handleDelete = (id: string) => {
@@ -35,6 +35,26 @@ export default function ArtistAlbumTable({ data, loading, pagination }: Props) {
 
 
     const columns: ColumnsType<Album> = [
+        {
+            title: "Ảnh bìa",
+            dataIndex: "img",
+            key: "img",
+            width: 80,
+            render: (img: string, record) => {
+                if (img) {
+                    return (
+                        <Image
+                            width={60}
+                            height={60}
+                            src={img}
+                            alt={record.name}
+                            style={{ objectFit: 'cover', borderRadius: '4px' }}
+                        />
+                    );
+                }
+                return <span className="text-gray-500 text-xs">Chưa có ảnh</span>;
+            },
+        },
         {
             title: "Tên Album",
             dataIndex: "name",
@@ -68,7 +88,7 @@ export default function ArtistAlbumTable({ data, loading, pagination }: Props) {
                     >
                         Xem
                     </Button>
-                    
+
                     {/* Nút Sửa Album */}
                     <Button
                         type="primary"

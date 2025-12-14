@@ -1,4 +1,5 @@
 "use client";
+import AlbumList from "@/components/client/AlbumList/album-list";
 import ArtistList from "@/components/client/ArtistList/artist-list";
 import EventList from "@/components/client/EventList/event-list";
 import Footer from "@/components/client/footer/footer";
@@ -9,7 +10,10 @@ import SongList from "@/components/client/SongList/song-list";
 import SongList2 from "@/components/client/SongList/song-list-2";
 import SquareSkeleton from "@/components/ui/skeleton";
 import Title from "@/components/ui/title";
+import { useAlbumList } from "@/queries/useAlbumQuery";
+import { useArtistList } from "@/queries/useArtistQuery";
 import { useSongList } from "@/queries/useSongQuery";
+import { useRouter } from "next/navigation";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Autoplay, Navigation } from "swiper/modules";
@@ -18,6 +22,8 @@ import AdvertisementBanner from "./advertisement-banner";
 import TopSong from "./top-song";
 
 export default function HomePage() {
+    const router = useRouter();
+
     const { data: songData, isPending } = useSongList({
         size: 8
     });
@@ -41,7 +47,15 @@ export default function HomePage() {
     });
     const songBallads = songBalladData?.data || [];
 
-    console.log(songBallads);
+    const { data: artistData, isPending: isArtistPending } = useArtistList({
+        size: 8
+    })
+    const artists = artistData?.data || [];
+
+    const { data: albumData, isPending: isAlbumPending } = useAlbumList({
+    })
+    const albums = albumData?.data || [];
+
     return (
         <>
             <div className="p-6">
@@ -79,7 +93,7 @@ export default function HomePage() {
 
                 <div className="mt-16 flex justify-between items-center">
                     <Title>Nhạc Pop trẻ trung năng động</Title>
-                    <a className="text-base text-text-secondary">Xem tất cả</a>
+                    <a className="text-base text-text-secondary" onClick={() => router.push('genre')}>Xem tất cả</a>
                 </div>
                 {
                     songPops
@@ -93,7 +107,7 @@ export default function HomePage() {
 
                 <div className="mt-16 flex justify-between items-center">
                     <Title>Cháy cùng rock</Title>
-                    <a className="text-base text-text-secondary">Xem tất cả</a>
+                    <a className="text-base text-text-secondary" onClick={() => router.push('genre')}>Xem tất cả</a>
                 </div>
                 {
                     songRocks
@@ -107,7 +121,7 @@ export default function HomePage() {
 
                 <div className="mt-16 flex justify-between items-center">
                     <Title>Thất tình à? Mở Ballad nghe nhé!</Title>
-                    <a className="text-base text-text-secondary">Xem tất cả</a>
+                    <a className="text-base text-text-secondary" onClick={() => router.push('genre')}>Xem tất cả</a>
                 </div>
                 {
                     songBallads
@@ -128,16 +142,41 @@ export default function HomePage() {
                 <NewSongList />
 
                 <div className="mt-16 flex justify-between items-center">
+                    <Title>Album nổi bật</Title>
+                    <a className="text-base text-text-secondary" onClick={() => router.push('album')}>Xem tất cả</a>
+                </div>
+                {
+                    albumData
+                        ? (
+                            isAlbumPending
+                                ? <SquareSkeleton />
+                                : <AlbumList albums={albums} />
+                        )
+                        : <div className="text-text-primary text-base">Chưa có album nào</div>
+                }
+
+
+                <div className="mt-16 flex justify-between items-center">
                     <Title>Bảng xếp hạng nhạc mới</Title>
                     <a className="text-base text-text-secondary">Xem tất cả</a>
                 </div>
                 <TopSong />
 
+
                 <div className="mt-16 flex justify-between items-center">
                     <Title>Nghệ sĩ nổi bật</Title>
                     <a className="text-base text-text-secondary">Xem tất cả</a>
                 </div>
-                <ArtistList />
+                {
+                    artistData
+                        ? (
+                            isArtistPending
+                                ? <SquareSkeleton />
+                                : <ArtistList artists={artists} />
+                        )
+                        : <div className="text-text-primary text-base">Chưa có nghệ sĩ nào</div>
+                }
+
 
 
                 <div className="mt-16 flex justify-between items-center">

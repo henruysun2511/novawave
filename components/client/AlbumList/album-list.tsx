@@ -1,20 +1,20 @@
-import { Artist } from "@/types/object.type";
+import { Album } from "@/types/object.type";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Autoplay, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import ArtistCard from "./artist-card";
+import AlbumCard from "./album-card";
 
-export default function ArtistList({ artists }: { artists: Artist[] }) {
-    if (!artists || artists.length === 0) {
-        return null;
+export default function AlbumList({albums} : {albums : Album[]}) {
+    if (!albums || albums.length === 0) {
+        return null; 
     }
     return (
         <>
             <Swiper
                 slidesPerView={6}
                 spaceBetween={20}
-                slidesPerGroup={1}
+                slidesPerGroup={1}  
                 navigation
                 modules={[Navigation, Autoplay]}
                 className="mySwiper"
@@ -25,13 +25,13 @@ export default function ArtistList({ artists }: { artists: Artist[] }) {
                     disableOnInteraction: false,
                 }}
             >
-                {artists?.map((artist) => (
-                    <SwiperSlide key={artist._id}>
-                        <ArtistCard artist={artist}/>
+                {albums?.map((album) => (
+                    <SwiperSlide key={album._id}>
+                        <AlbumCard album={album} /> 
                     </SwiperSlide>
                 ))}
-
             </Swiper>
         </>
+
     );
 }

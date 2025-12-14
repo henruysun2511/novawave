@@ -1,21 +1,29 @@
 import { AlbumService } from "@/services/album.service";
+import { PaginationParam } from "@/types/param.type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const ALBUM_QUERY_KEY = ["albums"];
+export const SONGS_IN_ALBUM_QUERY_KEY = ["songs-in-album"]
 
-export const useAlbumList = () =>
+export const useAlbumList = (params: PaginationParam) =>
     useQuery({
         queryKey: ALBUM_QUERY_KEY,
-        queryFn: async () => (await AlbumService.getList()).data,
+        queryFn: async () => (await AlbumService.getList(params)).data,
     });
 
 export const useAlbumListByArtist = (artistId: string) =>
     useQuery({
-        queryKey: [...ALBUM_QUERY_KEY, artistId], 
+        queryKey: [...ALBUM_QUERY_KEY, artistId],
         queryFn: async () => (await AlbumService.getListByArtist(artistId)).data,
-        enabled: !!artistId, 
+        enabled: !!artistId,
     });
 
+export const useSongsInAlbum = (albumId: string) =>
+    useQuery({
+        queryKey: [...SONGS_IN_ALBUM_QUERY_KEY, albumId],
+        queryFn: async () => (await AlbumService.getSongsInAlbum(albumId)).data,
+        enabled: !!albumId, 
+    });
 
 
 export const useAlbumDetail = (id: string) =>
@@ -28,7 +36,7 @@ export const useAlbumDetail = (id: string) =>
 export const useCreateAlbum = () => {
     const qc = useQueryClient();
     return useMutation({
-        mutationFn: AlbumService.create, 
+        mutationFn: AlbumService.create,
         onSuccess: () => {
             qc.invalidateQueries({ queryKey: ALBUM_QUERY_KEY });
         },
@@ -38,7 +46,7 @@ export const useCreateAlbum = () => {
 export const useUpdateAlbum = () => {
     const qc = useQueryClient();
     return useMutation({
-        mutationFn: ({ id, data }: {id: string, data: FormData}) => AlbumService.update(id, data),
+        mutationFn: ({ id, data }: { id: string, data: FormData }) => AlbumService.update(id, data),
         onSuccess: () => {
             qc.invalidateQueries({ queryKey: ALBUM_QUERY_KEY });
         },

@@ -1,23 +1,70 @@
 "use client";
 
+import AlbumCard from "@/components/client/AlbumList/album-card";
+import ArtistCard from "@/components/client/ArtistList/artist-card";
+import ReportModal from "@/components/client/Report/report-modal";
 import { WavePlayer } from "@/components/client/WavePlayer/wave-player";
 import Title from "@/components/ui/title";
+import { useToast } from "@/libs/toast";
+import { useLikeSong, useUnlikeSong, useUserLike } from "@/queries/useLikeQuery";
 import { useSongDetail } from "@/queries/useSongQuery";
-import { CaretRightFilled, HeartFilled, PlusOutlined } from "@ant-design/icons";
+import { useAuthStore } from "@/stores/useAuthStore";
+import { ReportTargetType } from "@/types/constant.type";
+import { CaretRightFilled, FlagOutlined, HeartFilled, HeartOutlined, PlusOutlined } from "@ant-design/icons";
 import { Input } from 'antd';
 import { useParams } from "next/navigation";
+import { useState } from "react";
 import LyricsPreview from "../lyrics-preview";
+import SongComment from "./song-comment";
 const { TextArea } = Input;
 
 export default function SongDetailPage() {
     const { id } = useParams<{ id: string }>();
-    const { data, isLoading } = useSongDetail(id);
+    const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+    const toast = useToast();
+
+    const { data: songRes, isLoading } = useSongDetail(id);
+    const user = useAuthStore((state) => state.user);
+
+    const { data: likeRes } = useUserLike({
+        page: 1,
+        size: 100,
+    });
+
+    const { mutate: likeSong } = useLikeSong();
+    const { mutate: unlikeSong } = useUnlikeSong();
 
     if (isLoading) return <div>Loading...</div>;
-    if (!data?.data) return <div>Không tìm thấy bài hát</div>;
+    if (!songRes?.data) return <div>Không tìm thấy bài hát</div>;
 
-    const song = data.data;
-    const lyrics = ""
+    const song = songRes.data;
+
+    const isLiked = likeRes?.data?.some(
+        (l: any) => l.songId?._id === song._id
+    );
+
+    const handleToggleLike = () => {
+        if (!user) {
+            toast.error("Vui lòng đăng nhập");
+            return;
+        }
+
+        if (isLiked) {
+            unlikeSong(song._id, {
+                onSuccess: (res: any) =>
+                    toast.success(res?.data?.message || "Đã bỏ thích"),
+                onError: (err: any) =>
+                    toast.error(err?.response?.data?.message || "Bỏ thích thất bại"),
+            });
+        } else {
+            likeSong(song._id, {
+                onSuccess: (res: any) =>
+                    toast.success(res?.data?.message || "Đã thích bài hát"),
+                onError: (err: any) =>
+                    toast.error(err?.response?.data?.message || "Thích bài hát thất bại"),
+            });
+        }
+    };
 
     return (
         <>
@@ -50,11 +97,16 @@ export default function SongDetailPage() {
                             <CaretRightFilled className="text-3xl" />
                         </div>
                         <div
+                            onClick={handleToggleLike}
                             className="border border-green rounded-full text-text-primary text-base px-5 py-1 cursor-pointer
-                                  transition duration-200
-                                 hover:bg-green hover:text-white"
+             transition duration-200 hover:bg-green hover:text-white flex items-center"
                         >
-                            <HeartFilled className="mr-2" /> Yêu thích
+                            {isLiked ? (
+                                <HeartFilled className="mr-2 text-red-500" />
+                            ) : (
+                                <HeartOutlined className="mr-2" />
+                            )}
+                            Yêu thích
                         </div>
                         <div
                             className="border border-green rounded-full text-text-primary text-base px-5 py-1 cursor-pointer
@@ -62,6 +114,14 @@ export default function SongDetailPage() {
                                  hover:bg-green hover:text-white"
                         >
                             <PlusOutlined className="mr-2" />Thêm vào playlist
+                        </div>
+                        <div
+                            className="border border-green rounded-full text-text-primary text-base px-5 py-1 cursor-pointer
+                                  transition duration-200
+                                 hover:bg-green hover:text-white"
+                            onClick={() => setIsReportModalOpen(true)}
+                        >
+                            <FlagOutlined className="mr-2" />Report
                         </div>
                     </div>
 
@@ -128,46 +188,48 @@ export default function SongDetailPage() {
                 </table>
 
                 <div className="my-10"></div>
+                <Title>Nghệ sĩ</Title>
+                <ArtistCard artist={song.artist} />
+
+                <div className="my-10"></div>
                 <Title>Nghệ sĩ cùng tham gia</Title>
-                 {song?.featArtistIds?.map((a: any) => a.name).join(", ") || "Không có nghệ sĩ khác tham gia"}
+                {song?.featArtists && song.featArtists.length > 0 ? (
+                    <div className="flex flex-wrap gap-4">
+                        {song.featArtists.map((artist) => (
+                            <ArtistCard key={artist._id} artist={artist} />
+                        ))}
+                    </div>
+                ) : (
+                    <div className="text-base text-text-primary">
+                        Không có nghệ sĩ khác tham gia
+                    </div>
+                )}
+
+                <div className="my-10"></div>
+                <Title>Album</Title>
+                {song?.album ? (
+                    <AlbumCard album={song.album} />
+                ) : (<div className="text-base text-text-primary">
+                    Không có album
+                </div>)}
+
+
 
                 <div className="my-10"></div>
                 <Title>Lời bài hát</Title>
                 <LyricsPreview lyrics={song?.lyrics || "Đang cập nhật"} />
 
-                <div className="my-10"></div>
-                <Title>Bình luận</Title>
-                <div className="">
-                    <TextArea className="w-[100%]" size='large' placeholder="Nhập bình luận của bạn" allowClear />
-                </div>
-
-                <div>
-                    <div className="flex gap-5 items-start my-8">
-                        <img className="w-[50px] h-[50px] object-cover rounded-full" src="https://img2.51gt3.com/rac/racer/202503/fe2de9975d864e38acfd9933164954a6.png?x-oss-process=style/_nowm" alt="" />
-                        <div>
-                            <div className="flex gap-3 items-center mb-2">
-                                <div className="text-xl font-bold text-green">Hoàng tử Monaco</div>
-                                <div className="text-text-secondary border boder-white rounded-sm px-2 py-0.5 font-bold cursor-pointer text-sm">00:50</div>
-                                <div className="text-text-secondary text-base">3 giờ trước</div>
-                            </div>
-                            <div className="text-text-primary text-base">Bài này hay quá</div>
-                        </div>
-                    </div>
-                    <div className="flex gap-5 items-start my-8">
-                        <img className="w-[50px] h-[50px] object-cover rounded-full" src="https://img2.51gt3.com/rac/racer/202503/fe2de9975d864e38acfd9933164954a6.png?x-oss-process=style/_nowm" alt="" />
-                        <div>
-                            <div className="flex gap-3 items-center mb-2">
-                                <div className="text-xl font-bold text-green">Hoàng tử Monaco</div>
-                                <div className="text-text-secondary border boder-white rounded-sm px-2 py-0.5 font-bold cursor-pointer text-sm">00:50</div>
-                                <div className="text-text-secondary text-base">3 giờ trước</div>
-                            </div>
-                            <div className="text-text-primary text-base">Bài này hay quá, nghe xong khóc luôn</div>
-                        </div>
-                    </div>
-                </div>
 
 
+                <SongComment songId={song._id} />
             </div>
+
+            <ReportModal
+                open={isReportModalOpen}
+                onClose={() => setIsReportModalOpen(false)}
+                targetId={id}
+                targetType={ReportTargetType.SONG}
+            />
         </>
     )
 }

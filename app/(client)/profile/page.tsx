@@ -4,6 +4,7 @@ import { useGetUserInfoQuery } from "@/queries/useAuthQuery";
 import { Avatar, Tabs } from "antd";
 import ChangePassword from "./change-password";
 import "./profile.css";
+import UserFollow from "./user-follow";
 import UserInfo from "./user-info";
 
 export default function ProfilePage() {
@@ -35,7 +36,7 @@ export default function ProfilePage() {
         {
             label: 'Nghệ sĩ đang theo dõi',
             key: '5',
-            children: 'Content of editable tab 3',
+            children:  (<UserFollow />),
         },
         {
             label: 'Bảo mật',

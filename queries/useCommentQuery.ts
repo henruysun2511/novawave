@@ -1,27 +1,43 @@
 import { CommentService } from "@/services/comment.service";
+import { Comment } from "@/types/object.type";
+import { PaginationParam } from "@/types/param.type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const COMMENT_QUERY_KEY = ["comments"];
 
-export const useCommentList = () =>
+export const useCommentList = (
+    songId: string,
+    params: PaginationParam
+) =>
     useQuery({
-        queryKey: COMMENT_QUERY_KEY,
-        queryFn: async () => (await CommentService.getList()).data,
+        queryKey: [...COMMENT_QUERY_KEY, songId, params],
+        queryFn: async () =>
+            (await CommentService.getList(songId, params)).data,
+        enabled: !!songId,
     });
 
-const commentMutation = (fn: any) => {
+
+export const useCreateComment = () => {
     const qc = useQueryClient();
     return useMutation({
-        mutationFn: fn,
+        mutationFn: CommentService.create,
         onSuccess: () => qc.invalidateQueries({ queryKey: COMMENT_QUERY_KEY }),
     });
 };
 
-export const useCreateComment = () =>
-    commentMutation(CommentService.create);
-export const useUpdateComment = () =>
-    commentMutation(({ id, data }: any) =>
-        CommentService.update(id, data)
-    );
-export const useDeleteComment = () =>
-    commentMutation(CommentService.delete);
+export const useUpdateComment = () => {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: ({ id, data }: { id: string, data: Partial<Comment> }) =>
+            CommentService.update(id, data),
+        onSuccess: () => qc.invalidateQueries({ queryKey: COMMENT_QUERY_KEY }),
+    });
+};
+
+export const useDeleteComment = () => {
+    const qc = useQueryClient();
+    return useMutation({
+        mutationFn: CommentService.delete,
+        onSuccess: () => qc.invalidateQueries({ queryKey: COMMENT_QUERY_KEY }),
+    });
+};

@@ -34,3 +34,17 @@ export enum SongReleseStatus {
   SCHEDULED = 'scheduled',
   PUBLISHED = 'published'
 }
+
+export enum ReportTargetType {
+  SONG = 'song',
+  ARTIST = 'artist',
+  USER = 'user',
+  ALBUM = 'album',
+  PLAYLIST = 'playlist'
+}
+
+export enum ReportStatus {
+  PENDING = 'pending',
+  RESOLVED = 'resolved', 
+  REJECTED = 'rejected' 
+}

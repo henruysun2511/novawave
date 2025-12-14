@@ -1,11 +1,15 @@
 import http from "@/libs/http";
 import { ApiResponse } from "@/types/body.type";
+import { Comment } from "@/types/object.type";
+import { PaginationParam } from "@/types/param.type";
 
 const prefix = "comments";
 
 export const CommentService = {
-    getList() {
-        return http.get<ApiResponse<Comment[]>>(`/${prefix}`);
+    getList(songId: string, params?: PaginationParam) {
+        return http.get<ApiResponse<Comment[]>>(`/${prefix}/${songId}`, {
+            params,
+        });
     },
     create(payload: Partial<Comment>) {
         return http.post<ApiResponse<Comment>>(`/${prefix}`, payload);

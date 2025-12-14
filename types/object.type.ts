@@ -1,4 +1,4 @@
-import { Gender, SongReleseStatus, SongStatus, UserStatus, VerificationStatus } from "./constant.type";
+import { Gender, ReportTargetType, SongReleseStatus, SongStatus, UserStatus, VerificationStatus } from "./constant.type";
 
 export interface Role {
   _id: string,
@@ -54,6 +54,15 @@ export interface Verification {
   }
 }
 
+export interface Report {
+  _id: string;
+  status: string;
+  targetId: string;
+  targetType: ReportTargetType
+  reason: string;
+  description: string;
+}
+
 export interface Song {
   _id: string,
   name: string,
@@ -91,7 +100,8 @@ export interface Album {
   updateAt: Date,
   album_type: string,
   label: string,
-  total_songs: number
+  total_songs: number,
+  artist: string
 }
 
 
@@ -116,4 +126,9 @@ export interface Product {
   stock: number;
   price: number;
   img: string;
+}
+
+export interface Comment {
+  content: string,
+  songId: string
 }

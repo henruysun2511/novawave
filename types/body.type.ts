@@ -71,6 +71,10 @@ export interface UpdateVerificationDto{
   rejectReason?: string 
 }
 
+export interface ReportDto{
+  status: string
+}
+
 
 
 

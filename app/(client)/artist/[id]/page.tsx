@@ -1,20 +1,94 @@
 "use client";
+import AlbumCard from "@/components/client/AlbumList/album-card";
 import Footer from "@/components/client/footer/footer";
+import ReportModal from "@/components/client/Report/report-modal";
+import SongList from "@/components/client/SongList/song-list";
 import Title from "@/components/ui/title";
-import { CaretRightFilled } from "@ant-design/icons";
+import { useToast } from "@/libs/toast";
+import { useAlbumListByArtist } from "@/queries/useAlbumQuery";
+import { useArtistDetail } from "@/queries/useArtistQuery";
+import { useFollow, useUnfollow, useUserFollow } from "@/queries/useFollowQuery";
+import { useSongListByArtist } from "@/queries/useSongQuery";
+import { useAuthStore } from "@/stores/useAuthStore";
+import { ReportTargetType } from "@/types/constant.type";
+import { Album } from "@/types/object.type";
+import { CaretRightFilled, FlagOutlined, UserAddOutlined, UserDeleteOutlined } from "@ant-design/icons";
+import { useParams } from "next/navigation";
+import { useState } from "react";
 import "swiper/css";
 import "swiper/css/navigation";
-import { Autoplay, Navigation } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
-import TestArtistPage from "./test";
 
 export default function ArtistDetailPage() {
+    const { id } = useParams<{ id: string }>();
+    const toast = useToast();
+    const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+
+    const { data: artistRes, isLoading } = useArtistDetail(id);
+    const artist = artistRes?.data;
+
+    const currentUser = useAuthStore((state) => state.user);
+
+    const { data: FollowRes } = useUserFollow({
+        page: 1,
+        size: 100,
+    });
+
+    const { mutate: followArtist, isPending: isFollowingMutate } = useFollow();
+    const { mutate: unfollowArtist, isPending: isUnfollowingMutate } = useUnfollow();
+
+    const isMutating = isFollowingMutate || isUnfollowingMutate;
+
+    const isFollowing = FollowRes?.data?.some(
+        (f: any) => f.artistId._id === artist?._id
+    );
+
+
+    const handleToggleFollow = () => {
+        if (!currentUser) {
+            toast.error("Vui lòng đăng nhập");
+            return;
+        }
+
+        if (!artist?._id) return;
+
+        if (isFollowing) {
+            unfollowArtist(artist._id, {
+                onSuccess: (res) => {
+                    toast.success(res.data.message);
+                },
+                onError: (err: any) => {
+                    toast.error(err?.response?.data?.message || "Bỏ theo dõi thất bại");
+                },
+            });
+        } else {
+            followArtist(artist._id, {
+                onSuccess: (res) => {
+                    toast.success(res.data.message);
+                },
+                onError: (err: any) => {
+                    toast.error(err?.response?.data?.message || "Theo dõi thất bại");
+                },
+            });
+        }
+    };
+
+    const { data: songRes } = useSongListByArtist(id);
+    const songs = songRes?.data;
+    console.log(songs)
+
+    const { data: albumRes } = useAlbumListByArtist(id);
+    const albums = albumRes?.data;
+    console.log(albums)
+
+    if (isLoading) return <div>Đang tải...</div>;
+    if (!artist) return <div>Không tìm thấy Nghệ sĩ.</div>;
+
     return (
         <>
             <div className="relative w-full h-[450px]">
                 <img
-                    src="/images/jungkook.jpg"
-                    alt="Logo"
+                    src={artist?.bannerUrl || "/images/default-banner.jpg"}
+                    alt={artist?.name || "Artist banner"}
                     className="w-full h-full object-cover rounded-2xl"
                 />
 
@@ -22,10 +96,11 @@ export default function ArtistDetailPage() {
 
                 <div className="absolute bottom-0 left-0 z-20 p-4 w-full">
                     <div className="text-base text-white mb-1">
-                        1 tỷ lượt nghe hàng tháng
+                        {artist?.followers ?? "Đang cập nhật"} lượt theo dõi
                     </div>
+
                     <h3 className="uppercase text-7xl font-extrabold text-white mb-1 hover:text-green transition">
-                        Jungkook
+                        {artist?.name || "Đang cập nhật"}
                     </h3>
                 </div>
             </div>
@@ -35,12 +110,36 @@ export default function ArtistDetailPage() {
                     <div className="cursor-pointer w-15 h-15 rounded-full bg-green flex items-center justify-center shadow-lg">
                         <CaretRightFilled className="text-3xl" />
                     </div>
+
+                    <button
+                        onClick={handleToggleFollow}
+                        disabled={isMutating}
+                        className={`flex items-center gap-2 border rounded-full text-base px-5 py-1 transition cursor-pointer
+                        ${isFollowing
+                                ? "border-green bg-green text-white hover:bg-green/90"
+                                : "border-green text-text-primary hover:bg-green hover:text-white"}
+                           `}>
+                        {isMutating ? (
+                            "Đang xử lý..."
+                        ) : isFollowing ? (
+                            <>
+                                <UserDeleteOutlined />
+                                Bỏ theo dõi
+                            </>
+                        ) : (
+                            <>
+                                <UserAddOutlined />
+                                Theo dõi
+                            </>
+                        )}
+                    </button>
                     <div
                         className="border border-green rounded-full text-text-primary text-base px-5 py-1 cursor-pointer
-                                  transition duration-200
+                                  transition duration-200 
                                  hover:bg-green hover:text-white"
+                        onClick={() => setIsReportModalOpen(true)}
                     >
-                        Theo dõi
+                        <FlagOutlined className="mr-2" />Report
                     </div>
                 </div>
 
@@ -58,100 +157,104 @@ export default function ArtistDetailPage() {
                     </thead>
 
                     <tbody>
-                        <tr className="hover:bg-[var(--background-tertiary)] transition text-text-primary">
-                            <td className="py-3">1</td>
-                            <td className="py-3 flex items-center gap-4">
-                                <img className="w-[50px] h-[50px] object-cover" src="https://i.scdn.co/image/ab67616d0000b273741fd4807f442af3f7359316" alt="" />
-                                <p>Seven</p>
-                            </td>
-                            <td className="py-3">Golden</td>
-                            <td className="py-3">2.648.769.215</td>
-                            <td className="py-3">03:55</td>
-                        </tr>
-                        <tr className="hover:bg-[var(--background-tertiary)] transition text-text-primary">
-                            <td className="py-3">2</td>
-                            <td className="py-3 flex items-center gap-4">
-                                <img className="w-[50px] h-[50px] object-cover" src="https://i.scdn.co/image/ab67616d0000b273741fd4807f442af3f7359316" alt="" />
-                                <p>Standing next to you</p>
-                            </td>
-                            <td className="py-3">Golden</td>
-                            <td className="py-3">2.648.769.215</td>
-                            <td className="py-3">03:55</td>
-                        </tr>
-                        <tr className="hover:bg-[var(--background-tertiary)] transition text-text-primary">
-                            <td className="py-3">3</td>
-                            <td className="py-3 flex items-center gap-4">
-                                <img className="w-[50px] h-[50px] object-cover" src="https://i.scdn.co/image/ab67616d00001e02409a2d7bd4b2238e4aaa7bf5" alt="" />
-                                <p>3D</p>
-                            </td>
-                            <td className="py-3">3D</td>
-                            <td className="py-3">2.648.769.215</td>
-                            <td className="py-3">03:55</td>
-                        </tr>
-                        <tr className="hover:bg-[var(--background-tertiary)] transition text-text-primary">
-                            <td className="py-3">4</td>
-                            <td className="py-3 flex items-center gap-4">
-                                <img className="w-[50px] h-[50px] object-cover" src="https://i.scdn.co/image/ab67616d0000b273741fd4807f442af3f7359316" alt="" />
-                                <p>Yes or no</p>
-                            </td>
-                            <td className="py-3">Golden</td>
-                            <td className="py-3">2.648.769.215</td>
-                            <td className="py-3">03:55</td>
-                        </tr>
+                        {songs && songs.length > 0 ? (
+                            songs.map((song: any, index: number) => (
+                                <tr
+                                    key={song._id}
+                                    className="hover:bg-[var(--background-tertiary)] transition text-text-primary"
+                                >
+                                    {/* STT */}
+                                    <td className="py-3">{index + 1}</td>
+
+                                    {/* Tên bài hát */}
+                                    <td className="py-3 flex items-center gap-4">
+                                        <img
+                                            className="w-[50px] h-[50px] object-cover rounded"
+                                            src={song?.imageUrl || "/images/default-cover.png"}
+                                            alt={song?.name || "Song"}
+                                        />
+                                        <p>{song?.name || "Đang cập nhật"}</p>
+                                    </td>
+                                    <td className="py-3">
+                                        {song?.album?.name || "Đang cập nhật"}
+                                    </td>
+                                    <td className="py-3">
+                                        {song?.listenCount !== undefined
+                                            ? song.listenCount.toLocaleString("vi-VN")
+                                            : "Đang cập nhật"}
+                                    </td>
+                                    <td className="py-3">
+                                        {song?.duration
+                                            ? `${Math.floor(song.duration / 60)}:${String(
+                                                Math.floor(song.duration % 60)
+                                            ).padStart(2, "0")}`
+                                            : "Đang cập nhật"}
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan={5} className="py-5 text-center text-gray-500">
+                                    Chưa có bài hát
+                                </td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
 
                 <div className="mt-10 mb-5">
                     <Title>Giới thiệu</Title>
                 </div>
-                <div className="flex gap-5 justify-between items-center">
-                    <div>
+                <div className="flex gap-5 justify-center items-center">
+                    <div className="">
                         <div className="mb-10">
-                            <h3 className="text-text-primary text-3xl font-extrabold mb-1">18.736.138</h3>
-                            <p className="text-text-primary">Người theo dõi</p>
+                            <h3 className="text-text-primary text-3xl font-extrabold mb-1"> {artist?.playerCount ?? "16.750.000"}</h3>
+                            <p className="text-text-primary">Lượt nghe</p>
                         </div>
                         <div>
-                            <h3 className="text-text-primary text-3xl font-extrabold mb-1">16.240.605</h3>
-                            <p className="text-text-primary">Lượt nghe hàng tháng</p>
+                            <h3 className="text-text-primary text-3xl font-extrabold mb-1">{artist?.country || "Đang cập nhật"}</h3>
+                            <p className="text-text-primary">Quốc gia</p>
                         </div>
                     </div>
-                    <img className="w-[500px] h-[500px] rounded-2xl object-cover" src="https://i.pinimg.com/1200x/1a/2e/79/1a2e79b262222a075368180ceefd03e5.jpg" alt="" />
-                    <p className="text-gray-500 text-base">Jung Kook (Jeon, Jeongguk) is a South Korean singer, songwriter, and member of 21st century pop icons, BTS. Living up to the group’s universal reputation, Jung Kook is known as an ‘all-rounder’ with his versatility in vocal, rap and performance. In addition to BTS’ group works, Jung Kook has been proving his wide spectrum of musical talent through solo works such as “Euphoria,” “My Time” and “Still With You”, and collaborative singles with global artists including Lauv and Charlie Puth. Jung Kook has continuously participated in making music including the Japanese single “Your eyes tell”, “Stay” from BE, and “Run BTS” from Proof. He also demonstrated his potential as a producer by partaking in producing music such as “Outro : Love Is Not Over” from The most beautiful moment in life pt.1, “Magic Shop” from LOVE YOURSELF 轉 ‘TEAR’ and his solo single “Still With You.” Jung Kook also participated in singing “Dreamers”, the Official Soundtrack of FIFA World Cup Qatar 2022™, which he performed at the Opening Ceremony.</p>
+                    <img className="h-[500px] w-[500px] rounded-2xl object-cover" src={artist?.avatarUrl} alt={artist?.name} />
+                    <div>
+                        <p className="text-gray-500 text-base"> {artist?.name || "Đang cập nhật"}</p>
+                        <h3 className="text-text-primary text-3xl font-extrabold mb-1">Tiểu sử</h3>
+                    </div>
+
                 </div>
 
                 <div className="mt-15 mb-5">
                     <Title>Danh sách đĩa nhạc</Title>
-                    <Swiper
-                        slidesPerView={6}
-                        spaceBetween={20}
-                        slidesPerGroup={1}
-                        navigation
-                        modules={[Navigation, Autoplay]}
-                        className="mySwiper"
-                        pagination={{ clickable: true }}
-                        speed={600}
-                        autoplay={{
-                            delay: 3000,
-                            disableOnInteraction: false,
-                        }}
-                    >
-                        <SwiperSlide><TestArtistPage /></SwiperSlide>
-                        <SwiperSlide><TestArtistPage /></SwiperSlide>
-                        <SwiperSlide><TestArtistPage /></SwiperSlide>
-                        <SwiperSlide><TestArtistPage /></SwiperSlide>
-                        <SwiperSlide><TestArtistPage /></SwiperSlide>
-                        <SwiperSlide><TestArtistPage /></SwiperSlide>
-                        <SwiperSlide><TestArtistPage /></SwiperSlide>
-                        <SwiperSlide><TestArtistPage /></SwiperSlide>
-                    </Swiper>
+                    {songs && songs.length > 0 ? (
+                        <SongList songs={songs} />
+                    ) : (
+                        <div className="text-gray-500">Chưa có bài hát nào</div>
+                    )}
                 </div>
 
                 <div className="mt-15 mb-5">
                     <Title>Album</Title>
+                    <div className="flex flex-wrap gap-3">
+                        {albums && albums.length > 0 ? (
+                            albums.map((album: Album) => (
+                                <AlbumCard key={album._id} album={album} />
+                            ))
+                        ) : (
+                            <p className="text-gray-500">Chưa có album</p>
+                        )}
+                    </div>
                 </div>
 
             </div>
-        <Footer />
+            <Footer />
+
+            <ReportModal
+                open={isReportModalOpen}
+                onClose={() => setIsReportModalOpen(false)}
+                targetId={id}
+                targetType={ReportTargetType.ARTIST}
+            />
         </>
     );
 }

@@ -38,10 +38,13 @@ export const useUpdateArtistProfile = () => {
     });
 };
 
-export const useArtistDetail = (id: string) =>
+export const useArtistDetail = (
+    id?: string
+) =>
     useQuery({
         queryKey: [...ARTIST_QUERY_KEY, id],
-        queryFn: async () => (await ArtistService.getDetail(id)).data,
+        queryFn: async () => (await ArtistService.getDetail(id!)).data,
+        enabled: !!id,
     });
 
 

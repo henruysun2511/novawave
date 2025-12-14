@@ -2,7 +2,7 @@ import { useToast } from "@/libs/toast";
 import { useDeleteSong } from "@/queries/useSongQuery";
 import { Song } from "@/types/object.type";
 import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
-import { Button, Popconfirm, Space, Table } from "antd";
+import { Button, Image, Popconfirm, Space, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { useState } from "react";
 import ArtistSongDetailModal from "./artist-song-detail-modal";
@@ -41,6 +41,26 @@ export default function ArtistSongTable({ data, loading }: Props) {
 
 
   const columns: ColumnsType<Song> = [
+    {
+      title: "Ảnh bìa",
+      dataIndex: "imageUrl",
+      key: "imageUrl",
+      width: 80,
+      render: (imageUrl: string, record) => {
+        if (imageUrl) {
+          return (
+            <Image
+              width={60}
+              height={60}
+              src={imageUrl}
+              alt={record.name}
+              style={{ objectFit: 'cover', borderRadius: '4px' }}
+            />
+          );
+        }
+        return <span className="text-gray-500 text-xs">Chưa có ảnh</span>;
+      },
+    },
     { title: "Tên bài hát", dataIndex: "name" },
 
     {
@@ -55,10 +75,10 @@ export default function ArtistSongTable({ data, loading }: Props) {
       dataIndex: "status",
       render: (_, record) => (
         <Button
-            onClick={() => setEditingStatusSong(record)}
-          >
-            Cập nhật trạng thái
-          </Button>
+          onClick={() => setEditingStatusSong(record)}
+        >
+          Cập nhật trạng thái
+        </Button>
       ),
     },
 

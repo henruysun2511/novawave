@@ -1,15 +1,19 @@
 import http from "@/libs/http";
 import { ApiResponse } from "@/types/body.type";
-import { Album } from "@/types/object.type";
+import { Album, Song } from "@/types/object.type";
+import { PaginationParam } from "@/types/param.type";
 
 const prefix = "albums";
 
 export const AlbumService = {
-    getList() {
-        return http.get<ApiResponse<Album[]>>(`/${prefix}`);
+    getList(params: PaginationParam) {
+        return http.get<ApiResponse<Album[]>>(`/${prefix}`, {params});
     },
     getListByArtist(artistId: string) {
         return http.get<ApiResponse<Album[]>>(`/${prefix}/${artistId}`);
+    },
+    getSongsInAlbum(albumId: string) {
+        return http.get<ApiResponse<Song[]>>(`/${prefix}/songs/${albumId}`); 
     },
     getDetail(id: string) {
         return http.get<ApiResponse<Album>>(`/${prefix}/detail/${id}`);

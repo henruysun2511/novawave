@@ -7,35 +7,37 @@
   margin-bottom: 24px;
 }
 
-/* Tab item */
-.profile-tabs .ant-tabs-tab {
+/* Tab text */
+.profile-tabs .ant-tabs-tab .ant-tabs-tab-btn {
   color: rgba(255, 255, 255, 0.6);
   font-size: 18px;
   font-weight: 600;
   padding: 12px 24px;
-  transition: all 0.3s;
+  transition: color 0.3s;
 }
 
 /* Hover */
-.profile-tabs .ant-tabs-tab:hover {
+.profile-tabs .ant-tabs-tab:hover .ant-tabs-tab-btn {
   color: var(--color-green);
 }
 
 /* Active */
-.profile-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
-  color: var(--color-green);;
+.profile-tabs
+  .ant-tabs-tab.ant-tabs-tab-active
+  .ant-tabs-tab-btn {
+  color: var(--color-green);
 }
 
 /* Ink bar */
 .profile-tabs .ant-tabs-ink-bar {
-  background: var(--color-green);;
+  background: var(--color-green);
   height: 3px;
   border-radius: 999px;
 }
 
 /* Remove bottom border */
 .profile-tabs .ant-tabs-nav::before {
-  border-bottom: none;
+  border-bottom: none !important;
 }
 
 /* Content */

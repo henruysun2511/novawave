@@ -1,4 +1,4 @@
-import { UserStatus } from "./constant.type";
+import { ReportTargetType, UserStatus } from "./constant.type";
 
 export interface PaginationParam {
     page?: number;
@@ -32,4 +32,12 @@ export interface ProductParam extends PaginationParam {
     name?: string;
     start?: number;
     end?: number;
+}
+
+export type FilterTargetType = ReportTargetType | 'all';
+
+export interface ReportParam {
+    page: number;
+    size: number;
+    targetType?: FilterTargetType;
 }
