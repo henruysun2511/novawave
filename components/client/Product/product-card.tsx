@@ -1,6 +1,5 @@
 import { Product } from "@/types/object.type";
-import { ShoppingCartOutlined } from "@ant-design/icons";
-import { Tooltip } from "antd";
+import { useRouter } from "next/navigation";
 
 interface ProductCardProps {
     product: Product;
@@ -8,8 +7,17 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, onAddToCart }: ProductCardProps) {
+    const router = useRouter();
+
+    const handleGoDetail = () => {
+        const encodedName = encodeURIComponent(product.name);
+        const encodedImg = encodeURIComponent(product.img);
+        router.push(`/product/${product._id}?name=${encodedName}&img=${encodedImg}&price=${product.price}&stock=${product.stock}`);
+    };
+
     return (
-        <div className="relative group p-4 rounded-xl shadow hover:shadow-lg transition cursor-pointer bg-[var(--background-secondary)]">
+        <div className="relative group p-4 rounded-xl shadow hover:shadow-lg transition cursor-pointer bg-[var(--background-secondary)]"
+            onClick={handleGoDetail}>
             <div className="w-full h-56 overflow-hidden rounded-lg">
                 <img
                     src={product.img}
@@ -24,22 +32,6 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
             <p className="font-bold text-green text-xl mb-1.5">
                 {product.price.toLocaleString()}₫
             </p>
-
-            <p className="font-bold text-gray-600 text-sm">
-                Còn: {product.stock}
-            </p>
-
-            <div className="absolute inset-0  bg-black/40 rounded-xl opacity-0  group-hover:opacity-100 transition"></div>
-
-            <Tooltip title="Thêm vào giỏ hàng">
-                <div
-                    className="absolute top-3 right-3 bg-green p-2 rounded-full shadow opacity-0 
-                group-hover:opacity-100 transition"
-                    onClick={() => onAddToCart(product)}
-                >
-                    <ShoppingCartOutlined size={20} />
-                </div>
-            </Tooltip>
 
         </div>
     );

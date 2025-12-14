@@ -6,6 +6,7 @@ import Title from "@/components/ui/title";
 import { useToast } from "@/libs/toast";
 import { useAlbumDetail, useSongsInAlbum } from "@/queries/useAlbumQuery";
 import { useArtistDetail } from "@/queries/useArtistQuery";
+import { useStartPlayer } from "@/queries/usePlayerQuery";
 import { ReportTargetType } from "@/types/constant.type";
 import { CaretRightFilled, FlagOutlined } from "@ant-design/icons";
 import { Input } from 'antd';
@@ -21,16 +22,44 @@ export default function AlbumDetailPage() {
     const { data: albumRes, isLoading: albumLoading } = useAlbumDetail(id);
     const album = albumRes?.data;
 
-    const { data: artistRes } = useArtistDetail(album?.artist ?? "");
+    const { data: artistRes, isPending } = useArtistDetail(album?.artist ?? "");
     const artist = artistRes?.data;
 
     const { data: songRes } = useSongsInAlbum(id);
     const songs = songRes?.data;
 
+
+
+
+    const { mutate: startPlayerMutation } = useStartPlayer();
+
+    const handlePlayAlbum = () => {
+        if (!songs || songs.length === 0) {
+            toast.warning("Album không có bài hát nào.");
+            return;
+        }
+
+        const firstSong = songs[0];
+        console.log(firstSong);
+
+        startPlayerMutation({
+            songId: firstSong._id,
+            albumId: album!._id,
+        }, {
+            onSuccess: (res) => {
+                toast.success(`Bắt đầu phát Album: ${album!.name}`);
+                console.log(res.data);
+            },
+            onError: (err) => {
+                toast.error("Không thể phát nhạc. Vui lòng thử lại.");
+                console.error(err);
+            }
+        });
+    };
+
     if (albumLoading) return <div>Loading...</div>;
     if (!album) return <div>Không tìm thấy album</div>;
-    if(!artist) return <div>Không tìm thấy artist</div>;
-    
+    if (!artist) return <div>Không tìm thấy artist</div>;
 
     return (
         <>
@@ -58,16 +87,17 @@ export default function AlbumDetailPage() {
             <div className="p-8">
                 <div className="flex items-center gap-4 mb-10">
                     <div className="cursor-pointer w-15 h-15 rounded-full bg-green flex items-center justify-center shadow-lg">
-                        <CaretRightFilled className="text-3xl" />
+                        <CaretRightFilled className="text-3xl"
+                            onClick={handlePlayAlbum} />
                     </div>
 
                     <div
                         className="border border-green rounded-full text-text-primary text-base px-5 py-1 cursor-pointer
                                   transition duration-200
                                  hover:bg-green hover:text-white"
-                                 onClick={() => setIsReportModalOpen(true)}
+                        onClick={() => setIsReportModalOpen(true)}
                     >
-                        <FlagOutlined className="mr-2"  />Report
+                        <FlagOutlined className="mr-2" />Report
                     </div>
                 </div>
 
@@ -104,9 +134,16 @@ export default function AlbumDetailPage() {
                     </tbody>
                 </table>
 
-                <div className="my-10"></div>
-                <Title>Nghệ sĩ</Title>
-                <ArtistCard artist={artist} />
+                <div className="my-10">
+                    <Title>Nghệ sĩ</Title>
+                    {isPending ? (
+                        <div>Đang tải nghệ sĩ...</div>
+                    ) : artist ? (
+                        <ArtistCard artist={artist} />
+                    ) : (
+                        <div>Không tìm thấy nghệ sĩ</div>
+                    )}
+                </div>
 
                 <div className="my-10"></div>
             </div>
@@ -114,8 +151,8 @@ export default function AlbumDetailPage() {
             <ReportModal
                 open={isReportModalOpen}
                 onClose={() => setIsReportModalOpen(false)}
-                targetId={id} 
-                targetType={ReportTargetType.ALBUM} 
+                targetId={id}
+                targetType={ReportTargetType.ALBUM}
             />
         </>
     )

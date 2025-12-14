@@ -76,6 +76,13 @@ export default function Header() {
     });
 
 
+    const handleSearch = (value: string) => {
+        if (!value?.trim()) return;
+
+        router.push(`/search?keyword=${encodeURIComponent(value.trim())}`);
+    };
+
+
 
     return (
         <>
@@ -93,6 +100,7 @@ export default function Header() {
                     placeholder="Tìm kiếm nhạc, nghệ sĩ, playlist,..."
                     allowClear
                     style={{ width: 550 }}
+                    onSearch={handleSearch}
                 />
 
                 <div className="flex items-center gap-4 pr-4">

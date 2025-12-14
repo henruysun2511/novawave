@@ -1,3 +1,7 @@
+import { useArtistDetail } from "@/queries/useArtistQuery";
+import { useNextSong, usePreviousSong } from "@/queries/usePlayerQuery";
+import { useSongDetail } from "@/queries/useSongQuery";
+import { usePlayerStore } from "@/stores/usePlayerStore";
 import { useSidebarStore } from "@/stores/useSidebarStore";
 import { CloseOutlined, MenuFoldOutlined, UpSquareOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
@@ -9,6 +13,43 @@ export default function SongBar() {
   const showInfo = useSidebarStore((s) => s.showInfo);
   const showQueue = useSidebarStore((s) => s.showQueue);
   const hidePanel = useSidebarStore((s) => s.hideRightPanel);
+
+  const { isPlaying, play, pause, status } = usePlayerStore(); 
+  console.log(status)
+  const { nowPlaying } = status;
+  console.log(nowPlaying)
+  
+  // Lấy chi tiết bài hát đang phát (ApiResponse<Song>)
+  const { data: songRes } = useSongDetail(nowPlaying ?? "");
+  const currentSong = songRes?.data; 
+  console.log(currentSong)
+  
+  // Lấy chi tiết nghệ sĩ
+  const artistId =
+  typeof currentSong?.artistId === "string" ? currentSong.artistId : undefined;
+
+  const { data: artistRes } = useArtistDetail(artistId);
+  const currentArtist = artistRes?.data;
+  
+  // Mutations
+  const nextMutation = useNextSong();
+  const previousMutation = usePreviousSong();
+
+  // Logic chuyển bài
+  const handleNext = () => {
+      if (nowPlaying) { 
+          // Gọi mutation, truyền ID hiện tại
+          nextMutation.mutate({ currentSongId: nowPlaying }); 
+      }
+  };
+
+  const handlePrev = () => {
+      if (nowPlaying) {
+          // Gọi mutation, ID vẫn được truyền trong payload
+          // (Dù PlayerService.previous không sử dụng, nhưng giúp call site nhất quán)
+          previousMutation.mutate({ currentSongId: nowPlaying }); 
+      }
+  };
 
   return (
     <div className="bg-black fixed bottom-0 right-0 w-full z-10 h-[64px] flex items-center px-4 text-white">
@@ -22,10 +63,13 @@ export default function SongBar() {
       {/* Audio player */}
       <div className="w-[50%]">
         <AudioPlayer
-          src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
-          autoPlay={false}
+          src={currentSong?.mp3Link} 
+          autoPlay={isPlaying} 
+          onPlay={play} // Cập nhật Zustand: isPlaying = true
+          onPause={pause} // Cập nhật Zustand: isPlaying = false
           showSkipControls
-          showJumpControls={false}
+          onClickNext={handleNext} // Gọi mutation chuyển bài
+          onClickPrevious={handlePrev} // Gọi mutation chuyển bài
           className="custom-audio-player"
         />
       </div>

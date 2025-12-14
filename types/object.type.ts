@@ -29,7 +29,7 @@ export interface Artist {
   biography: string,
   country: string,
   artistId?: {
-    _id: string, 
+    _id: string,
     name: string
   }
 }
@@ -130,6 +130,7 @@ export interface Product {
   stock: number;
   price: number;
   img: string;
+  productId: string;
 }
 
 export interface Comment {
@@ -137,7 +138,7 @@ export interface Comment {
   songId: string
 }
 
-export interface Playlist{
+export interface Playlist {
   _id: string,
   name: string,
   description: string,
@@ -145,8 +146,8 @@ export interface Playlist{
   img: string,
 }
 
-export interface Permission{
-   _id: string,
+export interface Permission {
+  _id: string,
   name: string,
   method: string,
   path: string;
@@ -154,9 +155,39 @@ export interface Permission{
   description?: string;
 }
 
-export interface Role{
-   _id: string,
+export interface Role {
+  _id: string,
   name: string,
   description?: string;
   permissions?: string[],
+}
+
+export interface Player {
+  nowPlaying: string | null,
+  queue: string[]
+}
+
+export interface Cart {
+  _id: string
+  products: Product[]
+  totalPrice: number,
+}
+
+export interface Plan {
+    _id: string;
+    planName: string;
+    price: number;
+    durationInMonths: number;
+    description?: string;
+    deleted: boolean;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface SearchResult {
+  songs: any[];
+  artists: any[];
+  albums: any[];
+  playlists: any[];
+  genres: any[];
 }

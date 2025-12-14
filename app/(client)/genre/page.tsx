@@ -9,7 +9,7 @@ import { Genre, Song } from "@/types/object.type";
 import { Pagination } from "antd";
 import { useEffect, useState } from "react";
 
-const getRandomColor = () => {
+export const getRandomColor = () => {
     // Danh sách các màu tươi sáng, dễ nhìn trên nền trắng/sáng
     const colors = [
         "bg-red-500",

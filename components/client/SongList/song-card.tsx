@@ -29,7 +29,7 @@ export default function SongCard({ song }: Props) {
                         />
                     ) : (
                         <div
-                            className="w-[180px] h-[180px] rounded-xl flex items-center justify-center bg-gray-600 text-white text-7xl font-bold"
+                            className="w-[160px] h-[180px] rounded-xl flex items-center justify-center bg-gray-600 text-white text-7xl font-bold"
                             title={song.name} 
                         >
                             {song.name ? song.name.charAt(0).toUpperCase() : '?'}

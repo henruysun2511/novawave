@@ -141,12 +141,12 @@ export default function ArtistSongUpdateModal({
 
         const image = values.imageUrl?.[0];
         if (image?.originFileObj) {
-            formData.append("image", image.originFileObj);
+            formData.append("imageUrl", image.originFileObj);
         }
 
         const audio = values.mp3Link?.[0];
         if (audio?.originFileObj) {
-            formData.append("audio", audio.originFileObj);
+            formData.append("mp3Link", audio.originFileObj);
         }
 
         mutate(

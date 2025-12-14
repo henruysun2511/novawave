@@ -26,7 +26,7 @@ export default function AlbumCard({ album }: Props) {
                         />
                     ) : (
                         <div
-                            className="w-[180px] h-[180px] rounded-xl
+                            className="w-[160px] h-[180px] rounded-xl
                        bg-green flex items-center justify-center
                        text-white text-4xl font-bold"
                         >

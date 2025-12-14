@@ -1,4 +1,5 @@
 import { Gender, VerificationStatus } from './constant.type';
+import { Product } from './object.type';
 
 export interface Pagination {
   page: number;
@@ -66,20 +67,46 @@ export interface ChangePasswordDto {
   oldPassword: string
 }
 
-export interface UpdateVerificationDto{
+export interface UpdateVerificationDto {
   status: VerificationStatus,
-  rejectReason?: string 
+  rejectReason?: string
 }
 
-export interface ReportDto{
+export interface ReportDto {
   status: string
 }
 
-export interface AssignPermissionDto{
+export interface AssignPermissionDto {
   permissions?: string[];
 }
 
+export interface PlayerDto {
+  songId: string;
+  albumId?: string;
+  playlistId?: string;
+}
 
+export interface NextSongDto {
+  currentSongId: string;
+}
+
+export interface AddCartDto {
+  productId: string;
+  quantity: number;
+}
+
+
+export interface PaymentProductDto {
+  fullName: string;
+  phone: string;
+  address: string;
+  products: Product;
+  cartId?: string
+}
+
+export interface PaymentPlanDto {
+  planId: string;
+}
 
 
 

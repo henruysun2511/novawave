@@ -1,8 +1,13 @@
 import http from "@/libs/http";
 import { ApiResponse } from "@/types/body.type";
+import { Plan } from "@/types/object.type";
 
 export const PlanService = {
-    create(payload: any) {
-        return http.post<ApiResponse<any>>(`/plans`, payload);
+    getAll: () => {
+        return http.get<ApiResponse<Plan[]>>(`/plans`);
+    },
+
+    create: (payload: Plan) => {
+        return http.post<ApiResponse<Plan>>(`/plans`, payload);
     },
 };

@@ -9,7 +9,7 @@ export default function SongList2({ songs }: { songs: Song[] }) {
         <>
             <div className="flex flex-wrap gap-4">
                 {songs?.map((song) => (
-                    <SongCard song={song} />
+                    <SongCard key={song._id} song={song} />
                 ))}
             </div>
         </>

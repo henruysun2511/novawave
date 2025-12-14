@@ -40,6 +40,13 @@ export default function SideBar() {
                 }
             ]
         },
+         {
+            key: '10', icon: <BookOutlined />, label: <span className="text-lg font-semibold">Gói nhạc</span>, children: [
+                {
+                    key: '/admin/plan', label: <span className="text-lg font-semibold">Quản lý gói nghe nhạc</span>
+                }
+            ]
+        },
         {
             key: '3', icon: <PlayCircleOutlined />, label: <span className="text-lg font-semibold">Âm nhạc</span>, children: [
                 {

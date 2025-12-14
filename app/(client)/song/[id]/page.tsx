@@ -15,12 +15,14 @@ import { Input } from 'antd';
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import LyricsPreview from "../lyrics-preview";
+import SongAddPlaylistModal from "./song-add-playlist-modal";
 import SongComment from "./song-comment";
 const { TextArea } = Input;
 
 export default function SongDetailPage() {
     const { id } = useParams<{ id: string }>();
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+    const [isPlaylistModalOpen, setIsPlaylistModalOpen] = useState(false);
     const toast = useToast();
 
     const { data: songRes, isLoading } = useSongDetail(id);
@@ -36,7 +38,6 @@ export default function SongDetailPage() {
 
     if (isLoading) return <div>Loading...</div>;
     if (!songRes?.data) return <div>Không tìm thấy bài hát</div>;
-
     const song = songRes.data;
 
     const isLiked = likeRes?.data?.some(
@@ -65,6 +66,15 @@ export default function SongDetailPage() {
             });
         }
     };
+
+    const handleOpenPlaylistModal = () => {
+        if (!user) {
+            toast.error("Vui lòng đăng nhập để thêm vào Playlist");
+            return;
+        }
+        setIsPlaylistModalOpen(true);
+    }
+
 
     return (
         <>
@@ -112,6 +122,7 @@ export default function SongDetailPage() {
                             className="border border-green rounded-full text-text-primary text-base px-5 py-1 cursor-pointer
                                   transition duration-200
                                  hover:bg-green hover:text-white"
+                                 onClick={() => setIsPlaylistModalOpen(true)}
                         >
                             <PlusOutlined className="mr-2" />Thêm vào playlist
                         </div>
@@ -229,6 +240,13 @@ export default function SongDetailPage() {
                 onClose={() => setIsReportModalOpen(false)}
                 targetId={id}
                 targetType={ReportTargetType.SONG}
+            />
+
+
+            <SongAddPlaylistModal
+                isOpen={isPlaylistModalOpen}
+                onClose={() => setIsPlaylistModalOpen(false)}
+                songId={song._id}
             />
         </>
     )

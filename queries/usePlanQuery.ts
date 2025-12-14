@@ -1,12 +1,23 @@
 import { PlanService } from "@/services/plan.service";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Plan } from "@/types/object.type";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const PLAN_QUERY_KEY = ["plans"];
 
+
+export const usePlans = () => {
+    return useQuery({
+        queryKey: PLAN_QUERY_KEY,
+        queryFn: PlanService.getAll,
+    });
+};
+
 export const useCreatePlan = () => {
-    const qc = useQueryClient();
+    const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: PlanService.create,
-        onSuccess: () => qc.invalidateQueries({ queryKey: PLAN_QUERY_KEY }),
+        mutationFn: (payload: Plan) => PlanService.create(payload),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: PLAN_QUERY_KEY });
+        },
     });
 };
