@@ -1,7 +1,10 @@
 import { CaretRightFilled, PlusOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
+import { useState } from "react";
+import PlaylistCreateModal from "./playlist-create-modal";
 
 export default function MyPlaylist() {
+    const [open, setOpen] = useState(false);
     return (
         <>
             <div className="p-3">
@@ -11,6 +14,7 @@ export default function MyPlaylist() {
                     <Tooltip title="Thêm playlist mới" placement="top">
                         <PlusOutlined
                             className="text-text-primary cursor-pointer text-base"
+                            onClick={() => setOpen(true)}
                         />
                     </Tooltip>
                 </div>
@@ -44,6 +48,8 @@ export default function MyPlaylist() {
 
                 </div>
             </div>
+
+            <PlaylistCreateModal open={open} onCancel={() => setOpen(false)}/>
 
         </>
     )

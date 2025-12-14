@@ -1,0 +1,9 @@
+.playlist-collapse .ant-collapse-header {
+  background: var(--background-tertiary);
+  color: white !important;
+  border-radius: 12px;
+}
+
+.playlist-collapse .ant-collapse-item-active > .ant-collapse-header {
+  background: var(--color-green);
+}

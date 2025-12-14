@@ -2,7 +2,7 @@
 import { Segmented, SegmentedProps } from "antd";
 import { useState } from "react";
 import MenuBar from "../MenuBar/menu-bar";
-import MyPlaylist from "../MyPlaylist/my-playlist";
+import MyPlaylist from "../Playlist/my-playlist";
 import "./sidebar.css";
 
 type SegmentedValue = string | number;

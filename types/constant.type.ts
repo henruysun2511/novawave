@@ -48,3 +48,8 @@ export enum ReportStatus {
   RESOLVED = 'resolved', 
   REJECTED = 'rejected' 
 }
+
+export enum PlaylistStatus {
+  PRIVATE = 'private',
+  PUBLIC = 'public'
+}

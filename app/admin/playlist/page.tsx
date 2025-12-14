@@ -1,37 +1,37 @@
 "use client";
+import PlaylistCreateModal from "@/components/client/Playlist/playlist-create-modal";
 import Title from "@/components/ui/title";
-import { useGenreList } from "@/queries/useGenreQuery";
+import { useAdminPlaylistList } from "@/queries/usePlaylistQuery";
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Space } from "antd";
 import { useState } from "react";
-import GenreCreateModal from "./genre-create-modal";
-import GenreTable from "./genre-table";
+import PlaylistCollapse from "./playlist-collapse";
 
 
-export default function GenreManagementPage() {
+export default function PlaylistManagementPage() {
     const [openCreate, setOpenCreate] = useState(false);
-    const { data, isLoading } = useGenreList();
-    console.log(data)
+    const { data, isLoading } = useAdminPlaylistList();
 
     return (
         <>
             <Space direction="vertical" className="w-full" size="large">
+                <Title>Quản lý playlist</Title>
                 <div className="flex justify-between items-center">
-                    <Title>Quản lý thể loại</Title>
+
                     <Button
                         icon={<PlusOutlined />}
                         type="primary"
                         className="bg-green"
                         onClick={() => setOpenCreate(true)}
                     >
-                        Thêm thể loại
+                        Thêm playlist
                     </Button>
                 </div>
+                <PlaylistCollapse playlists={data?.data || []} />
 
-                <GenreTable data={data?.data ?? []} loading={isLoading} />
             </Space>
 
-            <GenreCreateModal open={openCreate} onCancel={() => setOpenCreate(false)} />
+            <PlaylistCreateModal open={openCreate} onCancel={() => setOpenCreate(false)}/>
         </>
     );
 }

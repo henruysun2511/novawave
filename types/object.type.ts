@@ -1,4 +1,4 @@
-import { Gender, ReportTargetType, SongReleseStatus, SongStatus, UserStatus, VerificationStatus } from "./constant.type";
+import { Gender, PlaylistStatus, ReportTargetType, SongReleseStatus, SongStatus, UserStatus, VerificationStatus } from "./constant.type";
 
 export interface Role {
   _id: string,
@@ -131,4 +131,12 @@ export interface Product {
 export interface Comment {
   content: string,
   songId: string
+}
+
+export interface Playlist{
+  _id: string,
+  name: string,
+  description: string,
+  status: PlaylistStatus,
+  img: string,
 }
