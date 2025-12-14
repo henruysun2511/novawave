@@ -38,3 +38,15 @@ export const useDeleteUser = () => {
     },
   });
 };
+
+export const useUpdateUserRole = () => {
+    const qc = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({ id, roleId }: { id: string, roleId: string }) =>
+            UserService.updateRole(id, roleId),
+        onSuccess: () => {
+            qc.invalidateQueries({ queryKey: USER_QUERY_KEY });
+        },
+    });
+};

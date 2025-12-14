@@ -36,8 +36,14 @@ export interface ProductParam extends PaginationParam {
 
 export type FilterTargetType = ReportTargetType | 'all';
 
-export interface ReportParam {
+export interface ReportParam extends PaginationParam {
     page: number;
     size: number;
     targetType?: FilterTargetType;
+}
+
+export interface PermissionParam extends PaginationParam {
+    name?: string;
+    method?: string;
+    module?: string;
 }

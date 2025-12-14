@@ -53,3 +53,19 @@ export enum PlaylistStatus {
   PRIVATE = 'private',
   PUBLIC = 'public'
 }
+
+export enum HttpMethod {
+    GET = 'GET',
+    POST = 'POST',
+    PUT = 'PUT',
+    PATCH = 'PATCH',
+    DELETE = 'DELETE',
+}
+
+export const METHOD_TEXT_COLORS: Record<HttpMethod, string> = {
+    [HttpMethod.GET]: 'text-green-600',
+    [HttpMethod.POST]: 'text-blue-600',
+    [HttpMethod.PUT]: 'text-yellow-600',
+    [HttpMethod.PATCH]: 'text-indigo-600',
+    [HttpMethod.DELETE]: 'text-red-600',
+};

@@ -19,11 +19,13 @@ export default function AccountManagementPage() {
     });
 
     const { data: userData, isPending } = useUserList(params);
+    console.log(userData);
 
     const { data: roleData } = useRoleList();
     const roleOptions = roleData?.data.map((r) => ({
         value: r.name,
-        label: r.name
+        label: r.name,
+        _id: r._id,
     }));
 
     return (
@@ -32,8 +34,6 @@ export default function AccountManagementPage() {
             <div className="mb-8"></div>
             <Space direction="vertical" size={"large"} className="w-full">
                 <Space direction="horizontal" size="large">
-
-                    {/* SEARCH USERNAME */}
                     <Input.Search
                         size="large"
                         placeholder="Tìm kiếm username..."
@@ -48,7 +48,6 @@ export default function AccountManagementPage() {
                         }
                     />
 
-                    {/* FILTER PREMIUM */}
                     <div className="text-text-primary text-base">Premium:</div>
                     <Select
                         size="large"
@@ -109,6 +108,7 @@ export default function AccountManagementPage() {
                 <UserTable
                     data={userData?.data ?? []}
                     loading={isPending}
+                    roleOptions={roleOptions ?? []}
                     pagination={{
                         current: userData?.meta?.page,
                         pageSize: userData?.meta?.size,

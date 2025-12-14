@@ -144,3 +144,12 @@ export interface Playlist{
   status: PlaylistStatus,
   img: string,
 }
+
+export interface Permission{
+   _id: string,
+  name: string,
+  method: string,
+  path: string;
+  module: string;
+  description?: string;
+}

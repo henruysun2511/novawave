@@ -165,7 +165,7 @@ export default function HomePage() {
 
                 <div className="mt-16 flex justify-between items-center">
                     <Title>Nghệ sĩ nổi bật</Title>
-                    <a className="text-base text-text-secondary">Xem tất cả</a>
+                    <a className="text-base text-text-secondary" onClick={() => router.push('artist')}>Xem tất cả</a>
                 </div>
                 {
                     artistData

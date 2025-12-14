@@ -21,11 +21,6 @@ export default function ProfilePage() {
             children: (<UserInfo user={user} isPending={isPending}/>),
         },
         {
-            label: 'Gói của tôi',
-            key: '2',
-            children: 'Content of editable tab 2',
-        },
-        {
             label: 'Playlist của tôi',
             key: '3',
             children: (<UserPlaylist />),
