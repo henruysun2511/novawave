@@ -69,7 +69,6 @@ export default function GenrePage() {
                         Chưa có album nào
                     </div>
                 )}
-
             </div>
 
             <Footer />

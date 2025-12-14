@@ -14,7 +14,7 @@ export default function PlaylistCard({ playlist }: Props) {
     
     return (
         <>
-            <div onClick={handleGoDetail} className="group flex flex-col cursor-pointer my-2 w-[180px] rounded-xl hover:bg-[var(--background-tertiary)] p-2 transition">
+            <div onClick={handleGoDetail} className="group flex flex-col cursor-pointer my-2 w-[180px] rounded-xl p-2 transition">
 
                 {/* Ảnh */}
                 <div className="relative w-full h-full">

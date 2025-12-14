@@ -6,6 +6,8 @@ import ChangePassword from "./change-password";
 import "./profile.css";
 import UserFollow from "./user-follow";
 import UserInfo from "./user-info";
+import UserLike from "./user-like";
+import UserPlaylist from "./user-playlist";
 
 export default function ProfilePage() {
     const { data, isPending } = useGetUserInfoQuery();
@@ -26,12 +28,12 @@ export default function ProfilePage() {
         {
             label: 'Playlist của tôi',
             key: '3',
-            children: 'Content of editable tab 3',
+            children: (<UserPlaylist />),
         },
         {
             label: 'Bài hát đã thích',
             key: '4',
-            children: 'Content of editable tab 3',
+            children: (<UserLike />),
         },
         {
             label: 'Nghệ sĩ đang theo dõi',

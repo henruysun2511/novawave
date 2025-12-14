@@ -1,4 +1,21 @@
+"use client";
+import Footer from "@/components/client/footer/footer";
+import PlaylistCard from "@/components/client/Playlist/playlist-card";
+import SquareSkeleton from "@/components/ui/skeleton";
+import Title from "@/components/ui/title";
+import { usePlaylistList } from "@/queries/usePlaylistQuery";
+import { Playlist } from "@/types/object.type";
+import { Pagination } from "antd";
+import { useState } from "react";
+
 export default function PlaylistPage() {
+    const [params, setParams] = useState({
+        page: 1,
+    });
+    const { data: playlistData, isPending } = usePlaylistList(params)
+    const playlists = playlistData?.data || [];
+
+    const meta = playlistData?.meta;
     return (
         <>
             <div className="relative w-full h-[450px]">
@@ -20,7 +37,42 @@ export default function PlaylistPage() {
                 </div>
             </div>
 
-            <h2 className="text-2xl font-bold mb-4 p-6">Trang playlist</h2>
+            <div className="p-6">
+                <Title>Danh sách playlist</Title>
+
+                {isPending ? (
+                    <SquareSkeleton />
+                ) : playlists && playlists.length > 0 ? (
+                    <>
+                        <div className="flex flex-wrap gap-5">
+                            {playlists.map((playlist: Playlist) => (
+                                <PlaylistCard key={playlist._id} playlist={playlist} />
+                            ))}
+                        </div>
+
+                        <div className="mt-6 flex justify-center">
+                            <Pagination
+                                current={meta?.page ?? 1}
+                                pageSize={meta?.size ?? 10}
+                                total={meta?.totalElements ?? 0}
+                                onChange={(page, size) =>
+                                    setParams((prev) => ({
+                                        ...prev,
+                                        page,
+                                        size,
+                                    }))
+                                }
+                            />
+                        </div>
+                    </>
+                ) : (
+                    <div className="text-text-primary text-base">
+                        Chưa có playlist nào
+                    </div>
+                )}
+            </div>
+
+            <Footer />
         </>
     );
 }

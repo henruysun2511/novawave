@@ -27,7 +27,11 @@ export interface Artist {
   bannerUrl: string,
   avatarUrl: string,
   biography: string,
-  country: string
+  country: string,
+  artistId?: {
+    _id: string, 
+    name: string
+  }
 }
 
 export interface Verification {

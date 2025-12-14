@@ -5,7 +5,7 @@ import { Playlist } from "@/types/object.type";
 import { DeleteOutlined, EditOutlined, GlobalOutlined, LockOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Popconfirm, Space, Tag } from "antd";
 import { useState } from "react";
-import PlaylistAddSongModal from "./playlist-add-song-modal";
+import PlaylistAddSongModal from "../../../components/client/Playlist/playlist-add-song-modal";
 
 
 export default function PlaylistHeader({ playlist }: { playlist: Playlist }) {
@@ -19,7 +19,7 @@ export default function PlaylistHeader({ playlist }: { playlist: Playlist }) {
 
     const handleDelete = (id: string) => {
         deletePlaylist(id, {
-            onSuccess: (res: any) => {
+            onSuccess: (res) => {
                 toast.success(res?.data?.message || "Xóa playlist thành công");
             },
             onError: (err: any) => {

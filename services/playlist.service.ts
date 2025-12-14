@@ -1,6 +1,6 @@
 import http from "@/libs/http";
 import { ApiResponse } from "@/types/body.type";
-import { Playlist } from "@/types/object.type";
+import { Playlist, Song } from "@/types/object.type";
 import { PaginationParam } from "@/types/param.type";
 
 const prefix = "playlists";
@@ -37,7 +37,7 @@ export const PlaylistService = {
     },
 
     getPlaylistSong(playlistId: string) {
-        return http.get<ApiResponse<Playlist[]>>(`/${prefix}/songs/${playlistId}`);
+        return http.get<ApiResponse<Song[]>>(`/${prefix}/songs/${playlistId}`);
     },
 
     getAdminList(params?: PaginationParam) {
@@ -47,7 +47,7 @@ export const PlaylistService = {
         });
     },
     getUserPlaylists(params?: PaginationParam) {
-        return http.get<ApiResponse<Playlist[]>>(`/${prefix}/users`, {
+        return http.get<ApiResponse<Playlist[]>>(`/${prefix}/me`, {
             params
         });
     },

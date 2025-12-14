@@ -1,30 +1,30 @@
-import ArtistCard from "@/components/client/ArtistList/artist-card";
+import SongCard from "@/components/client/SongList/song-card";
 import SquareSkeleton from "@/components/ui/skeleton";
-import { useUserFollow } from "@/queries/useFollowQuery";
-import { Artist } from "@/types/object.type";
+import { useUserLike } from "@/queries/useLikeQuery";
+import { Song } from "@/types/object.type";
 import { Pagination } from "antd";
 import { useState } from "react";
 
-export default function UserFollow() {
+export default function UserLike() {
     const [params, setParams] = useState({
         page: 1,
         size: 10
     });
 
-
-    const { data: artistData, isPending: isArtistPending } = useUserFollow(params)
-    const artists = artistData?.data || [];
-    const meta = artistData?.meta;
+    const { data: songData, isPending: isSongPending } = useUserLike(params)
+    const songs = songData?.data || [];
+    console.log(songs)
+    const meta = songData?.meta;
     return (
         <>
             <div className="p-6">
-                {isArtistPending ? (
+                {isSongPending ? (
                     <SquareSkeleton />
-                ) : artists && artists.length > 0 ? (
+                ) : songs && songs.length > 0 ? (
                     <>
-                        <div className="flex flex-wrap gap-2">
-                            {artists.map((p: Artist) => (
-                                <ArtistCard key={p._id} artist={p.artistId} />
+                        <div className="flex flex-wrap gap-3">
+                            {songs.map((p: Song) => (
+                                <SongCard key={p._id} song={p.songId} />
                             ))}
                         </div>
 

@@ -21,12 +21,20 @@ export default function SongCard({ song }: Props) {
                 {/* Ảnh */}
                 <div className="relative w-full h-full">
 
-                    <img
-                        className="w-[180px] h-[180px] object-cover rounded-xl"
-                        src={song.imageUrl}
-                        alt={song.name}
-                    />
-
+                    {song.imageUrl ? (
+                        <img
+                            className="w-[180px] h-[180px] object-cover rounded-xl"
+                            src={song.imageUrl}
+                            alt={song.name}
+                        />
+                    ) : (
+                        <div
+                            className="w-[180px] h-[180px] rounded-xl flex items-center justify-center bg-gray-600 text-white text-7xl font-bold"
+                            title={song.name} 
+                        >
+                            {song.name ? song.name.charAt(0).toUpperCase() : '?'}
+                        </div>
+                    )}
                     {/* Overlay mờ khi hover */}
                     <div className="absolute inset-0  bg-black/40 rounded-xl opacity-0  group-hover:opacity-100 transition"></div>
 

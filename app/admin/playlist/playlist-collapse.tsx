@@ -1,8 +1,8 @@
 import { Playlist } from "@/types/object.type";
 import { Collapse } from "antd";
+import PlaylistSongList from "../../../components/client/Playlist/playlist-song-list";
 import "./collapse.css";
 import PlaylistHeader from "./playlist-header";
-import PlaylistSongList from "./playlist-song-list";
 
 interface PlaylistCollapseProps {
     playlists: Playlist[];
