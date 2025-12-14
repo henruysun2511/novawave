@@ -153,3 +153,10 @@ export interface Permission{
   module: string;
   description?: string;
 }
+
+export interface Role{
+   _id: string,
+  name: string,
+  description?: string;
+  permissions?: string[],
+}

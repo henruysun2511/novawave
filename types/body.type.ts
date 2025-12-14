@@ -75,6 +75,10 @@ export interface ReportDto{
   status: string
 }
 
+export interface AssignPermissionDto{
+  permissions?: string[];
+}
+
 
 
 

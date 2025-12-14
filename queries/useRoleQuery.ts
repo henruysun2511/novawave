@@ -1,4 +1,5 @@
 import { RoleService } from "@/services/role.service";
+import { Role } from "@/types/object.type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const ROLE_QUERY_KEY = ["roles"];
@@ -9,22 +10,57 @@ export const useRoleList = () =>
         queryFn: async () => (await RoleService.getList()).data,
     });
 
-export const useRoleDetail = (id: string) =>
-    useQuery({
-        queryKey: [...ROLE_QUERY_KEY, id],
-        queryFn: async () => (await RoleService.getDetail(id)).data,
-        enabled: !!id,
-    });
-
-const roleMutation = (fn: any) => {
+export const useCreateRole = () => {
     const qc = useQueryClient();
+    
     return useMutation({
-        mutationFn: fn,
-        onSuccess: () => qc.invalidateQueries({ queryKey: ROLE_QUERY_KEY }),
+        mutationFn: RoleService.create,
+        onSuccess: () => {
+            qc.invalidateQueries({ queryKey: ROLE_QUERY_KEY });
+        },
     });
 };
 
-export const useCreateRole = () => roleMutation(RoleService.create);
-export const useUpdateRole = () =>
-    roleMutation(({ id, data }: any) => RoleService.update(id, data));
-export const useDeleteRole = () => roleMutation(RoleService.delete);
+
+export const useUpdateRole = () => {
+    const qc = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({ id, payload } : {id: string, payload: Role}) => RoleService.update(id, payload),
+        onSuccess: () => {
+            qc.invalidateQueries({ queryKey: ROLE_QUERY_KEY });
+        },
+    });
+};
+
+
+export const useDeleteRole = () => {
+    const qc = useQueryClient();
+
+    return useMutation({
+        mutationFn: RoleService.delete,
+        onSuccess: () => {
+            qc.invalidateQueries({ queryKey: ROLE_QUERY_KEY });
+        },
+    });
+};
+
+export const useAssignPermissions = () => {
+    const qc = useQueryClient();
+
+    type AssignPermissionVariables = { 
+        roleId: string; 
+        permissionIds: string[]; 
+    };
+
+    return useMutation({
+        mutationFn: ({ roleId, permissionIds }: AssignPermissionVariables) => 
+            RoleService.assignPermissions(roleId, { 
+                permissions: permissionIds 
+            }),
+            
+        onSuccess: () => {
+            qc.invalidateQueries({ queryKey: ROLE_QUERY_KEY });
+        },
+    });
+};
