@@ -21,7 +21,6 @@ export default function AlbumDetailPage() {
 
     const { data: albumRes, isLoading: albumLoading } = useAlbumDetail(id);
     const album = albumRes?.data;
-    console.log(album);
 
     const { data: artistRes, isPending } = useArtistDetail(album?.artist ?? "");
     const artist = artistRes?.data;
@@ -40,6 +39,7 @@ export default function AlbumDetailPage() {
 
         const firstSong = songs[0];
         console.log(firstSong);
+        console.log(id)
 
         startPlayerMutation({
             songId: firstSong._id,

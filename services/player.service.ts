@@ -1,6 +1,6 @@
 import http from "@/libs/http";
 import { ApiResponse, PlayerDto } from "@/types/body.type";
-import { Player } from "@/types/object.type";
+import { NextTrack, Player } from "@/types/object.type";
 
 const prefix = 'player';
 
@@ -10,12 +10,14 @@ export const PlayerService = {
     },
 
     next(currentSongId: string) {
-        return http.get<ApiResponse<Player>>(`/${prefix}/next`, {
+        // ✅ FIX: Đổi kiểu trả về sang NextTrackResponse
+        return http.get<ApiResponse<NextTrack>>(`/${prefix}/next`, {
             params: { currentSongId },
         });
     },
 
     previous() {
-        return http.get<ApiResponse<Player>>(`/${prefix}/previous`);
+        // ✅ FIX: Đổi kiểu trả về sang NextTrackResponse
+        return http.get<ApiResponse<NextTrack>>(`/${prefix}/previous`);
     },
 };

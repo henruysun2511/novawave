@@ -31,7 +31,8 @@ export interface Artist {
   artistId?: {
     _id: string,
     name: string
-  }
+  },
+  playerCount?: number
 }
 
 export interface Verification {
@@ -207,6 +208,13 @@ export interface Upload {
 }
 
 export interface Payment {
-    checkoutUrl: string;
-    status: string;
+  checkoutUrl: string;
+  status: string;
+}
+
+export interface NextTrack {
+  type: string;
+  trackId: string;
+  random?: boolean;
+  previous?: boolean;
 }

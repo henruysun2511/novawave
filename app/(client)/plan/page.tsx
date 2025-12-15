@@ -1,6 +1,7 @@
 "use client";
 import Footer from "@/components/client/footer/footer";
 import Title from "@/components/ui/title";
+import { usePayOSReady } from "@/libs/payos";
 import { useToast } from "@/libs/toast";
 import { usePaymentPlan } from "@/queries/usePaymentQuery";
 import { usePlans } from "@/queries/usePlanQuery";
@@ -11,6 +12,7 @@ const { Text } = Typography;
 
 export default function PlanPage() {
     const toast = useToast();
+    const isPayOSReady = usePayOSReady();
 
     const { data: plansRes, isLoading, isError } = usePlans();
     const plans = plansRes?.data.data || [];
@@ -23,6 +25,8 @@ export default function PlanPage() {
     };
 
     const { mutate: payPlanMutate, isPending: isPaying } = usePaymentPlan();
+
+
     const handleSubscribePlan = (planId: string) => {
         const payload: PaymentPlanDto = { planId };
 

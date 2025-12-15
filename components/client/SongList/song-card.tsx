@@ -1,5 +1,8 @@
+import { useToast } from "@/libs/toast";
+import { useStartPlayer } from "@/queries/usePlayerQuery";
+import { PlayerDto } from "@/types/body.type";
 import { Song } from "@/types/object.type";
-import { CaretRightFilled } from "@ant-design/icons";
+import { CaretRightFilled, LoadingOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 
 interface Props {
@@ -8,10 +11,30 @@ interface Props {
 
 export default function SongCard({ song }: Props) {
     const artistName = (song.artistId as any)?.name;
+    const toast = useToast();
     const router = useRouter();
 
     const handleGoDetail = () => {
         router.push(`/song/${song._id}`);
+    };
+
+    const { mutate: startPlayerMutation, isPending: isStartingPlayer } = useStartPlayer();
+    const handlePlaySong = (e: React.MouseEvent) => {
+        e.stopPropagation();
+
+        if (isStartingPlayer) return;
+
+        const payload: PlayerDto = {
+            songId: song._id,
+        };
+
+        startPlayerMutation(payload, {
+            onSuccess: () => {
+            },
+            onError: (err: any) => {
+                toast.error(err?.response?.data?.message || "Không thể phát nhạc");
+            },
+        });
     };
 
     return (
@@ -40,8 +63,13 @@ export default function SongCard({ song }: Props) {
 
                     {/* Nút play */}
                     <div className="absolute inset-0 flex items-center justify-center opacity-0  group-hover:opacity-100 transition">
-                        <div className="w-12 h-12 rounded-full bg-green flex items-center justify-center shadow-lg">
-                            <CaretRightFilled className="text-3xl" />
+                        <div className="w-12 h-12 rounded-full bg-green flex items-center justify-center shadow-lg"
+                        onClick={handlePlaySong}>
+                            {isStartingPlayer ? (
+                                <LoadingOutlined className="text-xl text-white animate-spin" />
+                            ) : (
+                                <CaretRightFilled className="text-3xl text-black" /> 
+                            )}
                         </div>
                     </div>
 

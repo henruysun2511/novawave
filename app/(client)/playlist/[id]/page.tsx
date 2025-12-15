@@ -4,9 +4,11 @@ import PlaylistAddSongModal from "@/components/client/Playlist/playlist-add-song
 import ReportModal from "@/components/client/Report/report-modal";
 import Title from "@/components/ui/title";
 import { useToast } from "@/libs/toast";
+import { useStartPlayer } from "@/queries/usePlayerQuery";
 import { usePlaylistDetail, usePlaylistsSong, useRemoveSongFromPlaylist, useUserPlaylists } from "@/queries/usePlaylistQuery";
+import { PlayerDto } from "@/types/body.type";
 import { ReportTargetType } from "@/types/constant.type";
-import { CaretRightFilled, FlagOutlined, PlusOutlined } from "@ant-design/icons";
+import { CaretRightFilled, FlagOutlined, LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { Popconfirm } from "antd";
 import { useParams } from "next/navigation";
 import { useState } from "react";
@@ -32,6 +34,9 @@ export default function PlaylistDetailPage() {
     // Kiểm tra playlist hiện tại có trong danh sách của user không
     const isUserPlaylist = userPlaylists.some(p => p._id === id);
 
+
+    // ✅ Hook phát nhạc
+    const { mutate: startPlayerMutation, isPending: isStartingPlayer } = useStartPlayer();
 
     //Xử lý ảnh
     const imgs = songs.filter(song => song?.imageUrl).slice(0, 3);
@@ -96,7 +101,7 @@ export default function PlaylistDetailPage() {
         }
     };
 
-    const { mutate: removeSong, isPending } = useRemoveSongFromPlaylist();
+    const { mutate: removeSong, isPending: isRemovingSong } = useRemoveSongFromPlaylist();
     const playlistId = id;
     const handleRemove = (songId: string) => {
         removeSong(
@@ -113,6 +118,42 @@ export default function PlaylistDetailPage() {
             }
         );
     };
+
+    // ✅ Hàm xử lý phát toàn bộ playlist
+    const handlePlayPlaylist = () => {
+        if (!songs || songs.length === 0) {
+            toast.info("Playlist này chưa có bài hát nào!");
+            return;
+        }
+
+        if (isStartingPlayer) return;
+
+
+        const nowPlayingId = songs[0]?._id;
+
+        if (!nowPlayingId) {
+            toast.error("Không tìm thấy thông tin bài hát để phát.");
+            return;
+        }
+
+        const payload: PlayerDto = {
+            songId: nowPlayingId,
+            playlistId: id,
+        };
+        
+        startPlayerMutation(payload, {
+            onSuccess: () => {
+                toast.success(`Đang phát playlist: ${playlist?.name}`);
+            },
+            onError: (err: any) => {
+                toast.error(err?.response?.data?.message || "Không thể phát playlist");
+            },
+        });
+    };
+
+    if (playlistLoading) return <div>Đang tải...</div>;
+    if (!playlist) return <div>Không tìm thấy Playlist.</div>;
+
 
     return (
         <>
@@ -139,14 +180,22 @@ export default function PlaylistDetailPage() {
 
             <div className="p-8">
                 <div className="flex items-center gap-4 mb-10">
-                    <div className="cursor-pointer w-15 h-15 rounded-full bg-green flex items-center justify-center shadow-lg">
-                        <CaretRightFilled className="text-3xl" />
+                    {/* ✅ Nút Play Playlist */}
+                    <div 
+                        className={`cursor-pointer w-15 h-15 rounded-full bg-green flex items-center justify-center shadow-lg transition ${isStartingPlayer ? 'opacity-70' : 'hover:scale-105'}`}
+                        onClick={handlePlayPlaylist} 
+                    >
+                        {isStartingPlayer ? (
+                            <LoadingOutlined className="text-3xl text-black animate-spin" />
+                        ) : (
+                            <CaretRightFilled className="text-3xl" />
+                        )}
                     </div>
 
                     {isUserPlaylist && (
                         <div
                             className="border border-green rounded-full text-text-primary text-base px-5 py-1 cursor-pointer
-                          transition duration-200 hover:bg-green hover:text-white"
+                             transition duration-200 hover:bg-green hover:text-white"
                             onClick={() => setOpenAddSong(true)}
                         >
                             <PlusOutlined className="mr-2" />Thêm bài hát mới
@@ -155,7 +204,7 @@ export default function PlaylistDetailPage() {
 
                     <div
                         className="border border-green rounded-full text-text-primary text-base px-5 py-1 cursor-pointer
-                        transition duration-200 hover:bg-green hover:text-white"
+                         transition duration-200 hover:bg-green hover:text-white"
                         onClick={() => setIsReportModalOpen(true)}
                     >
                         <FlagOutlined className="mr-2" />Report
@@ -174,7 +223,7 @@ export default function PlaylistDetailPage() {
                     </thead>
 
                     <tbody>
-                        {songs.length > 0 &&
+                        {songs.length > 0 ? (
                             songs.map((song, index) => (
                                 <tr
                                     key={song?._id || index}
@@ -202,19 +251,26 @@ export default function PlaylistDetailPage() {
                                                 title="Xóa bài hát khỏi playlist?"
                                                 okText="Xóa"
                                                 cancelText="Hủy"
-                                                onConfirm={() => handleRemove(song._id)}
+                                                onConfirm={() => song._id && handleRemove(song._id)}
                                             >
                                                 <button
-                                                    className="text-red-500 hover:text-red-700 cursor-pointer"
+                                                    className={`text-red-500 hover:text-red-700 cursor-pointer ${isRemovingSong ? 'opacity-50' : ''}`}
+                                                    disabled={isRemovingSong}
                                                 >
-                                                    Xóa
+                                                    {isRemovingSong ? 'Đang xóa...' : 'Xóa'}
                                                 </button>
                                             </Popconfirm>
-
                                         </td>
                                     )}
                                 </tr>
-                            ))}
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan={3 + (isUserPlaylist ? 1 : 0)} className="py-5 text-center text-gray-500">
+                                    Playlist này chưa có bài hát nào.
+                                </td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
             </div>

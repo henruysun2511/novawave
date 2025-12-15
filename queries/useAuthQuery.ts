@@ -14,6 +14,7 @@ export const useLoginMutation = () => {
       sessionStorage.setItem("accessToken", data.accessToken);
 
       const payload = jwtDecode<JwtPayload>(data.accessToken);
+      console.log(payload)
       
       useAuthStore.getState().setAuth(data.accessToken, payload);
       useAuthStore.getState().setRoleName(data.roleName);
