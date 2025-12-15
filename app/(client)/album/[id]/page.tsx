@@ -21,14 +21,13 @@ export default function AlbumDetailPage() {
 
     const { data: albumRes, isLoading: albumLoading } = useAlbumDetail(id);
     const album = albumRes?.data;
+    console.log(album);
 
     const { data: artistRes, isPending } = useArtistDetail(album?.artist ?? "");
     const artist = artistRes?.data;
 
     const { data: songRes } = useSongsInAlbum(id);
     const songs = songRes?.data;
-
-
 
 
     const { mutate: startPlayerMutation } = useStartPlayer();

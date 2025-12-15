@@ -205,3 +205,8 @@ export interface Upload {
   url: string,
   duration?: number
 }
+
+export interface Payment {
+    checkoutUrl: string;
+    status: string;
+}

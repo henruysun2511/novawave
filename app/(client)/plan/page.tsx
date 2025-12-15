@@ -1,12 +1,17 @@
 "use client";
 import Footer from "@/components/client/footer/footer";
 import Title from "@/components/ui/title";
+import { useToast } from "@/libs/toast";
+import { usePaymentPlan } from "@/queries/usePaymentQuery";
 import { usePlans } from "@/queries/usePlanQuery";
+import { PaymentPlanDto } from "@/types/body.type";
 import { ArrowDownOutlined, AudioOutlined, ClockCircleOutlined, DollarCircleOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import { Button, Card, Typography } from "antd";
 const { Text } = Typography;
 
 export default function PlanPage() {
+    const toast = useToast();
+
     const { data: plansRes, isLoading, isError } = usePlans();
     const plans = plansRes?.data.data || [];
 
@@ -15,6 +20,30 @@ export default function PlanPage() {
             return '0 VNĐ';
         }
         return amount.toLocaleString('vi-VN') + ' VNĐ';
+    };
+
+    const { mutate: payPlanMutate, isPending: isPaying } = usePaymentPlan();
+    const handleSubscribePlan = (planId: string) => {
+        const payload: PaymentPlanDto = { planId };
+
+        payPlanMutate(payload, {
+            onSuccess: (res) => {
+                const checkoutUrl = res.data?.checkoutUrl;
+
+                if (checkoutUrl) {
+                    toast.success("Khởi tạo thanh toán thành công! Đang chuyển hướng...");
+                    window.location.href = checkoutUrl;
+                } else {
+                    toast.error("Thanh toán thành công nhưng không tìm thấy URL chuyển hướng.");
+                }
+            },
+            onError: (error: any) => {
+                const msg =
+                    error?.response?.data?.message ||
+                    "Có lỗi xảy ra trong quá trình thanh toán.";
+                toast.error(Array.isArray(msg) ? msg.join(", ") : msg);
+            },
+        });
     };
 
     return (
@@ -108,7 +137,11 @@ export default function PlanPage() {
                                     <p className="text-gray-300 text-center italic mt-2 min-h-[50px]">
                                         {plan.description || "Không có mô tả chi tiết."}
                                     </p>
-                                    <Button type="primary" className="bg-green rounded-2xl">ĐĂNG KÍ GÓI</Button>
+                                    <Button
+                                        onClick={() => handleSubscribePlan(plan._id)}
+                                        loading={isPaying}
+                                        disabled={isPaying}
+                                        type="primary" className="bg-green rounded-2xl">ĐĂNG KÍ GÓI</Button>
                                 </div>
                             </Card>
                         ))}

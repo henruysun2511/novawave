@@ -1,9 +1,11 @@
 import http from "@/libs/http";
-import { PaymentPlanDto } from "@/types/body.type";
+import { ApiResponse, PaymentPlanDto } from "@/types/body.type";
+import { Payment } from "@/types/object.type";
 
 export const PaymentService = {
-    payPlan(payload: PaymentPlanDto) {
-        return http.post(`/payments/plan`, payload);
+    payPlan(payload: PaymentPlanDto): Promise<ApiResponse<Payment>> {
+        return http.post<ApiResponse<Payment>>(`/payments/plan`, payload)
+            .then(res => res.data);
     },
     payProduct(payload: any) {
         return http.post(`/payments/product`, payload);
