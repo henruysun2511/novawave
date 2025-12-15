@@ -1,5 +1,4 @@
 import { Gender, VerificationStatus } from './constant.type';
-import { Product } from './object.type';
 
 export interface Pagination {
   page: number;
@@ -96,12 +95,17 @@ export interface AddCartDto {
 }
 
 
+export interface PaymentProductPayload {
+    productId: string;
+    quantity: number;
+}
+
 export interface PaymentProductDto {
-  fullName: string;
-  phone: string;
-  address: string;
-  products: Product;
-  cartId?: string
+    fullName: string;
+    phone: string;
+    address: string;
+    products: PaymentProductPayload[]; 
+    cartId?: string
 }
 
 export interface PaymentPlanDto {

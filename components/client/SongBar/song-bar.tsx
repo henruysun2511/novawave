@@ -36,21 +36,16 @@ export default function SongBar() {
   const nextMutation = useNextSong();
   const previousMutation = usePreviousSong();
 
-  // Kiểm tra trạng thái loading của nút chuyển bài
   const isSkipLoading = nextMutation.isPending || previousMutation.isPending;
 
-  // Logic chuyển bài
   const handleNext = () => {
     if (nowPlaying && !isSkipLoading) {
-      // Gọi mutation, truyền ID hiện tại
       nextMutation.mutate({ currentSongId: nowPlaying });
     }
   };
 
   const handlePrev = () => {
     if (nowPlaying && !isSkipLoading) {
-      // PlayerService.previous không dùng currentSongId nhưng ta vẫn truyền
-      // để duy trì sự nhất quán của payload SongIdPayload
       previousMutation.mutate({ currentSongId: nowPlaying });
     }
   };

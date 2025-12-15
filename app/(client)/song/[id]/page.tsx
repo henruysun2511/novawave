@@ -7,10 +7,12 @@ import { WavePlayer } from "@/components/client/WavePlayer/wave-player";
 import Title from "@/components/ui/title";
 import { useToast } from "@/libs/toast";
 import { useLikeSong, useUnlikeSong, useUserLike } from "@/queries/useLikeQuery";
+import { useStartPlayer } from "@/queries/usePlayerQuery";
 import { useSongDetail } from "@/queries/useSongQuery";
 import { useAuthStore } from "@/stores/useAuthStore";
+import { PlayerDto } from "@/types/body.type";
 import { ReportTargetType } from "@/types/constant.type";
-import { CaretRightFilled, FlagOutlined, HeartFilled, HeartOutlined, PlusOutlined } from "@ant-design/icons";
+import { CaretRightFilled, FlagOutlined, HeartFilled, HeartOutlined, LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { Input } from 'antd';
 import { useParams } from "next/navigation";
 import { useState } from "react";
@@ -23,6 +25,7 @@ export default function SongDetailPage() {
     const { id } = useParams<{ id: string }>();
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
     const [isPlaylistModalOpen, setIsPlaylistModalOpen] = useState(false);
+
     const toast = useToast();
 
     const { data: songRes, isLoading } = useSongDetail(id);
@@ -35,6 +38,7 @@ export default function SongDetailPage() {
 
     const { mutate: likeSong } = useLikeSong();
     const { mutate: unlikeSong } = useUnlikeSong();
+    const { mutate: startPlayerMutation, isPending: isStartingPlayer } = useStartPlayer();
 
     if (isLoading) return <div>Loading...</div>;
     if (!songRes?.data) return <div>Không tìm thấy bài hát</div>;
@@ -67,13 +71,25 @@ export default function SongDetailPage() {
         }
     };
 
-    const handleOpenPlaylistModal = () => {
-        if (!user) {
-            toast.error("Vui lòng đăng nhập để thêm vào Playlist");
-            return;
-        }
-        setIsPlaylistModalOpen(true);
-    }
+
+    const handlePlaySong = (e: React.MouseEvent) => {
+        e.stopPropagation();
+
+        if (isStartingPlayer) return;
+
+        const payload: PlayerDto = {
+            songId: song._id,
+        };
+
+        startPlayerMutation(payload, {
+            onSuccess: () => {
+            },
+            onError: (err: any) => {
+                toast.error(err?.response?.data?.message || "Không thể phát nhạc");
+            },
+        });
+    };
+
 
 
     return (
@@ -103,8 +119,13 @@ export default function SongDetailPage() {
             <div className="p-8">
                 <div className="flex justify-between">
                     <div className="flex items-center gap-4 mb-10">
-                        <div className="cursor-pointer w-15 h-15 rounded-full bg-green flex items-center justify-center shadow-lg">
-                            <CaretRightFilled className="text-3xl" />
+                        <div className="cursor-pointer w-15 h-15 rounded-full bg-green flex items-center justify-center shadow-lg"
+                            onClick={handlePlaySong}>
+                            {isStartingPlayer ? (
+                                <LoadingOutlined className="text-xl text-white animate-spin" />
+                            ) : (
+                                <CaretRightFilled className="text-3xl text-black" />
+                            )}
                         </div>
                         <div
                             onClick={handleToggleLike}
@@ -122,7 +143,7 @@ export default function SongDetailPage() {
                             className="border border-green rounded-full text-text-primary text-base px-5 py-1 cursor-pointer
                                   transition duration-200
                                  hover:bg-green hover:text-white"
-                                 onClick={() => setIsPlaylistModalOpen(true)}
+                            onClick={() => setIsPlaylistModalOpen(true)}
                         >
                             <PlusOutlined className="mr-2" />Thêm vào playlist
                         </div>

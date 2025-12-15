@@ -10,14 +10,12 @@ export const PlayerService = {
     },
 
     next(currentSongId: string) {
-        // ✅ FIX: Đổi kiểu trả về sang NextTrackResponse
         return http.get<ApiResponse<NextTrack>>(`/${prefix}/next`, {
             params: { currentSongId },
         });
     },
 
     previous() {
-        // ✅ FIX: Đổi kiểu trả về sang NextTrackResponse
         return http.get<ApiResponse<NextTrack>>(`/${prefix}/previous`);
     },
 };

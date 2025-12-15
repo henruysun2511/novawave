@@ -8,7 +8,7 @@ import { Avatar, Dropdown, Input, MenuProps, Tooltip } from 'antd';
 import Image from "next/image";
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import Notification from '../Notification/notification';
+import Notification from '../Notification/notification-dropdown';
 import "./header.css";
 const { Search } = Input;
 

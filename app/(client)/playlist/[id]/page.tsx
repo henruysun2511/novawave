@@ -119,7 +119,6 @@ export default function PlaylistDetailPage() {
         );
     };
 
-    // ✅ Hàm xử lý phát toàn bộ playlist
     const handlePlayPlaylist = () => {
         if (!songs || songs.length === 0) {
             toast.info("Playlist này chưa có bài hát nào!");
@@ -142,8 +141,9 @@ export default function PlaylistDetailPage() {
         };
         
         startPlayerMutation(payload, {
-            onSuccess: () => {
+            onSuccess: (res) => {
                 toast.success(`Đang phát playlist: ${playlist?.name}`);
+                console.log(res);
             },
             onError: (err: any) => {
                 toast.error(err?.response?.data?.message || "Không thể phát playlist");

@@ -3,13 +3,15 @@ import Title from '@/components/ui/title';
 import { useToast } from '@/libs/toast';
 import { useAddToCart } from '@/queries/useCartQuery';
 import { CreditCardOutlined, MinusOutlined, PlusOutlined, ShoppingCartOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Image, InputNumber, notification, Row, Space, Typography } from 'antd';
-import { useParams, useSearchParams } from 'next/navigation';
+import { Button, Card, Col, Image, InputNumber, Row, Space, Typography } from 'antd';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 const { Text } = Typography;
 
 export default function ProductDetailPage() {
     const toast = useToast();
+    const router = useRouter(); // Khai báo useRouter
+
     // 1. Lấy và chuyển đổi dữ liệu từ URL
     const params = useParams();
     const id = params.id as string; // ID sản phẩm
@@ -28,12 +30,11 @@ export default function ProductDetailPage() {
     const addToCartMutation = useAddToCart();
 
     const handleAddToCart = () => {
+        // ... (Logic thêm vào giỏ hàng giữ nguyên) ...
         if (quantity > stock) {
             toast.error('Số lượng mua vượt quá số lượng tồn kho');
             return;
         }
-
-        console.log(id)
 
         addToCartMutation.mutate({
             productId: id,
@@ -50,12 +51,30 @@ export default function ProductDetailPage() {
     };
 
     const handleBuyNow = () => {
-        // ... (Logic chuyển hướng đến trang thanh toán)
-        notification.info({
-            message: 'Mua ngay',
-            description: 'Đang chuyển hướng đến trang thanh toán...',
-            placement: 'bottomRight'
-        });
+        if (stock <= 0) {
+            toast.error('Sản phẩm đã hết hàng.');
+            return;
+        }
+        if (quantity > stock) {
+            toast.error('Số lượng mua vượt quá số lượng tồn kho');
+            return;
+        }
+
+        const checkoutData = {
+            products: [{
+                productId: id,
+                quantity: quantity,
+                price: price,
+                name: name,
+                img: img,
+            }],
+            totalPrice: price * quantity, 
+        };
+        
+        localStorage.setItem('checkoutData', JSON.stringify(checkoutData));
+        toast.info(`Đang chuẩn bị thanh toán cho ${quantity} x "${name}"...`);
+
+        router.push('/payment');
     };
     
     const handleQuantityChange = (value: number | null) => {
@@ -79,8 +98,8 @@ export default function ProductDetailPage() {
         <div className="min-h-screen px-4 py-10 md:px-10">
             <Card className="mx-auto max-w-6xl bg-[var(--background-secondary)] border-none rounded-2xl shadow-2xl">
                 <Row gutter={[48, 48]} align="middle">
-                    {/* ... (Image Column giữ nguyên) ... */}
-                    <Col xs={24} md={10} lg={9} className="flex justify-center">
+                      <Col xs={24} md={10} lg={9} className="flex justify-center">
+
                         {img && (
                             <Image
                                 src={img}
@@ -89,6 +108,7 @@ export default function ProductDetailPage() {
                                 preview
                             />
                         )}
+
                     </Col>
 
                     <Col xs={24} md={14} lg={15}>
@@ -143,7 +163,7 @@ export default function ProductDetailPage() {
                                 type="primary"
                                 size="large"
                                 icon={<CreditCardOutlined />}
-                                onClick={handleBuyNow}
+                                onClick={handleBuyNow} // Sử dụng hàm đã cập nhật
                                 disabled={stock <= 0}
                                 className="bg-green hover:bg-green-700 border-none px-8 h-12 text-base font-semibold rounded-xl shadow-lg"
                             >

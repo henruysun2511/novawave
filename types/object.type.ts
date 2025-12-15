@@ -131,7 +131,8 @@ export interface Product {
   stock: number;
   price: number;
   img: string;
-  productId: string;
+  productId: string
+  quantity: number
 }
 
 export interface Comment {

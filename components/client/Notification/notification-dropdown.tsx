@@ -65,7 +65,7 @@ export default function NotificationDropdown() {
         <Dropdown
             trigger={['click']}
             placement="bottomRight"
-            dropdownRender={() => notificationContent}
+            popupRender={() => notificationContent}
         >
             <div className="relative cursor-pointer">
                 <BellFilled className="text-green text-2xl" />

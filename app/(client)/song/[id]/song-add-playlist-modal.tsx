@@ -56,16 +56,14 @@ export default function SongAddPlaylistModal ({
             onCancel={onClose}
             footer={null}
             className="custom-modal"
-            style={{ backgroundColor: 'var(--background-secondary)', color: 'white' }}
         >
             {isLoading ? (
                 <div className="text-center py-5">
                     <Spin tip={<span className="!text-white">Đang tải danh sách Playlist...</span>} />
                 </div>
             ) : playlists.length === 0 ? (
-                <p className="text-white text-center py-5">
+                <p className="text-black text-center py-5">
                     Bạn chưa có Playlist nào. 
-                    <Button type="link" className="text-green ml-1">Tạo mới</Button>
                 </p>
             ) : (
                 <List
@@ -73,7 +71,7 @@ export default function SongAddPlaylistModal ({
                     renderItem={(item) => (
                         <List.Item
                             key={item._id}
-                            className="!border-b !border-[#2a2a2a] hover:!bg-[#1c1c1c] transition cursor-default"
+                            className="!border-b !border-[#2a2a2a]  transition cursor-default"
                             actions={[
                                 <Button 
                                     type="primary" 
