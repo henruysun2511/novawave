@@ -15,6 +15,20 @@ interface Props {
 }
 
 export default function SearchAllTab({ data }: Props) {
+  const isEmpty =
+  data.songs.length === 0 &&
+  data.albums.length === 0 &&
+  data.genres.length === 0 &&
+  data.artists.length === 0 &&
+  data.playlists.length === 0;
+
+  if (isEmpty) {
+    return (
+      <div className="text-text-primary italic mt-10">
+        Không tìm thấy nội dung phù hợp
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col gap-10">
 

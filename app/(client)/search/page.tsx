@@ -25,7 +25,7 @@ export default function SearchPage() {
     {
       key: "all",
       label: "Tất cả",
-      children: <SearchAllTab data={data} />,
+      children: <div className="mt-10"><SearchAllTab data={data} /></div>,
     },
     {
       key: "song",

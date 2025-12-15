@@ -191,3 +191,7 @@ export interface SearchResult {
   playlists: any[];
   genres: any[];
 }
+
+export interface Upload{
+  url: string
+}
