@@ -1,7 +1,8 @@
 import http from "@/libs/http";
+import { PaymentPlanDto } from "@/types/body.type";
 
 export const PaymentService = {
-    payPlan(payload: any) {
+    payPlan(payload: PaymentPlanDto) {
         return http.post(`/payments/plan`, payload);
     },
     payProduct(payload: any) {
@@ -9,8 +10,5 @@ export const PaymentService = {
     },
     cancel() {
         return http.get(`/payments/cancel`);
-    },
-    webhook(payload: any) {
-        return http.post(`/payments/webhook`, payload);
     },
 };

@@ -1,7 +1,7 @@
 "use client";
 import { useToast } from "@/libs/toast";
 import { useRemoveFromCart, useUserCart } from "@/queries/useCartQuery";
-import { DeleteOutlined, MinusOutlined, PlusOutlined } from "@ant-design/icons";
+import { DeleteOutlined } from "@ant-design/icons";
 import { Button, Checkbox, InputNumber, Tooltip } from "antd";
 
 export default function Cart() {
@@ -9,7 +9,7 @@ export default function Cart() {
 
     const cart = data?.data?.data;
     const products = cart?.products ?? [];
-console.log(products)
+    console.log(products)
 
 
     const { mutate: removeFromCart, isPending: removing } = useRemoveFromCart();
@@ -58,31 +58,34 @@ console.log(products)
                                     <td className="py-4">{index + 1}</td>
 
                                     <td className="py-4 flex items-center gap-4">
-                                        <img
-                                            className="w-[55px] h-[55px] object-cover rounded-lg"
-                                            src="https://product.hstatic.net/1000152881/product/0__2__7983795bc66e400eb81bf5c8462e9a78.jpg"
-                                            alt=""
-                                        />
+                                        {
+                                            item.img ? (
+                                                <img
+                                                    className="w-[55px] h-[55px] object-cover rounded-lg"
+                                                    src={item.img}
+                                                    alt=""
+                                                />
+                                            ) : (
+                                                <img
+                                                    className="w-[55px] h-[55px] object-cover rounded-lg"
+                                                    src="https://product.hstatic.net/1000152881/product/0__2__7983795bc66e400eb81bf5c8462e9a78.jpg"
+                                                    alt=""
+                                                />
+                                            )
+                                        }
+
                                         <p className="font-medium text-text-primary">
-                                            {item.productId}
+                                            {item.name}
                                         </p>
                                     </td>
 
                                     <td className="py-4">
                                         <div className="flex items-center gap-2 bg-[#1c1c1c] px-2 py-1 rounded-lg w-fit">
-                                            <Button
-                                                icon={<MinusOutlined />}
-                                                className="!border-none hover:!bg-[#333]"
-                                            />
                                             <InputNumber
                                                 min={1}
                                                 max={999}
                                                 value={item.quantity}
                                                 className="w-12 text-center text-white"
-                                            />
-                                            <Button
-                                                icon={<PlusOutlined />}
-                                                className="!border-none hover:!bg-[#333]"
                                             />
                                         </div>
                                     </td>

@@ -1,4 +1,4 @@
-import { Gender, PlaylistStatus, ReportTargetType, SongReleseStatus, SongStatus, UserStatus, VerificationStatus } from "./constant.type";
+import { Gender, NotificationType, PlaylistStatus, ReportTargetType, SongReleseStatus, SongStatus, UserStatus, VerificationStatus } from "./constant.type";
 
 export interface Role {
   _id: string,
@@ -162,6 +162,15 @@ export interface Role {
   permissions?: string[],
 }
 
+export interface Notification {
+  _id: string,
+  type: NotificationType,
+  title: string,
+  message: string,
+  isRead: boolean,
+  createdAt: Date,
+}
+
 export interface Player {
   nowPlaying: string | null,
   queue: string[]
@@ -174,14 +183,14 @@ export interface Cart {
 }
 
 export interface Plan {
-    _id: string;
-    planName: string;
-    price: number;
-    durationInMonths: number;
-    description?: string;
-    deleted: boolean;
-    createdAt: string;
-    updatedAt: string;
+  _id: string;
+  planName: string;
+  price: number;
+  durationInMonths: number;
+  description?: string;
+  deleted: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface SearchResult {
@@ -192,6 +201,7 @@ export interface SearchResult {
   genres: any[];
 }
 
-export interface Upload{
-  url: string
+export interface Upload {
+  url: string,
+  duration?: number
 }

@@ -19,8 +19,3 @@ export const usePaymentCancel = () =>
         queryFn: () => PaymentService.cancel(),
         enabled: false,
     });
-
-export const usePaymentWebhook = () =>
-    useMutation({
-        mutationFn: PaymentService.webhook,
-    });

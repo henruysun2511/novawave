@@ -3,11 +3,12 @@ import { useToast } from '@/libs/toast';
 import { useGetUserInfoQuery, useLogoutMutation } from '@/queries/useAuthQuery';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { Role } from '@/types/constant.type';
-import { BellFilled, ShoppingCartOutlined } from '@ant-design/icons';
+import { ShoppingCartOutlined } from '@ant-design/icons';
 import { Avatar, Dropdown, Input, MenuProps, Tooltip } from 'antd';
 import Image from "next/image";
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Notification from '../Notification/notification';
 import "./header.css";
 const { Search } = Input;
 
@@ -112,13 +113,15 @@ export default function Header() {
                     )}
 
                     {(!isAuthenticated || (isAuthenticated && !isPrenium)) && (
-                        <div className="base-button">Khám phá premium</div>
+                        <Link href={"/plan"}>
+                            <div className="base-button">Khám phá premium</div>
+                        </Link>
                     )}
 
 
                     {isAuthenticated ? (
                         <>
-                            <BellFilled className="text-green text-2xl" />
+                            <Notification />
 
                             {(finalRoleName === "USER" || finalRoleName === "ARTIST") && (
                                 <Tooltip title="Giỏ hàng">

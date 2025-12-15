@@ -1,6 +1,7 @@
 import Title from "@/components/ui/title";
 import useDebounce from "@/libs/debounce";
 import { useToast } from "@/libs/toast";
+import { useUploadFile } from "@/libs/upload";
 import { useAlbumListByArtist } from "@/queries/useAlbumQuery";
 import { useArtistListAdmin, useArtistProfile } from "@/queries/useArtistQuery";
 import { useGenreList } from "@/queries/useGenreQuery";
@@ -13,13 +14,13 @@ import { useState } from "react";
 export default function ArtistSongUpload() {
     const [form] = Form.useForm();
     const toast = useToast();
-
+    const { uploadFile , isUploading } = useUploadFile();
     const [explicit, setExplicit] = useState(false);
     const [releaseNow, setReleaseNow] = useState(true);
     const [searchText, setSearchText] = useState("");
     const debouncedSearch = useDebounce(searchText, 400);
 
-    const { data: artistSearch} = useArtistListAdmin({ name: debouncedSearch });
+    const { data: artistSearch } = useArtistListAdmin({ name: debouncedSearch });
 
     const { mutate, isPending } = useCreateSong();
 
@@ -39,65 +40,64 @@ export default function ArtistSongUpload() {
     }));
 
 
-    const handleCreateSong = (values: any) => {
-        const formData = new FormData();
-
-        formData.append("name", values.name);
-        formData.append("explicit", explicit ? "true" : "false");
-
-        if (explicit && values.lyrics) {
-            formData.append("lyrics", values.lyrics);
-        }
-
-        if (values.genreNames?.length) {
-            values.genreNames.forEach((g: string) =>
-                formData.append("genreNames", g)
-            );
-        }
-
-        if (values.albumId) {
-            formData.append("albumId", values.albumId);
-        }
-
-        if (Array.isArray(values.featArtistIds)) {
-            values.featArtistIds.forEach((id: string) => {
-                formData.append("featArtistIds[]", id);
-            });
-        }
-
-        if (releaseNow) {
-            formData.append("releseStatus", SongReleseStatus.PUBLISHED);
-        } else {
-            formData.append("releseStatus", SongReleseStatus.SCHEDULED);
-            if (values.releaseAt) {
-                formData.append("releaseAt", values.releaseAt.toISOString());
+    const handleCreateSong = async (values: any) => {
+        try {
+            /* ===== IMAGE ===== */
+            const imageFile: File | undefined =
+                values.imageUrl?.[0]?.originFileObj;
+            if (!imageFile) {
+                toast.error("Thiếu ảnh bìa");
+                return;
             }
-        }
+            const { url: imageUrl } = await uploadFile(imageFile);
 
-        const imageFile = values.imageUrl?.[0]?.originFileObj;
-        if (imageFile) {
-            formData.append("imageUrl", imageFile);
-        }
+  
+            const audioFile: File | undefined =
+                values.mp3Link?.[0]?.originFileObj;
+            if (!audioFile) {
+                toast.error("Thiếu file audio");
+                return;
+            }
+            const { url: mp3Url, duration } = await uploadFile(audioFile);
 
-        const audioFile = values.mp3Link?.[0]?.originFileObj;
-        if (audioFile) {
-            formData.append("mp3Link", audioFile);
-        }
+            const payload = {
+                name: values.name,
+                explicit,
+                lyrics: explicit ? values.lyrics : undefined,
+                genreNames: values.genreNames,
+                albumId: values.albumId || null,
+                featArtistIds: values.featArtistIds || [],
+                releseStatus: releaseNow
+                    ? SongReleseStatus.PUBLISHED
+                    : SongReleseStatus.SCHEDULED,
+                releaseAt: !releaseNow
+                    ? values.releaseAt?.toISOString()
+                    : null,
+                imageUrl,
+                mp3Link: mp3Url,
+                duration, 
+            };
 
-        mutate(formData, {
-            onSuccess: (res) => {
-                toast.success(res?.data.message || "Upload bài hát thành công!");
-                form.resetFields();
-            },
-            onError: (error: any) => {
-                const msg =
-                    error?.response?.data?.message ||
-                    error?.message ||
-                    "Có lỗi xảy ra";
-                toast.error(Array.isArray(msg) ? msg.join(", ") : msg);
-            },
-        });
+            mutate(payload, {
+                onSuccess: (res) => {
+                    toast.success(
+                        res?.data?.message || "Upload bài hát thành công!"
+                    );
+                    form.resetFields();
+                },
+                onError: (error: any) => {
+                    const msg =
+                        error?.response?.data?.message ||
+                        error?.message ||
+                        "Có lỗi xảy ra";
+                    toast.error(Array.isArray(msg) ? msg.join(", ") : msg);
+                },
+            });
+        } catch {
+            // lỗi upload đã được toast trong hook
+        }
     };
+
 
     return (
         <>

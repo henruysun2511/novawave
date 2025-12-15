@@ -1,3 +1,5 @@
+import Title from "@/components/ui/title";
+
 export default function NewsPage() {
     return (
         <>
@@ -20,7 +22,7 @@ export default function NewsPage() {
                 </div>
             </div>
 
-            <h2 className="text-2xl font-bold mb-4 p-6">Trang tin tức</h2>
+            <Title>Chưa có tin tức nào</Title>
         </>
     );
 }

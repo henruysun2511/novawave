@@ -1,9 +1,11 @@
 import useDebounce from "@/libs/debounce";
 import { useToast } from "@/libs/toast";
+import { useUploadFile } from "@/libs/upload";
 import { useAlbumListByArtist } from "@/queries/useAlbumQuery";
 import { useArtistListAdmin, useArtistProfile } from "@/queries/useArtistQuery";
 import { useGenreList } from "@/queries/useGenreQuery";
 import { useSongDetail, useUpdateSong } from "@/queries/useSongQuery";
+import { SongReleseStatus } from "@/types/constant.type";
 import { Song } from "@/types/object.type";
 import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import {
@@ -87,7 +89,7 @@ export default function ArtistSongUpdateModal({
         setArtistOptions(featOptions);
 
         form.setFieldsValue({
-            
+
             name: s.name,
             genreNames: s.genreNames || [],
             albumId: s.album?._id,
@@ -115,57 +117,69 @@ export default function ArtistSongUpdateModal({
         });
     }, [songData, open]);
 
-    const handleUpdateSong = (values: any) => {
-        const formData = new FormData();
+    const { uploadFile , isUploading } = useUploadFile();
 
-        formData.append("name", values.name);
-        values.genreNames.forEach((g: string) =>
-            formData.append("genreNames[]", g)
-        );
+    const handleUpdateSong = async (values: any) => {
+        try {
+            let imageUrl = songData?.data?.imageUrl;
+            let mp3Url = songData?.data?.mp3Link;
+            let duration = songData?.data?.duration;
 
-        if (values.albumId) {
-            formData.append("albumId", values.albumId);
-        }
-
-        values.featArtistIds?.forEach((id: string) =>
-            formData.append("featArtistIds[]", id)
-        );
-
-        if (explicit && values.lyrics) {
-            formData.append("lyrics", values.lyrics);
-        }
-
-        if (!releaseNow && values.releaseAt) {
-            formData.append("releaseAt", values.releaseAt.toISOString());
-        }
-
-        const image = values.imageUrl?.[0];
-        if (image?.originFileObj) {
-            formData.append("imageUrl", image.originFileObj);
-        }
-
-        const audio = values.mp3Link?.[0];
-        if (audio?.originFileObj) {
-            formData.append("mp3Link", audio.originFileObj);
-        }
-
-        mutate(
-            { id: song?._id, data: formData },
-            {
-                onSuccess: (res) => {
-                    toast.success(res?.data.message || "Cập nhật bài hát thành công!");
-                    form.resetFields();
-                    onCancel();
-                },
-                onError: (error: any) => {
-                    const msg =
-                        error?.response?.data?.message ||
-                        error?.message ||
-                        "Có lỗi xảy ra";
-                    toast.error(Array.isArray(msg) ? msg.join(", ") : msg);
-                },
+            const image = values.imageUrl?.[0];
+            if (image?.originFileObj) {
+                const res = await uploadFile(image.originFileObj);
+                imageUrl = res.url;
             }
-        );
+
+            const audio = values.mp3Link?.[0];
+            if (audio?.originFileObj) {
+                const res = await uploadFile(audio.originFileObj);
+                mp3Url = res.url;
+                duration = res.duration;
+            }
+
+            const payload = {
+                name: values.name,
+                explicit,
+                lyrics: explicit ? values.lyrics : null,
+                genreNames: values.genreNames,
+                albumId: values.albumId || null,
+                featArtistIds: values.featArtistIds || [],
+                releseStatus: releaseNow
+                    ? SongReleseStatus.PUBLISHED
+                    : SongReleseStatus.SCHEDULED,
+                releaseAt: !releaseNow
+                    ? values.releaseAt?.toISOString()
+                    : null,
+                imageUrl,
+                mp3Link: mp3Url,
+                duration,
+            };
+
+            mutate(
+                { id: song?._id, data: payload },
+                {
+                    onSuccess: (res) => {
+                        toast.success(
+                            res?.data?.message || "Cập nhật bài hát thành công!"
+                        );
+                        form.resetFields();
+                        onCancel();
+                    },
+                    onError: (error: any) => {
+                        const msg =
+                            error?.response?.data?.message ||
+                            error?.message ||
+                            "Có lỗi xảy ra";
+                        toast.error(
+                            Array.isArray(msg) ? msg.join(", ") : msg
+                        );
+                    },
+                }
+            );
+        } catch {
+            // lỗi upload đã được toast trong hook
+        }
     };
 
     return (

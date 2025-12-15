@@ -48,10 +48,10 @@ export const SongService = {
     getDetail(id: string) {
         return http.get<ApiResponse<Song>>(`/${prefix}/detail/${id}`);
     },
-    create(payload: FormData) {
+    create(payload: Song) {
         return http.post<ApiResponse<Song>>(`/${prefix}`, payload);
     },
-    update(id: string, payload: FormData) {
+    update(id: string, payload: Song) {
         return http.put<ApiResponse<Song>>(`/${prefix}/${id}`, payload);
     },
     delete(id: string) {

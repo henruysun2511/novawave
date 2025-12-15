@@ -11,10 +11,7 @@ import PlanCreateModal from './plan-create-modal';
 export default function PlanManagementPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    // Fetch danh sách Plans
     const { data: plansRes, isLoading, isError, error } = usePlans();
-    console.log(plansRes)
-
     const plans = plansRes?.data.data || [];
 
     return (
