@@ -16,6 +16,7 @@ export interface User {
   status: UserStatus,
   role: Role
   createdAt: Date,
+  updatedAt: Date,
 }
 
 export interface Artist {
@@ -92,7 +93,7 @@ export interface Song {
   updatedAt: string,
   likeCount: number,
   playCount?: number,
-  album?: Album
+  album?: Album,
 }
 
 export interface Album {
@@ -214,7 +215,7 @@ export interface Payment {
 }
 
 export interface NextTrack {
-  type: string;
+  type: 'song' | 'advertisement';
   trackId: string;
   random?: boolean;
   previous?: boolean;

@@ -6,6 +6,7 @@ import Title from "@/components/ui/title";
 import { useToast } from "@/libs/toast";
 import { useStartPlayer } from "@/queries/usePlayerQuery";
 import { usePlaylistDetail, usePlaylistsSong, useRemoveSongFromPlaylist, useUserPlaylists } from "@/queries/usePlaylistQuery";
+import { usePlayerStore } from "@/stores/usePlayerStore";
 import { PlayerDto } from "@/types/body.type";
 import { ReportTargetType } from "@/types/constant.type";
 import { CaretRightFilled, FlagOutlined, LoadingOutlined, PlusOutlined } from "@ant-design/icons";
@@ -19,6 +20,9 @@ export default function PlaylistDetailPage() {
     const [openAddSong, setOpenAddSong] = useState(false);
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
     const toast = useToast();
+
+    const nowPlayingType = usePlayerStore(state => state.status.nowPlayingType);
+    const isCurrentAd = nowPlayingType === 'advertisement';
 
 
     const { data: playlistRes, isLoading: playlistLoading } = usePlaylistDetail(id);
@@ -35,7 +39,6 @@ export default function PlaylistDetailPage() {
     const isUserPlaylist = userPlaylists.some(p => p._id === id);
 
 
-    // ✅ Hook phát nhạc
     const { mutate: startPlayerMutation, isPending: isStartingPlayer } = useStartPlayer();
 
     //Xử lý ảnh
@@ -120,6 +123,10 @@ export default function PlaylistDetailPage() {
     };
 
     const handlePlayPlaylist = () => {
+        if (isCurrentAd) {
+            toast.info("Nghe nhạc free thì chịu nghe quảng cáo đi");
+            return;
+        }
         if (!songs || songs.length === 0) {
             toast.info("Playlist này chưa có bài hát nào!");
             return;
@@ -139,7 +146,7 @@ export default function PlaylistDetailPage() {
             songId: nowPlayingId,
             playlistId: id,
         };
-        
+
         startPlayerMutation(payload, {
             onSuccess: (res) => {
                 toast.success(`Đang phát playlist: ${playlist?.name}`);
@@ -180,10 +187,10 @@ export default function PlaylistDetailPage() {
 
             <div className="p-8">
                 <div className="flex items-center gap-4 mb-10">
-                    {/* ✅ Nút Play Playlist */}
-                    <div 
+                    {/*Nút Play Playlist */}
+                    <div
                         className={`cursor-pointer w-15 h-15 rounded-full bg-green flex items-center justify-center shadow-lg transition ${isStartingPlayer ? 'opacity-70' : 'hover:scale-105'}`}
-                        onClick={handlePlayPlaylist} 
+                        onClick={handlePlayPlaylist}
                     >
                         {isStartingPlayer ? (
                             <LoadingOutlined className="text-3xl text-black animate-spin" />

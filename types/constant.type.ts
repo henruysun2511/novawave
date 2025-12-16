@@ -73,6 +73,11 @@ export enum NotificationType {
   NEW_SONG_RELEASE = 'NEW_SONG_RELEASE'
 }
 
+export enum PlaySongType{
+    ADVERTISEMENT = 'advertisement',
+    SONG = 'song'
+}
+
 export const NOTIFICATION_CONFIG = {
     [NotificationType.SONG_FEAT_REQUEST]: { 
         icon: UserAddOutlined, 

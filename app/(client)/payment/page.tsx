@@ -4,12 +4,10 @@ import { useToast } from '@/libs/toast';
 import { usePaymentProduct } from '@/queries/usePaymentQuery';
 import { PaymentProductDto } from '@/types/body.type';
 import { ArrowLeftOutlined } from '@ant-design/icons';
-import { Button, Card, Divider, Form, Input, List, Spin, Typography } from 'antd';
+import { Button, Card, Divider, Form, Input, List, Spin } from 'antd';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-
-const { Text } = Typography;
 
 interface CheckoutData {
     products: { productId: string; quantity: number; price: number; name: string; img?: string }[];
@@ -34,7 +32,7 @@ export default function CheckoutPage() {
         } else {
             toast.warning("Không tìm thấy sản phẩm trong giỏ hàng. Quay lại giỏ hàng.");
         }
-    }, [toast]);
+    }, []);
 
     // Tổng tiền đã được tính sẵn (hoặc tính lại từ products để an toàn hơn)
     const totalPrice = checkoutData?.totalPrice ?? 0;
@@ -72,7 +70,7 @@ export default function CheckoutPage() {
             fullName: values.fullName,
             phone: phone,
             address: values.address,
-            products: productsPayload, // Cast vì React Query cần đúng tuple type
+            products: productsPayload, 
             cartId: checkoutData.cartId,
         };
 

@@ -1,7 +1,6 @@
 import SongCard from "@/components/client/SongList/song-card";
 import SquareSkeleton from "@/components/ui/skeleton";
 import { useUserLike } from "@/queries/useLikeQuery";
-import { Song } from "@/types/object.type";
 import { Pagination } from "antd";
 import { useState } from "react";
 
@@ -23,7 +22,7 @@ export default function UserLike() {
                 ) : songs && songs.length > 0 ? (
                     <>
                         <div className="flex flex-wrap gap-3">
-                            {songs.map((p: Song) => (
+                            {songs.map((p: any) => (
                                 <SongCard key={p._id} song={p.songId} />
                             ))}
                         </div>

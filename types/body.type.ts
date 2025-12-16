@@ -112,6 +112,9 @@ export interface PaymentPlanDto {
   planId: string;
 }
 
+export interface PlaySongDto{
+  currentSongId: string;
+}
 
 
 

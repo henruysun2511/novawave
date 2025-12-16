@@ -38,8 +38,6 @@ export default function AlbumDetailPage() {
         }
 
         const firstSong = songs[0];
-        console.log(firstSong);
-        console.log(id)
 
         startPlayerMutation({
             songId: firstSong._id,

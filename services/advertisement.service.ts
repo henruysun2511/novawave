@@ -12,6 +12,12 @@ export const AdvertisementService = {
         );
     },
 
+    getDetail(id: string) {
+        return http.get<ApiResponse<Advertisement>>(
+            `/${prefix}/detail/${id}`
+        );
+    },
+
     create(payload: FormData) {
         return http.post<ApiResponse<Advertisement>>(
             `/${prefix}`,

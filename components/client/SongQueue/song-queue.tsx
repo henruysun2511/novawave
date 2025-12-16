@@ -17,15 +17,13 @@ import NewSongCard from "../NewSongList/newsong-card";
 
 const getSongDetailQueryConfig = (id: string) => ({
     queryKey: ['song', id],
-    // ✅ Sử dụng hàm API thực tế để fetch chi tiết bài hát
     queryFn: async () => {
-        // Giả định SongService.getDetail trả về Promise<ApiResponse<Song>>
         const response = await SongService.getDetail(id);
-        return response.data; // Trả về data (chứa chi tiết bài hát)
+        return response.data; 
     }, 
     enabled: !!id,
     staleTime: 5 * 60 * 1000, // 5 phút
-    select: (data: ApiResponse<Song>) => data.data as Song, // Lấy ra object Song
+    select: (data: ApiResponse<Song>) => data.data as Song, 
 });
 
 

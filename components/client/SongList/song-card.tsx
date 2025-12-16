@@ -1,5 +1,6 @@
 import { useToast } from "@/libs/toast";
 import { useStartPlayer } from "@/queries/usePlayerQuery";
+import { usePlayerStore } from "@/stores/usePlayerStore";
 import { PlayerDto } from "@/types/body.type";
 import { Song } from "@/types/object.type";
 import { CaretRightFilled, LoadingOutlined } from "@ant-design/icons";
@@ -14,6 +15,9 @@ export default function SongCard({ song }: Props) {
     const toast = useToast();
     const router = useRouter();
 
+    const nowPlayingType = usePlayerStore(state => state.status.nowPlayingType);
+    const isCurrentAd = nowPlayingType === 'advertisement';
+
     const handleGoDetail = () => {
         router.push(`/song/${song._id}`);
     };
@@ -21,6 +25,11 @@ export default function SongCard({ song }: Props) {
     const { mutate: startPlayerMutation, isPending: isStartingPlayer } = useStartPlayer();
     const handlePlaySong = (e: React.MouseEvent) => {
         e.stopPropagation();
+
+        if (isCurrentAd) {
+            toast.info("Nghe nhạc free thì chịu nghe quảng cáo đi");
+            return;
+        }
 
         if (isStartingPlayer) return;
 
@@ -53,7 +62,7 @@ export default function SongCard({ song }: Props) {
                     ) : (
                         <div
                             className="w-[160px] h-[180px] rounded-xl flex items-center justify-center bg-gray-600 text-white text-7xl font-bold"
-                            title={song.name} 
+                            title={song.name}
                         >
                             {song.name ? song.name.charAt(0).toUpperCase() : '?'}
                         </div>
@@ -64,11 +73,11 @@ export default function SongCard({ song }: Props) {
                     {/* Nút play */}
                     <div className="absolute inset-0 flex items-center justify-center opacity-0  group-hover:opacity-100 transition">
                         <div className="w-12 h-12 rounded-full bg-green flex items-center justify-center shadow-lg"
-                        onClick={handlePlaySong}>
+                            onClick={handlePlaySong}>
                             {isStartingPlayer ? (
                                 <LoadingOutlined className="text-xl text-white animate-spin" />
                             ) : (
-                                <CaretRightFilled className="text-3xl text-black" /> 
+                                <CaretRightFilled className="text-3xl text-black" />
                             )}
                         </div>
                     </div>

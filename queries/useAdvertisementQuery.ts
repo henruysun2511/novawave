@@ -17,6 +17,18 @@ export const useAdvertisementList = (params: AdvertisementParam) => {
     });
 };
 
+export const useAdvertisementDetail = (id: string) => {
+    return useQuery<ApiResponse<Advertisement>>({
+        queryKey: [...ADVERTISEMENT_QUERY_KEY, id], 
+        queryFn: async () => {
+            const res = await AdvertisementService.getDetail(id);
+            return res.data;
+        },
+        enabled: !!id, 
+        staleTime: 5 * 60 * 1000, 
+    });
+};
+
 export const useCreateAdvertisement = () => {
     const qc = useQueryClient();
     return useMutation({
