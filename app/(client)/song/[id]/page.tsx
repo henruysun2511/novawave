@@ -3,7 +3,7 @@
 import AlbumCard from "@/components/client/AlbumList/album-card";
 import ArtistCard from "@/components/client/ArtistList/artist-card";
 import ReportModal from "@/components/client/Report/report-modal";
-import { WavePlayer } from "@/components/client/WavePlayer/wave-player";
+import WavePlayer from "@/components/client/WavePlayer/wave-player";
 import Title from "@/components/ui/title";
 import { useToast } from "@/libs/toast";
 import { useLikeSong, useUnlikeSong, useUserLike } from "@/queries/useLikeQuery";
@@ -26,6 +26,8 @@ export default function SongDetailPage() {
     const { id } = useParams<{ id: string }>();
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
     const [isPlaylistModalOpen, setIsPlaylistModalOpen] = useState(false);
+    const currentTime = usePlayerStore((state) => state.currentTime);
+    const setStoreCurrentTime = usePlayerStore((state) => state.setCurrentTime);
     const nowPlayingType = usePlayerStore(state => state.status.nowPlayingType);
     const isCurrentAd = nowPlayingType === PlaySongType.ADVERTISEMENT;
 
@@ -46,6 +48,8 @@ export default function SongDetailPage() {
     if (isLoading) return <div>Loading...</div>;
     if (!songRes?.data) return <div>Không tìm thấy bài hát</div>;
     const song = songRes.data;
+
+
 
     const isLiked = likeRes?.data?.some(
         (l: any) => l.songId?._id === song._id
@@ -103,25 +107,40 @@ export default function SongDetailPage() {
     return (
         <>
             <div className="relative w-full h-[350px]">
-                {/* <div className="absolute inset-0 bg-gradient-to-r from-[#7f1d1d] via-[#991b1b] to-[#7c2d12]" /> */}
-
                 <div className="absolute inset-0 bg-black/10"></div>
 
-                <div className="absolute inset-0 z-10 gap-5 flex items-center p-4">
-                    <img className="w-[300px] h-[300px] rounded-xl" src={song?.imageUrl || "/images/default-cover.png"} alt="" />
-                    <div className="relative z-20">
+                <div className="absolute inset-0 z-10 gap-5 flex items-center p-6">
+                    {/* COVER */}
+                    <img
+                        className="w-[300px] h-[300px] rounded-xl flex-shrink-0"
+                        src={song?.imageUrl || "/images/default-cover.png"}
+                        alt=""
+                    />
+
+                    {/* INFO + WAVE */}
+                    <div className="relative z-20 flex-1 min-w-0">
                         <div className="text-base text-white mt-5 mb-3">
                             Đĩa đơn
                         </div>
-                        <h3 className="uppercase text-6xl font-extrabold text-white mb-1 hover:text-green transition">
+
+                        <h3 className="uppercase text-6xl font-extrabold text-white mb-1">
                             {song?.name || "Đang cập nhật"}
                         </h3>
-                        <div className="text-base text-white mb-3 font-bold">
+
+                        <div className="text-base text-white mb-4 font-bold">
                             {song?.artist.name}
                         </div>
-                        <WavePlayer url="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" />
+
+                        {/* WAVE */}
+                        <div className="w-full">
+                            <WavePlayer
+                                url={song?.mp3Link}
+                                currentTime={currentTime}
+                            />
+                        </div>
                     </div>
                 </div>
+
             </div>
 
             <div className="p-8">

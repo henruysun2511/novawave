@@ -1,40 +1,74 @@
-"use client";
-
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import WaveSurfer from "wavesurfer.js";
 
-export function WavePlayer({
-  url,
-  onReady,
-  onSeek,
-}: {
+interface WavePlayerProps {
   url: string;
-  onReady?: (ws: WaveSurfer) => void;
+  currentTime: number;
   onSeek?: (time: number) => void;
-}) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const waveRef = useRef<WaveSurfer | null>(null);
+}
 
+const WavePlayer: React.FC<WavePlayerProps> = ({
+  url,
+  currentTime,
+  onSeek,
+}) => {
+  const waveformRef = useRef<HTMLDivElement | null>(null);
+  const wavesurferRef = useRef<WaveSurfer | null>(null);
+
+  // INIT WAVESURFER
   useEffect(() => {
-    if (!containerRef.current) return;
+    if (!waveformRef.current) return;
 
     const ws = WaveSurfer.create({
-      container: containerRef.current,
-      waveColor: "#444",
-      progressColor: "#22c55e",
-      height: 64,
+      container: waveformRef.current,
+
+      waveColor: "rgba(255,255,255,0.45)",
+      progressColor: "#1DB954",   // ✅ xanh lá đang chạy
+      cursorColor: "#1DB954",     // ✅ line chạy rõ
+      cursorWidth: 2,
+
       barWidth: 2,
-      cursorColor: "#22c55e",
+      barGap: 1.5,
+      barRadius: 2,
+
+      height: 90,
+      normalize: true,
+      interact: true,
+      dragToSeek: true,
     });
 
+    wavesurferRef.current = ws;
     ws.load(url);
-    waveRef.current = ws;
 
-    ws.on("ready", () => onReady?.(ws));
+    // ⚠️ FIX TYPE: ép any cho event
+    (ws as any).on("seek", (progress: number) => {
+      if (!ws.getDuration()) return;
+      const time = progress * ws.getDuration();
+      onSeek?.(time);
+    });
 
-
-    return () => ws.destroy();
+    return () => {
+      ws.destroy();
+      wavesurferRef.current = null;
+    };
   }, [url]);
 
-  return <div ref={containerRef} />;
-}
+  // SYNC PLAYER -> WAVESURFER
+  useEffect(() => {
+    const ws = wavesurferRef.current;
+    if (!ws || !ws.getDuration()) return;
+
+    const diff = Math.abs(ws.getCurrentTime() - currentTime);
+    if (diff > 0.3) {
+      ws.seekTo(currentTime / ws.getDuration());
+    }
+  }, [currentTime]);
+
+  return (
+    <div className="wave-wrapper">
+      <div ref={waveformRef} id="waveform" />
+    </div>
+  );
+};
+
+export default WavePlayer;

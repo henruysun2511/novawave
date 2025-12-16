@@ -4,7 +4,6 @@ import ArtistList from "@/components/client/ArtistList/artist-list";
 import EventList from "@/components/client/EventList/event-list";
 import Footer from "@/components/client/footer/footer";
 import NewsList from "@/components/client/NewsList/news-list";
-import Vinyl from "@/components/client/SongInfo/vinyl";
 import SongList from "@/components/client/SongList/song-list";
 import SongList2 from "@/components/client/SongList/song-list-2";
 import SquareSkeleton from "@/components/ui/skeleton";
@@ -200,13 +199,6 @@ export default function HomePage() {
                 <div className="mt-16 flex justify-between items-center">
                     <img src=" https://yt3.googleusercontent.com/SCRkFwhAbYkvTcSod-rMsK5hER4ljSYFxxPBeXPgpmER8MLxQQSh_dmfgNeVTuUxalHT8ynpEA=w2276-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj" alt="" />
                 </div>
-
-                <div className="mt-16 flex justify-between items-center">
-                    <Title>Không có video thì hiện cái này</Title>
-                    <Vinyl />
-                </div>
-
-
             </div>
             <Footer />
 

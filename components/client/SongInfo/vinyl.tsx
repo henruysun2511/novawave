@@ -1,16 +1,24 @@
 
-export default function Vinyl() {
+const DEFAULT_VINYL_IMG = "/images/default-vinyl.png"; // đặt trong public/images
+
+export default function Vinyl({ img }: { img?: string }) {
+    const imageSrc = img || DEFAULT_VINYL_IMG;
+
     return (
-        <>
-                <h2 className="text-2xl font-bold mb-4 spin-slow">
-                    <div className="w-[200px] h-[200px] p-10 shadow-2xl bg-black rounded-full">
-                        <div className="p-1 bg-orange-400 rounded-full">
-                            <img className="rounded-full" src="https://photo-zmp3.zadn.vn/avatars/4/e/9/e/4e9e34312435973c052bab49765f84a2.jpg" alt="" />
-                        </div>
+        <div className="flex items-center justify-center h-full">
+            <div className="spin-slow w-[220px] h-[220px] rounded-full bg-black shadow-2xl flex items-center justify-center">
+                <div className="w-[190px] h-[190px] rounded-full bg-neutral-800 flex items-center justify-center">
+                    
+                    <div className="w-[90px] h-[90px] rounded-full bg-orange-400 p-1">
+                        <img
+                            src={imageSrc}
+                            alt="vinyl"
+                            className="w-full h-full object-cover rounded-full"
+                        />
                     </div>
 
-                </h2>
-
-        </>
+                </div>
+            </div>
+        </div>
     );
 }

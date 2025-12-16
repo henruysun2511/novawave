@@ -18,7 +18,7 @@ export default function SongBar() {
   const hidePanel = useSidebarStore((s) => s.hideRightPanel);
   const toast = useToast();
 
-  const { isPlaying, play, pause, status } = usePlayerStore();
+  const { isPlaying, play, pause, status, setCurrentTime } = usePlayerStore();
   const { nowPlaying } = status;
 
   //Lấy type hiện tại: 'song' hoặc 'advertisement'
@@ -38,7 +38,6 @@ export default function SongBar() {
     nowPlaying && isCurrentAd ? nowPlaying : ""
   );
   const currentAd = adRes?.data;
-  console.log(currentAd)
 
   // 3. Fetch chi tiết nghệ sĩ (chỉ chạy khi là bài hát)
   const artistId =
@@ -76,6 +75,11 @@ export default function SongBar() {
 
     nextMutation.mutate({ currentSongId: nowPlaying });
   };
+
+  const handleListen = (e: any) => {
+        if (isCurrentAd) return; 
+        setCurrentTime(e.target.currentTime);
+    };
 
   // Dữ liệu cho phần hiển thị
   const displayImageUrl = isCurrentAd
@@ -119,6 +123,7 @@ export default function SongBar() {
           onClickNext={handleNext}
           onClickPrevious={handlePrev}
           onEnded={handleEnded}
+          onListen={handleListen}
           customProgressBarSection={isCurrentAd ? [] : undefined}
           className="custom-audio-player"
         />

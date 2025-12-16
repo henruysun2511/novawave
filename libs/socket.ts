@@ -10,7 +10,7 @@ export const connectSocket = () => {
 
     console.log("🟢 Connecting socket...");
 
-    socket = io(process.env.NEXT_PUBLIC_API_URL, {
+    socket = io("http://localhost:3000", {
         transports: ["websocket"],
         auth: {
             token: sessionStorage.getItem("accessToken"),

@@ -83,3 +83,23 @@ body {
 }
 
 
+/* .wave-wrapper {
+    width: 100%!important;
+    padding: 24px 32px;
+    border-radius: 20px;
+
+    background: linear-gradient(
+        90deg,
+        #9b8f86,
+        #8f8d88,
+        #7f7f7a
+    );
+
+    display: flex;
+    align-items: center;
+} */
+
+#waveform {
+    width: 100%;
+}
+

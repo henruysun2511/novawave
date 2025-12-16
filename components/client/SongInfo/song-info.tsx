@@ -9,6 +9,7 @@ import { usePlayerStore } from "@/stores/usePlayerStore";
 import { useSidebarStore } from "@/stores/useSidebarStore";
 import { LoadingOutlined, MenuFoldOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
+import Vinyl from "./vinyl";
 
 
 
@@ -131,7 +132,6 @@ export default function SongInfo() {
         );
     }
 
-
     const mainTitle = isCurrentAd
         ? currentAd?.title || "Quảng Cáo"
         : currentSong?.name || "Đang cập nhật";
@@ -159,15 +159,17 @@ export default function SongInfo() {
                         alt={mainTitle + " Banner"}
                     />
                 ) : (
-                    // Dùng video fallback khi không có banner (cả song và ad)
-                    <video
-                        className="w-full h-full object-cover"
-                        autoPlay
-                        muted
-                        loop
-                    >
-                        <source src="/videos/Download.mp4" type="video/mp4" />
-                    </video>
+                    <>
+                        <video
+                            className="w-full h-full object-cover"
+                            autoPlay
+                            muted
+                            loop
+                        >
+                            <source src="/videos/Download.mp4" type="video/mp4" />
+                        </video>
+                    </>
+
                 )}
 
                 {/* Nút Ẩn */}
@@ -248,7 +250,7 @@ export default function SongInfo() {
                             </p>
 
                             <p className="text-base text-gray-300 line-clamp-2">
-                               {currentAd?.description ?? "Không có mô tả cho quảng cáo này."}
+                                {currentAd?.description ?? "Không có mô tả cho quảng cáo này."}
                             </p>
                         </div>
 
@@ -298,6 +300,8 @@ export default function SongInfo() {
                         )}
                     </div>
                 )}
+                <div className="mt-10"></div>
+                <Vinyl img={currentSong?.imageUrl} />
             </div>
         </div>
     );
