@@ -1,6 +1,7 @@
 import Title from "@/components/ui/title";
 import useDebounce from "@/libs/debounce";
 import { useToast } from "@/libs/toast";
+import { useUploadFile } from "@/libs/upload";
 import { useCreateAlbum } from "@/queries/useAlbumQuery";
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Col, DatePicker, Form, Input, Row, Switch, Upload } from "antd";
@@ -9,30 +10,38 @@ import { useState } from "react";
 export default function ArtistAlbumCreate() {
     const [form] = Form.useForm();
     const toast = useToast();
-
+    const { uploadFile, isUploading } = useUploadFile();
     const [releaseNow, setReleaseNow] = useState(true);
     const [searchText, setSearchText] = useState("");
     const debouncedSearch = useDebounce(searchText, 400);
 
     const { mutate, isPending } = useCreateAlbum();
 
-    const handleCreateAlbum = (values: any) => {
-        const formData = new FormData();
+    const handleCreateAlbum = async (values: any) => {
+        const imageFile: File | undefined =
+            values.imageUrl?.[0]?.originFileObj;
 
-        formData.append("name", values.name);
-
-        if (values.release_date) {
-            formData.append("release_date", values.release_date);
-        } 
-
-        const imageFile = values.imageUrl?.[0]?.originFileObj;
-        if (imageFile) {
-            formData.append("img", imageFile);
+        if (!imageFile) {
+            toast.error("Thiếu ảnh bìa album");
+            return;
         }
+        const { url: img } = await uploadFile(imageFile);
 
-        mutate(formData, {
-            onSuccess: (res: any) => {
-                toast.success(res?.data?.message || "Tạo album thành công!");
+
+        const payload = {
+            name: values.name,
+            img,
+            release_date: !releaseNow
+                ? values.release_date?.toISOString()
+                : null,
+        };
+
+
+        mutate(payload as any, {
+            onSuccess: (res) => {
+                toast.success(
+                    res?.data?.message || "Tạo album thành công!"
+                );
                 form.resetFields();
                 setReleaseNow(true);
             },

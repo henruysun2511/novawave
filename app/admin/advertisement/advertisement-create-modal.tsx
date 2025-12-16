@@ -1,4 +1,5 @@
 import { useToast } from "@/libs/toast";
+import { useUploadFile } from "@/libs/upload";
 import { useCreateAdvertisement } from "@/queries/useAdvertisementQuery";
 import { UploadOutlined } from "@ant-design/icons";
 import { Button, Col, Form, Input, Modal, Upload } from "antd";
@@ -9,38 +10,31 @@ export function AdvertisementCreateModal({ open, onCancel }: { open: boolean; on
     const { mutate, isPending } = useCreateAdvertisement();
     const toast = useToast();
 
-    const handleCreateAdvertisment = (values: any) => {
-        const formData = new FormData();
-        formData.append("title", values.title);
-        formData.append("description", values.description);
-        formData.append("partner", values.partner);
+    const { uploadFile } = useUploadFile();
 
-        const fileAudio = values.audio?.[0]?.originFileObj;
-        if (fileAudio) {
-            formData.append("audio", fileAudio);
-        }
-        const fileImage = values.banner?.[0]?.originFileObj;
-        if (fileImage) {
-            formData.append("banner", fileImage);
-        }
+    const handleCreateAdvertisment = async (values: any) => {
+        try {
+            const audioRes = await uploadFile(values.audio[0].originFileObj);
+            const bannerRes = await uploadFile(values.banner[0].originFileObj);
 
-        mutate(formData, {
-            onSuccess: (res) => {
-                form.resetFields();
-                toast.success(res?.data.message || "Thêm thành công");
-                onCancel();
-            },
-            onError: (error: any) => {
-                const message =
-                    error?.response?.data?.message ||
-                    error?.message ||
-                    "Có lỗi xảy ra";
-
-                toast.error(
-                    Array.isArray(message) ? message.join(", ") : message
-                );
-            },
-        });
+            mutate(
+                {
+                    title: values.title,
+                    description: values.description,
+                    partner: values.partner,
+                    audioUrl: audioRes.url,
+                    bannerUrl: bannerRes.url,
+                },
+                {
+                    onSuccess: () => {
+                        toast.success("Thêm quảng cáo thành công");
+                        form.resetFields();
+                        onCancel();
+                    },
+                    onError: () => toast.error("Lỗi"),
+                }
+            );
+        } catch { }
     };
 
     return (
@@ -79,8 +73,8 @@ export function AdvertisementCreateModal({ open, onCancel }: { open: boolean; on
                     <Form.Item
                         name="audio"
                         label="Audio"
-                        valuePropName="fileList" 
-                        getValueFromEvent={(e) => e.fileList} 
+                        valuePropName="fileList"
+                        getValueFromEvent={(e) => e.fileList}
                         rules={[{ required: true, message: "Vui lòng chọn audio" }]}
                     >
                         <Upload

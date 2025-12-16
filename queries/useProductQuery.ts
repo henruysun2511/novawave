@@ -1,4 +1,5 @@
 import { ProductService } from "@/services/product.service";
+import { CreateProductDto } from "@/types/body.type";
 import { ProductParam } from "@/types/param.type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -22,7 +23,7 @@ export const useCreateProduct = () => {
 export const useUpdateProduct = () => {
     const qc = useQueryClient();
     return useMutation({
-        mutationFn: ({ id, data }: any) => ProductService.update(id, data),
+        mutationFn: ({ id, data }: {id: string, data: CreateProductDto}) => ProductService.update(id, data),
         onSuccess: () => qc.invalidateQueries({ queryKey: PRODUCT_QUERY_KEY }),
     });
 };

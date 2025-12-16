@@ -1,5 +1,5 @@
 import http from "@/libs/http";
-import { ApiResponse } from "@/types/body.type";
+import { AdvertisementDto, ApiResponse } from "@/types/body.type";
 import { Advertisement } from "@/types/object.type";
 import { AdvertisementParam } from "@/types/param.type";
 
@@ -18,14 +18,14 @@ export const AdvertisementService = {
         );
     },
 
-    create(payload: FormData) {
+    create(payload: AdvertisementDto) {
         return http.post<ApiResponse<Advertisement>>(
             `/${prefix}`,
             payload
         );
     },
 
-    update(id: string, payload: FormData) {
+    update(id: string, payload: AdvertisementDto) {
         return http.put<ApiResponse<Advertisement>>(
             `/${prefix}/${id}`,
             payload

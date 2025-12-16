@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuthStore } from "@/stores/useAuthStore";
-import { JwtPayload } from "@/types/body.type";
+import { UserJwtPayload } from "@/types/body.type";
 import { jwtDecode, } from "jwt-decode";
 import { useEffect, useState } from "react";
 
@@ -23,7 +23,7 @@ export default function AuthInitializer({
     }
 
     try {
-      const user = jwtDecode<JwtPayload>(token);
+      const user = jwtDecode<UserJwtPayload>(token);
 
       if (user.exp * 1000 < Date.now() + 30_000) {
         logout();

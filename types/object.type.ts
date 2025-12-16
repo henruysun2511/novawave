@@ -220,3 +220,12 @@ export interface NextTrack {
   random?: boolean;
   previous?: boolean;
 }
+
+export interface PurchaseHistory{
+  products: Product[];
+  shippingAddress: {
+    fullName: string,
+    address: string,
+    phone: string
+  }
+}

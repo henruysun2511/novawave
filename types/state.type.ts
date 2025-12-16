@@ -1,4 +1,4 @@
-import { JwtPayload } from "./body.type";
+import { UserJwtPayload } from "./body.type";
 
 
 type RightPanelMode = "info" | "queue" | "hidden";
@@ -17,10 +17,10 @@ export interface PlayerState {
 export interface AuthState {
   isAuthenticated: boolean,
   accessToken: string | null;
-  user: JwtPayload | null;
+  user: UserJwtPayload | null;
   email: string | null;
   roleName: string | null;
-  setAuth: (token: string, user: JwtPayload) => void;
+  setAuth: (token: string, user: UserJwtPayload) => void;
   setEmail: (email: string) => void;
   setRoleName: (roleName: string) => void;
   logout: () => void;

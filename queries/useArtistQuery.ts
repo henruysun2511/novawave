@@ -1,5 +1,5 @@
 import { ArtistService } from "@/services/artist.service"; // Import service vừa tạo
-import { UpdateVerificationDto } from "@/types/body.type";
+import { SubmitArtistVerificationDto, UpdateVerificationDto } from "@/types/body.type";
 import { ArtistParam, PaginationParam } from "@/types/param.type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -51,7 +51,7 @@ export const useArtistDetail = (
 export const useSubmitVerification = () => {
     const qc = useQueryClient();
     return useMutation({
-        mutationFn: ArtistService.submitVerification,
+        mutationFn: (payload: SubmitArtistVerificationDto) => ArtistService.submitVerification(payload),
         onSuccess: () => {
             qc.invalidateQueries({ queryKey: ARTIST_ADMIN_QUERY_KEY });
         },

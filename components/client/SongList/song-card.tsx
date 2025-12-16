@@ -2,6 +2,7 @@ import { useToast } from "@/libs/toast";
 import { useStartPlayer } from "@/queries/usePlayerQuery";
 import { usePlayerStore } from "@/stores/usePlayerStore";
 import { PlayerDto } from "@/types/body.type";
+import { PlaySongType } from "@/types/constant.type";
 import { Song } from "@/types/object.type";
 import { CaretRightFilled, LoadingOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
@@ -16,7 +17,7 @@ export default function SongCard({ song }: Props) {
     const router = useRouter();
 
     const nowPlayingType = usePlayerStore(state => state.status.nowPlayingType);
-    const isCurrentAd = nowPlayingType === 'advertisement';
+    const isCurrentAd = nowPlayingType === PlaySongType.ADVERTISEMENT;
 
     const handleGoDetail = () => {
         router.push(`/song/${song._id}`);

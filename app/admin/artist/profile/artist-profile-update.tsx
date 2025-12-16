@@ -1,5 +1,6 @@
 import Title from "@/components/ui/title";
 import { useToast } from "@/libs/toast";
+import { useUploadFile } from "@/libs/upload";
 import { useUpdateArtistProfile } from "@/queries/useArtistQuery";
 import { Artist } from "@/types/object.type";
 import { PlusOutlined } from "@ant-design/icons";
@@ -9,7 +10,7 @@ import { useEffect } from "react";
 export default function ArtistProfileUpdate({ artist }: { artist: Artist }) {
     const [form] = Form.useForm();
     const toast = useToast();
-
+    const { uploadFile } = useUploadFile();
     const { mutate, isPending } = useUpdateArtistProfile();
 
     useEffect(() => {
@@ -45,30 +46,42 @@ export default function ArtistProfileUpdate({ artist }: { artist: Artist }) {
     }, [artist, form]);
 
 
-    const handleUpdateProfile = (values: any) => {
-        const formData = new FormData();
+    const handleUpdateProfile = async (values: any) => {
+        let avatarUrl = artist.avatarUrl;
+        let bannerUrl = artist.bannerUrl;
 
-        formData.append("name", values.name);
-        formData.append("country", values.country || "");
-        formData.append("biography", values.biography || "");
-
-        const avatarImg = values.avatarUrl?.[0];
-        if (avatarImg?.originFileObj) {
-            formData.append("avatar", avatarImg.originFileObj);
+        const avatarFile: File | undefined =
+            values.avatarUrl?.[0]?.originFileObj;
+        if (avatarFile) {
+            const res = await uploadFile(avatarFile);
+            avatarUrl = res.url;
         }
 
-        const bannerImg = values.bannerUrl?.[0];
-        if (bannerImg?.originFileObj) {
-            formData.append("banner", bannerImg.originFileObj);
+        const bannerFile: File | undefined =
+            values.bannerUrl?.[0]?.originFileObj;
+        if (bannerFile) {
+            const res = await uploadFile(bannerFile);
+            bannerUrl = res.url;
         }
 
-        // Gọi mutation
-        mutate(formData, {
+        const payload = {
+            name: values.name,
+            country: values.country || "",
+            biography: values.biography || "",
+            avatarUrl,
+            bannerUrl,
+        };
+
+        mutate(payload, {
             onSuccess: (res) => {
-                toast.success(res?.data?.message || "Cập nhật hồ sơ thành công!");
+                toast.success(
+                    res?.data?.message || "Cập nhật hồ sơ thành công!"
+                );
             },
             onError: (error: any) => {
-                toast.error(error?.response?.data?.message || "Cập nhật hồ sơ thất bại");
+                toast.error(
+                    error?.response?.data?.message || "Cập nhật hồ sơ thất bại"
+                );
             },
         });
     };

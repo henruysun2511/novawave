@@ -1,7 +1,7 @@
 import { AuthService } from "@/services/auth.service";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useSidebarStore } from "@/stores/useSidebarStore";
-import { ChangePasswordDto, JwtPayload, ResetPasswordDto } from "@/types/body.type";
+import { ChangePasswordDto, ResetPasswordDto, UpdateUserInfoDto, UserJwtPayload } from "@/types/body.type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { jwtDecode } from "jwt-decode";
 
@@ -13,7 +13,7 @@ export const useLoginMutation = () => {
     onSuccess: async (data) => {
       sessionStorage.setItem("accessToken", data.accessToken);
 
-      const payload = jwtDecode<JwtPayload>(data.accessToken);
+      const payload = jwtDecode<UserJwtPayload>(data.accessToken);
       console.log(payload)
       
       useAuthStore.getState().setAuth(data.accessToken, payload);
@@ -90,7 +90,7 @@ export const useUpdateUserInfoMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (body: FormData) => AuthService.updateUserInfo(body),
+    mutationFn: (body: UpdateUserInfoDto) => AuthService.updateUserInfo(body),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user-info"] });
     }

@@ -2,7 +2,7 @@
 
 import { useToast } from "@/libs/toast";
 import { useAuthStore } from "@/stores/useAuthStore";
-import { JwtPayload } from "@/types/body.type";
+import { UserJwtPayload } from "@/types/body.type";
 import { jwtDecode } from "jwt-decode";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
@@ -25,7 +25,7 @@ export default function GoogleCallbackPage() {
 
     sessionStorage.setItem("accessToken", token);
 
-    const user = jwtDecode<JwtPayload>(token);
+    const user = jwtDecode<UserJwtPayload>(token);
     console.log(user)
     setAuth(token, user);
 

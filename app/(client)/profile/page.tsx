@@ -8,6 +8,7 @@ import UserFollow from "./user-follow";
 import UserInfo from "./user-info";
 import UserLike from "./user-like";
 import UserPlaylist from "./user-playlist";
+import UserPurchaseHistory from "./user-purchase-history";
 
 export default function ProfilePage() {
     const { data, isPending } = useGetUserInfoQuery();
@@ -36,8 +37,13 @@ export default function ProfilePage() {
             children:  (<UserFollow />),
         },
         {
-            label: 'Bảo mật',
+            label: 'Lịch sử mua hảng',
             key: '6',
+            children:  (<UserPurchaseHistory/>),
+        },
+        {
+            label: 'Bảo mật',
+            key: '7',
             children: (<ChangePassword />),
         },
     ];
@@ -69,7 +75,7 @@ export default function ProfilePage() {
 
             <Tabs
                 defaultActiveKey="1"
-                size="large"
+                size="middle"
                 style={{ marginBottom: 32 }}
                 items={items}
                 className="profile-tabs"

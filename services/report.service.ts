@@ -1,5 +1,5 @@
 import http from "@/libs/http";
-import { ApiResponse, ReportDto } from "@/types/body.type";
+import { ApiResponse, CreateReportDto, ReportDto } from "@/types/body.type";
 import { Report } from "@/types/object.type";
 import { ReportParam } from "@/types/param.type";
 
@@ -9,7 +9,7 @@ export const ReportService = {
         return http.get<ApiResponse<Report[]>>(`/${prefix}`, { params });
     },
 
-    create(payload: Report) {
+    create(payload: CreateReportDto) {
         return http.post<ApiResponse<Report>>(`/${prefix}`, payload);
     },
 

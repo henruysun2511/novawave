@@ -10,8 +10,9 @@ import { useLikeSong, useUnlikeSong, useUserLike } from "@/queries/useLikeQuery"
 import { useStartPlayer } from "@/queries/usePlayerQuery";
 import { useSongDetail } from "@/queries/useSongQuery";
 import { useAuthStore } from "@/stores/useAuthStore";
+import { usePlayerStore } from "@/stores/usePlayerStore";
 import { PlayerDto } from "@/types/body.type";
-import { ReportTargetType } from "@/types/constant.type";
+import { PlaySongType, ReportTargetType } from "@/types/constant.type";
 import { CaretRightFilled, FlagOutlined, HeartFilled, HeartOutlined, LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { Input } from 'antd';
 import { useParams } from "next/navigation";
@@ -25,6 +26,8 @@ export default function SongDetailPage() {
     const { id } = useParams<{ id: string }>();
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
     const [isPlaylistModalOpen, setIsPlaylistModalOpen] = useState(false);
+    const nowPlayingType = usePlayerStore(state => state.status.nowPlayingType);
+    const isCurrentAd = nowPlayingType === PlaySongType.ADVERTISEMENT;
 
     const toast = useToast();
 
@@ -74,6 +77,11 @@ export default function SongDetailPage() {
 
     const handlePlaySong = (e: React.MouseEvent) => {
         e.stopPropagation();
+
+        if (isCurrentAd) {
+            toast.info("Nghe nhạc free thì chịu nghe quảng cáo đi");
+            return;
+        }
 
         if (isStartingPlayer) return;
 

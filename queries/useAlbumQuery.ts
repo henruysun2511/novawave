@@ -1,4 +1,6 @@
 import { AlbumService } from "@/services/album.service";
+import { UpdateAlbumDto } from "@/types/body.type";
+import { Album } from "@/types/object.type";
 import { PaginationParam } from "@/types/param.type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -36,7 +38,7 @@ export const useAlbumDetail = (id: string) =>
 export const useCreateAlbum = () => {
     const qc = useQueryClient();
     return useMutation({
-        mutationFn: AlbumService.create,
+        mutationFn: (payload: Album) => AlbumService.create(payload),
         onSuccess: () => {
             qc.invalidateQueries({ queryKey: ALBUM_QUERY_KEY });
         },
@@ -46,7 +48,7 @@ export const useCreateAlbum = () => {
 export const useUpdateAlbum = () => {
     const qc = useQueryClient();
     return useMutation({
-        mutationFn: ({ id, data }: { id: string, data: FormData }) => AlbumService.update(id, data),
+        mutationFn: ({ id, data }: { id: string, data: UpdateAlbumDto }) => AlbumService.update(id, data),
         onSuccess: () => {
             qc.invalidateQueries({ queryKey: ALBUM_QUERY_KEY });
         },

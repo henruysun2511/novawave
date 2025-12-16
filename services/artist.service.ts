@@ -1,5 +1,5 @@
 import http from "@/libs/http";
-import { ApiResponse, UpdateVerificationDto } from "@/types/body.type";
+import { ApiResponse, SubmitArtistVerificationDto, UpdateArtistProfileDto, UpdateVerificationDto } from "@/types/body.type";
 import { Artist } from "@/types/object.type";
 import { ArtistParam, PaginationParam } from "@/types/param.type";
 
@@ -20,15 +20,10 @@ export const ArtistService = {
         return http.get<ApiResponse<Artist>>(`/${prefix}/profile`);
     },
 
-    updateProfile(payload: FormData) {
+    updateProfile(payload: UpdateArtistProfileDto) {
         return http.put<ApiResponse<Artist>>(
             `/${prefix}`,
-            payload,
-            {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                }
-            }
+            payload
         );
     },
 
@@ -36,15 +31,10 @@ export const ArtistService = {
         return http.get<ApiResponse<Artist>>(`/${prefix}/detail/${id}`);
     },
 
-    submitVerification(payload: FormData) {
+    submitVerification(payload: SubmitArtistVerificationDto) {
         return http.post<ApiResponse<Artist>>(
             "/artist-verifications",
-            payload,
-            {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                }
-            }
+            payload
         );
     },
 

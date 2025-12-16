@@ -42,7 +42,7 @@ export const useCreateAdvertisement = () => {
 export const useUpdateAdvertisement = () => {
     const qc = useQueryClient();
     return useMutation({
-        mutationFn: ({ id, data }: { id: string; data: FormData }) =>
+        mutationFn: ({ id, data }: { id: string; data: any }) =>
             AdvertisementService.update(id, data),
         onSuccess: () => {
             qc.invalidateQueries({ queryKey: ADVERTISEMENT_QUERY_KEY });

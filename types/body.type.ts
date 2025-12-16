@@ -1,4 +1,4 @@
-import { Gender, VerificationStatus } from './constant.type';
+import { Gender, ReportTargetType, VerificationStatus } from './constant.type';
 
 export interface Pagination {
   page: number;
@@ -15,7 +15,7 @@ export interface ApiResponse<T> {
   meta?: Pagination;
 }
 
-export interface JwtPayload {
+export interface UserJwtPayload {
   sub: string;
   username: string;
   roleId: string;
@@ -96,24 +96,82 @@ export interface AddCartDto {
 
 
 export interface PaymentProductPayload {
-    productId: string;
-    quantity: number;
+  productId: string;
+  quantity: number;
 }
 
 export interface PaymentProductDto {
-    fullName: string;
-    phone: string;
-    address: string;
-    products: PaymentProductPayload[]; 
-    cartId?: string
+  fullName: string;
+  phone: string;
+  address: string;
+  products: PaymentProductPayload[];
+  cartId?: string
 }
 
 export interface PaymentPlanDto {
   planId: string;
 }
 
-export interface PlaySongDto{
+export interface PlaySongDto {
   currentSongId: string;
+}
+
+export interface UpdateAlbumDto {
+  name?: string;
+  img?: string;
+  release_date?: string | null;
+}
+
+export interface UpdateUserInfoDto {
+  gender?: Gender;
+  birthday?: string | null;
+  avatar?: string;
+}
+
+export interface UpdateArtistProfileDto {
+  name: string;
+  country?: string;
+  biography?: string;
+  avatarUrl?: string;
+  bannerUrl?: string;
+}
+
+export interface SubmitArtistVerificationDto {
+  fullName: string;
+  stageName: string;
+  bio?: string;
+  socialLinks?: {
+    facebook?: string;
+    instagram?: string;
+    tiktok?: string;
+    youtube?: string;
+  };
+  identityImages: {
+    front: string;
+    back: string;
+  };
+}
+
+export interface CreateProductDto {
+  name: string;
+  price: number;
+  stock: number;
+  img?: string;
+}
+
+export interface AdvertisementDto {
+  title: string;
+  description?: string;
+  partner: string;
+  audioUrl: string;
+  bannerUrl: string;
+}
+
+export interface CreateReportDto {
+  targetId: string,
+  targetType: ReportTargetType,
+  reason: string,
+  description: string,
 }
 
 

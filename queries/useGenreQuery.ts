@@ -1,4 +1,5 @@
 import { GenreService } from "@/services/genre.service";
+import { Genre } from "@/types/object.type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const GENRE_QUERY_KEY = ["genres"];

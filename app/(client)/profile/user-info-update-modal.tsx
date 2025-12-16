@@ -1,4 +1,5 @@
 import { useToast } from "@/libs/toast";
+import { useUploadFile } from "@/libs/upload";
 import { useUpdateUserInfoMutation } from "@/queries/useAuthQuery";
 import { Button, DatePicker, Form, Modal, Radio, Upload } from "antd";
 import dayjs from "dayjs";
@@ -8,6 +9,7 @@ export default function UserInfoUpdateModal({ open, onCancel, data }: any) {
     const [form] = Form.useForm();
     const { mutate, isPending } = useUpdateUserInfoMutation();
     const toast = useToast();
+    const { uploadFile } = useUploadFile();
 
     useEffect(() => {
         if (data) {
@@ -28,29 +30,36 @@ export default function UserInfoUpdateModal({ open, onCancel, data }: any) {
         }
     }, [data]);
 
-    const handleUpdate = (values: any) => {
-        const formData = new FormData();
+    const handleUpdate = async (values: any) => {
+        let avatarUrl: string | undefined;
 
-        console.log(values.birthday.toISOString())
+        const avatarFile: File | undefined =
+            values.avatar?.[0]?.originFileObj;
 
-        formData.append("gender", values.gender);
-        formData.append("birthday", values.birthday.toISOString());
-
-        const file = values.avatar?.[0];
-
-        if (file?.originFileObj) {
-            formData.append("avatar", file.originFileObj);
+        if (avatarFile) {
+            const res = await uploadFile(avatarFile);
+            avatarUrl = res.url;
         }
 
-        mutate(formData, {
+        const payload = {
+            gender: values.gender,
+            birthday: values.birthday
+                ? values.birthday.toISOString()
+                : null,
+            avatar: avatarUrl,
+        };
+
+        mutate(payload, {
             onSuccess: () => {
                 toast.success("Cập nhật thông tin thành công");
                 form.resetFields();
                 onCancel();
             },
             onError: (err: any) => {
-                toast.error(err?.response?.data?.message || "Lỗi");
-            }
+                toast.error(
+                    err?.response?.data?.message || "Có lỗi xảy ra"
+                );
+            },
         });
     };
 

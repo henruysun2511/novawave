@@ -1,48 +1,56 @@
 "use client";
 
 import { useToast } from "@/libs/toast";
+import { useUploadFile } from "@/libs/upload";
 import { useSubmitVerification } from "@/queries/useArtistQuery";
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, Card, Col, Form, Input, Row, Typography, Upload } from "antd";
+import { Button, Card, Col, Form, Input, Row, Upload } from "antd";
 
-const { Title, Paragraph } = Typography;
-const { TextArea } = Input;
 
 export default function CreateArtistPage() {
     const [form] = Form.useForm();
     const toast = useToast();
     const { mutate, isPending } = useSubmitVerification();
+    const { uploadFile } = useUploadFile();
 
-    const handleSubmit = (values: any) => {
-        const formData = new FormData();
+    const handleSubmit = async (values: any) => {
+        const frontFile: File | undefined =
+            values.frontImage?.[0]?.originFileObj;
+        const backFile: File | undefined =
+            values.backImage?.[0]?.originFileObj;
 
-        formData.append("fullName", values.fullName);
-        formData.append("stageName", values.stageName);
-        formData.append("bio", values.bio || "");
-
-        // Xử lý socialLinks (cố định các key)
-        if (values.socialLinks) {
-            if (values.socialLinks.facebook) formData.append("socialLinks[facebook]", values.socialLinks.facebook);
-            if (values.socialLinks.instagram) formData.append("socialLinks[instagram]", values.socialLinks.instagram);
-            if (values.socialLinks.tiktok) formData.append("socialLinks[tiktok]", values.socialLinks.tiktok);
-            if (values.socialLinks.youtube) formData.append("socialLinks[youtube]", values.socialLinks.youtube);
+        if (!frontFile || !backFile) {
+            toast.error("Thiếu ảnh định danh");
+            return;
         }
 
+        const [{ url: frontUrl }, { url: backUrl }] = await Promise.all([
+            uploadFile(frontFile),
+            uploadFile(backFile),
+        ]);
 
-        // Xử lý identityImages
-        const frontFile = values.frontImage?.[0]?.originFileObj;
-        const backFile = values.backImage?.[0]?.originFileObj;
+        const payload = {
+            fullName: values.fullName,
+            stageName: values.stageName,
+            bio: values.bio || "",
+            socialLinks: values.socialLinks || {},
+            identityImages: {
+                front: frontUrl,
+                back: backUrl,
+            },
+        };
 
-        if (frontFile) formData.append("identity-front", frontFile);
-        if (backFile) formData.append("identity-back", backFile);
-
-        mutate(formData, {
+        mutate(payload, {
             onSuccess: (res) => {
-                toast.success(res?.data?.message || "Hồ sơ đã được gửi thành công");
+                toast.success(
+                    res?.data?.message || "Hồ sơ đã được gửi thành công"
+                );
                 form.resetFields();
             },
             onError: (error: any) => {
-                toast.error(error?.response?.data?.message || "Gửi hồ sơ thất bại");
+                toast.error(
+                    error?.response?.data?.message || "Gửi hồ sơ thất bại"
+                );
             },
         });
     };

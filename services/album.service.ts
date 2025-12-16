@@ -1,5 +1,5 @@
 import http from "@/libs/http";
-import { ApiResponse } from "@/types/body.type";
+import { ApiResponse, UpdateAlbumDto } from "@/types/body.type";
 import { Album, Song } from "@/types/object.type";
 import { PaginationParam } from "@/types/param.type";
 
@@ -18,10 +18,10 @@ export const AlbumService = {
     getDetail(id: string) {
         return http.get<ApiResponse<Album>>(`/${prefix}/detail/${id}`);
     },
-    create(payload: FormData) {
+    create(payload: Album) {
         return http.post<ApiResponse<Album>>(`/${prefix}`, payload);
     },
-    update(id: string, payload: FormData) {
+    update(id: string, payload: UpdateAlbumDto) {
         return http.put<ApiResponse<Album>>(`/${prefix}/${id}`, payload);
     },
     delete(id: string) {

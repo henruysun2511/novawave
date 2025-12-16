@@ -1,5 +1,6 @@
 "use client"
 import { useToast } from "@/libs/toast";
+import { useUploadFile } from "@/libs/upload";
 import { useUpdateAdvertisement } from "@/queries/useAdvertisementQuery";
 import { Advertisement } from "@/types/object.type";
 import { UploadOutlined } from "@ant-design/icons";
@@ -21,6 +22,7 @@ export function AdvertisementUpdateModal({
     const [form] = Form.useForm();
     const { mutate, isPending } = useUpdateAdvertisement();
     const toast = useToast();
+    const { uploadFile } = useUploadFile();
 
     useEffect(() => {
         if (data) {
@@ -30,20 +32,20 @@ export function AdvertisementUpdateModal({
                     ? [
                         {
                             uid: '-1',
-                            name: data.audioUrl.split('/').pop(), 
+                            name: data.audioUrl.split('/').pop(),
                             status: 'done',
-                            url: data.audioUrl, 
+                            url: data.audioUrl,
                         },
                     ]
                     : [],
-         
+
                 banner: data.bannerUrl
                     ? [
                         {
                             uid: '-1',
                             name: data.bannerUrl.split('/').pop(),
                             status: 'done',
-                            url: data.bannerUrl, 
+                            url: data.bannerUrl,
                         },
                     ]
                     : [],
@@ -51,52 +53,52 @@ export function AdvertisementUpdateModal({
         }
     }, [data]);
 
-    const handleUpdateAdvertisement = (values: any) => {
-        if (!data?._id) return;
-
-        const updatedData = new FormData();
-
-        updatedData.append("title", values.title);
-        updatedData.append("description", values.description);
-        updatedData.append("partner", values.partner);
-
-        // XỬ LÝ AUDIO
-        const newAudioFile = values.audio?.[0]?.originFileObj;
-        if (newAudioFile) {
-            updatedData.append("audio", newAudioFile);
-        } else if (data.audioUrl && typeof data.audioUrl === 'string') {
-            updatedData.append("audioUrl", data.audioUrl);
+    const handleUpdateAdvertisement = async (values: any) => {
+        if (!data) {
+            toast.error("Advertisement data is null");
+            return;
         }
 
-        // XỬ LÝ BANNER
-        const newBannerFile = values.banner?.[0]?.originFileObj;
-        if (newBannerFile) {
-            updatedData.append("banner", newBannerFile);
-        } else if (data.bannerUrl && typeof data.bannerUrl === 'string') {
-            updatedData.append("bannerUrl", data.bannerUrl);
-        }
+        try {
+            let audioUrl = data.audioUrl;
+            let bannerUrl = data.bannerUrl;
 
-        mutate(
-            { id: data._id, data: updatedData },
-            {
-                onSuccess: (res) => {
-                    toast.success(res?.data?.message || "Cập nhật quảng cáo thành công");
-                    form.resetFields();
-                    onCancel();
-
-                },
-                onError: (error: any) => {
-                    const message =
-                        error?.response?.data?.message ||
-                        error?.message ||
-                        "Có lỗi xảy ra";
-
-                    toast.error(
-                        Array.isArray(message) ? message.join(", ") : message
-                    );
-                },
+            // upload audio nếu có file mới
+            const audioFile = values.audio?.[0]?.originFileObj;
+            if (audioFile) {
+                const res = await uploadFile(audioFile);
+                audioUrl = res.url;
             }
-        );
+
+            // upload banner nếu có file mới
+            const bannerFile = values.banner?.[0]?.originFileObj;
+            if (bannerFile) {
+                const res = await uploadFile(bannerFile);
+                bannerUrl = res.url;
+            }
+
+            mutate(
+                {
+                    id: data._id,
+                    data: {
+                        title: values.title,
+                        description: values.description,
+                        partner: values.partner,
+                        audioUrl,
+                        bannerUrl,
+                    },
+                },
+                {
+                    onSuccess: () => {
+                        toast.success("Cập nhật quảng cáo thành công");
+                        onCancel();
+                    },
+                    onError: () => toast.error("Lỗi"),
+                }
+            );
+        } catch (err) {
+            toast.error("Upload thất bại");
+        }
     };
 
 

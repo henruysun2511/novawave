@@ -1,5 +1,6 @@
 "use client"
 import { useToast } from "@/libs/toast";
+import { useUploadFile } from "@/libs/upload";
 import { useCreateProduct } from "@/queries/useProductQuery";
 import { Button, Form, Input, Modal, Upload } from "antd";
 
@@ -14,26 +15,32 @@ export function ProductCreateModal({
     const [form] = Form.useForm();
     const toast = useToast();
     const { mutate, isPending } = useCreateProduct();
+    const { uploadFile } = useUploadFile();
 
-    const handleCreateProduct = (values: any) => {
-        const formData = new FormData();
-        formData.append("name", values.name);
-        formData.append("stock", values.stock);
-        formData.append("price", values.price);
+    const handleCreateProduct = async (values: any) => {
+        let imgUrl = "";
 
-        const fileObj = values.img?.[0]?.originFileObj;
-        if (fileObj) {
-            formData.append("img", fileObj); 
+        const file = values.img?.[0]?.originFileObj;
+        if (file) {
+            const res = await uploadFile(file);
+            imgUrl = res.url;
         }
 
-        mutate(formData, {
+        const payload = {
+            name: values.name,
+            price: Number(values.price),
+            stock: Number(values.stock),
+            img: imgUrl,
+        };
+
+        mutate(payload, {
             onSuccess: (res) => {
                 toast.success(res?.data?.message || "Thêm sản phẩm thành công");
                 form.resetFields();
                 onCancel();
             },
-            onError: (error: any) => {
-                toast.error(error?.response?.data?.message || "Lỗi");
+            onError: (err: any) => {
+                toast.error(err?.response?.data?.message || "Lỗi");
             },
         });
     };

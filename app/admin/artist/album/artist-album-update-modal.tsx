@@ -1,4 +1,5 @@
 import { useToast } from "@/libs/toast";
+import { useUploadFile } from "@/libs/upload";
 import { useAlbumDetail, useUpdateAlbum } from "@/queries/useAlbumQuery"; // Giả định hook
 import { Album } from "@/types/object.type";
 import { PlusOutlined } from "@ant-design/icons";
@@ -30,12 +31,12 @@ export default function ArtistAlbumUpdateModal({
 }: Props) {
     const [form] = Form.useForm();
     const toast = useToast();
-    
+    const { uploadFile } = useUploadFile();
     // Lấy thông tin album chi tiết để populate
     const { data: albumData } = useAlbumDetail(album?._id ?? "");
     const currentAlbum = albumData?.data;
 
-    const { mutate, isPending } = useUpdateAlbum(); 
+    const { mutate, isPending } = useUpdateAlbum();
 
 
     useEffect(() => {
@@ -46,7 +47,7 @@ export default function ArtistAlbumUpdateModal({
         form.setFieldsValue({
             name: a.name,
             // Set giá trị cho DatePicker
-            release_date: a.release_date ? dayjs(a.release_date) : null, 
+            release_date: a.release_date ? dayjs(a.release_date) : null,
 
             // Set giá trị cho Upload ảnh
             imageUrl: a.img
@@ -60,39 +61,48 @@ export default function ArtistAlbumUpdateModal({
         });
     }, [currentAlbum, open]);
 
-    const handleUpdateAlbum = (values: any) => {
-        const formData = new FormData();
+    const handleUpdateAlbum = async (values: any) => {
+        try {
+            let img: string | undefined;
 
-        formData.append("name", values.name);
+            const imageFile: File | undefined =
+                values.imageUrl?.[0]?.originFileObj;
 
-        // Xử lý ngày phát hành
-        if (values.release_date) {
-            formData.append("release_date", values.release_date.toISOString());
-        }
-
-        // Xử lý ảnh bìa
-        const image = values.imageUrl?.[0];
-        if (image?.originFileObj) {
-            formData.append("img", image.originFileObj);
-        }
-
-        mutate(
-            { id: album?._id || "", data: formData },
-            {
-                onSuccess: (res) => {
-                    toast.success(res?.data.message || "Cập nhật Album thành công!");
-                    form.resetFields();
-                    onCancel();
-                },
-                onError: (error: any) => {
-                    const msg =
-                        error?.response?.data?.message ||
-                        error?.message ||
-                        "Có lỗi xảy ra";
-                    toast.error(Array.isArray(msg) ? msg.join(", ") : msg);
-                },
+            if (imageFile) {
+                const res = await uploadFile(imageFile);
+                img = res.url;
             }
-        );
+
+            const payload = {
+                name: values.name,
+                img,
+                release_date: values.release_date
+                    ? values.release_date.toISOString()
+                    : null,
+            };
+
+            mutate(
+                { id: album?._id ?? "", data: payload },
+                {
+                    onSuccess: (res) => {
+                        toast.success(
+                            res?.data?.message || "Cập nhật album thành công!"
+                        );
+                        form.resetFields();
+                        onCancel();
+                    },
+                    onError: (error: any) => {
+                        const msg =
+                            error?.response?.data?.message ||
+                            error?.message ||
+                            "Có lỗi xảy ra";
+                        toast.error(Array.isArray(msg) ? msg.join(", ") : msg);
+                    },
+                }
+            );
+        } catch {
+            // upload lỗi đã toast trong hook
+        }
     };
 
     return (
@@ -133,8 +143,8 @@ export default function ArtistAlbumUpdateModal({
                         >
                             <Input placeholder="Nhập tên Album..." />
                         </Form.Item>
-                        
-    
+
+
 
                         <Form.Item label={<span className="text-black text-base">Ngày phát hành</span>} name="release_date">
                             <DatePicker showTime={false} format="DD/MM/YYYY" style={{ width: '100%' }} />

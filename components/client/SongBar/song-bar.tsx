@@ -5,6 +5,7 @@ import { useNextSong, usePreviousSong } from "@/queries/usePlayerQuery";
 import { useSongDetail } from "@/queries/useSongQuery";
 import { usePlayerStore } from "@/stores/usePlayerStore";
 import { useSidebarStore } from "@/stores/useSidebarStore";
+import { PlaySongType } from "@/types/constant.type";
 import { CloseOutlined, MenuFoldOutlined, UpSquareOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import AudioPlayer from "react-h5-audio-player";
@@ -22,7 +23,7 @@ export default function SongBar() {
 
   //Lấy type hiện tại: 'song' hoặc 'advertisement'
   const nowPlayingType = usePlayerStore(state => state.status.nowPlayingType);
-  const isCurrentAd = nowPlayingType === 'advertisement';
+  const isCurrentAd = nowPlayingType === PlaySongType.ADVERTISEMENT;
 
 
 

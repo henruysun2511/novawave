@@ -4,7 +4,6 @@ import ArtistList from "@/components/client/ArtistList/artist-list";
 import EventList from "@/components/client/EventList/event-list";
 import Footer from "@/components/client/footer/footer";
 import NewsList from "@/components/client/NewsList/news-list";
-import NewSongList from "@/components/client/NewSongList/newsong-list";
 import Vinyl from "@/components/client/SongInfo/vinyl";
 import SongList from "@/components/client/SongList/song-list";
 import SongList2 from "@/components/client/SongList/song-list-2";
@@ -135,11 +134,11 @@ export default function HomePage() {
 
 
 
-                <div className="mt-16 flex justify-between items-center">
+                {/* <div className="mt-16 flex justify-between items-center">
                     <Title>Mới phát hành</Title>
                     <a className="text-base text-text-secondary">Xem tất cả</a>
                 </div>
-                <NewSongList />
+                <NewSongList /> */}
 
                 <div className="mt-16 flex justify-between items-center">
                     <Title>Album nổi bật</Title>

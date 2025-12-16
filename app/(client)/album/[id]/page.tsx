@@ -7,7 +7,8 @@ import { useToast } from "@/libs/toast";
 import { useAlbumDetail, useSongsInAlbum } from "@/queries/useAlbumQuery";
 import { useArtistDetail } from "@/queries/useArtistQuery";
 import { useStartPlayer } from "@/queries/usePlayerQuery";
-import { ReportTargetType } from "@/types/constant.type";
+import { usePlayerStore } from "@/stores/usePlayerStore";
+import { PlaySongType, ReportTargetType } from "@/types/constant.type";
 import { CaretRightFilled, FlagOutlined } from "@ant-design/icons";
 import { Input } from 'antd';
 import { useParams } from "next/navigation";
@@ -18,6 +19,8 @@ export default function AlbumDetailPage() {
     const { id } = useParams<{ id: string }>();
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
     const toast = useToast();
+    const nowPlayingType = usePlayerStore(state => state.status.nowPlayingType);
+    const isCurrentAd = nowPlayingType === PlaySongType.ADVERTISEMENT;
 
     const { data: albumRes, isLoading: albumLoading } = useAlbumDetail(id);
     const album = albumRes?.data;
@@ -34,6 +37,11 @@ export default function AlbumDetailPage() {
     const handlePlayAlbum = () => {
         if (!songs || songs.length === 0) {
             toast.warning("Album không có bài hát nào.");
+            return;
+        }
+
+        if (isCurrentAd) {
+            toast.info("Nghe nhạc free thì chịu nghe quảng cáo đi");
             return;
         }
 

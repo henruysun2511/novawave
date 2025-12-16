@@ -1,4 +1,5 @@
 import { useToast } from "@/libs/toast";
+import { useUploadFile } from "@/libs/upload";
 import { useUpdateProduct } from "@/queries/useProductQuery";
 import { Product } from "@/types/object.type";
 import { Button, Form, Input, Modal, Upload } from "antd";
@@ -16,6 +17,7 @@ export default function ProductUpdateModal({
     const [form] = Form.useForm();
     const { mutate, isPending } = useUpdateProduct();
     const toast = useToast();
+    const { uploadFile } = useUploadFile();
 
     useEffect(() => {
         if (data) {
@@ -36,31 +38,36 @@ export default function ProductUpdateModal({
         }
     }, [data]);
 
-    const handleUpdate = (values: any) => {
-        const formData = new FormData();
+    const handleUpdate = async (values: any) => {
+        if (!data) {
+            toast.error("Product data is null");
+            return;
+        }
 
-        formData.append("name", values.name);
-        formData.append("price", values.price);
-        formData.append("stock", values.stock);
+        let imgUrl = data.img;
 
-        const newImg = values.img?.[0]?.originFileObj;
-        if (newImg) {
-            formData.append("img", newImg);
-        } else if (data?.img && typeof data.img === 'string') {
-            formData.append("img", data.img);
+        const file = values.img?.[0]?.originFileObj;
+        if (file) {
+            const res = await uploadFile(file);
+            imgUrl = res.url;
         }
 
         mutate(
-            { id: data!._id, data: formData },
             {
-                onSuccess: (res) => {
-                    toast.success(res?.data?.message || "Cập nhật sản phẩm thành công");
-                    form.resetFields();
+                id: data._id,
+                data: {
+                    name: values.name,
+                    price: Number(values.price),
+                    stock: Number(values.stock),
+                    img: imgUrl,
+                },
+            },
+            {
+                onSuccess: () => {
+                    toast.success("Cập nhật sản phẩm thành công");
                     onCancel();
                 },
-                onError: (error: any) => {
-                    toast.error(error?.response?.data?.message || "Lỗi");
-                },
+                onError: () => toast.error("Lỗi"),
             }
         );
     };

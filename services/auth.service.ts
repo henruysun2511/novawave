@@ -1,5 +1,5 @@
 import http from "@/libs/http";
-import { ApiResponse, ChangePasswordDto, LoginDto, LoginRes, RegisterDto, ResetPasswordDto, SendEmailDto, VerifyOtpDto } from "@/types/body.type";
+import { ApiResponse, ChangePasswordDto, LoginDto, LoginRes, RegisterDto, ResetPasswordDto, SendEmailDto, UpdateUserInfoDto, VerifyOtpDto } from "@/types/body.type";
 import { User } from "@/types/object.type";
 
 
@@ -31,6 +31,6 @@ export const AuthService = {
     getUserInfo: () =>
         http.get<ApiResponse<User>>("/auth/profile").then((res) => res.data),
 
-    updateUserInfo: (body: FormData) =>
+    updateUserInfo: (body: UpdateUserInfoDto) =>
         http.put<ApiResponse<null>>("/auth/info", body).then((res) => res.data),
 }
