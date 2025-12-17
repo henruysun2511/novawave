@@ -13,7 +13,7 @@ export const connectSocket = () => {
 
     console.log("🟢 Connecting socket...");
 
-    socket = io("http://novawave-backend.onrender.com", {
+    socket = io("https://novawave-backend.onrender.com", {
         transports: ["websocket"],
         auth: {
             token:token,
@@ -24,9 +24,9 @@ export const connectSocket = () => {
         console.log("✅ Socket connected:", socket?.id);
     });
 
-    // socket.on("connect_error", (err) => {
-    //     console.error("❌ Socket connect error:", err.message);
-    // });
+    socket.on("connect_error", (err) => {
+        console.error("❌ Socket connect error:", err.message);
+    });
 
     socket.on("disconnect", (reason) => {
         console.warn("⚠️ Socket disconnected:", reason);
