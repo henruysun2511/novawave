@@ -9,17 +9,18 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 interface RegisterFormValues {
-  username: string;
-  email: string;
-  password: string;
-  birthday: Dayjs;
-  gender: Gender;
+    username: string;
+    email: string;
+    password: string;
+    birthday: Dayjs;
+    gender: Gender;
 }
 
 export default function RegisterPage() {
     const router = useRouter();
     const { mutate, isPending } = useRegisterMutation();
     const toast = useToast();
+    const baseURL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001/api/v1";
 
     const handleRegister = (values: RegisterFormValues) => {
         const payload = {
@@ -42,6 +43,10 @@ export default function RegisterPage() {
                 toast.error(err?.response?.data?.message);
             }
         });
+    }
+
+    const handleGoogleLogin = () => {
+        window.location.href = `${baseURL}/auth/google`;
     }
 
     return (
@@ -164,7 +169,7 @@ export default function RegisterPage() {
                     </div>
 
                     {/* Google login */}
-                    <div className="flex gap-3 items-center justify-center w-full p-3 rounded-xl bg-white hover:bg-gray-100 transition cursor-pointer">
+                    <div onClick={handleGoogleLogin} className="flex gap-3 items-center justify-center w-full p-3 rounded-xl bg-white hover:bg-gray-100 transition cursor-pointer">
                         <img
                             className="w-[22px] h-[22px]"
                             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJBW9gugHuiK0748qr9vZHrlIqdiDdfuEYVw&s"
