@@ -10,6 +10,10 @@ export const ProductService = {
         return http.get<ApiResponse<Product[]>>(`/${prefix}`, { params });
     },
 
+    getCommerceList() {
+        return http.get<ApiResponse<Product[]>>(`/${prefix}/me`);
+    },
+
     create(payload: CreateProductDto) {
         return http.post<ApiResponse<Product>>(
             "/products",
@@ -23,6 +27,9 @@ export const ProductService = {
     },
     delete(id: string) {
         return http.delete<ApiResponse<any>>(`/${prefix}/${id}`);
+    },
+    adminDelete(id: string) {
+        return http.delete<ApiResponse<any>>(`admin/${prefix}/${id}`);
     },
 };
 

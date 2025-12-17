@@ -98,6 +98,11 @@ export default function SideBar() {
             items.push(menuGroups.music);
         }
 
+        if (finalRoleName === Role.COMMERCE_MANAGER) {
+            items.push(menuGroups.commerce);
+        }
+
+
         return items;
     };
 

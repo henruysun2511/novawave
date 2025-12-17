@@ -20,6 +20,8 @@ export default function SongTable({
     const { mutate: deleteSong, isPending } = useDeleteSongByAdmin();
     const toast = useToast();
 
+    
+
     const handleDelete = (id: string) => {
         deleteSong(id, {
             onSuccess: (res) => {

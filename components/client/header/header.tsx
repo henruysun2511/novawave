@@ -23,8 +23,7 @@ export default function Header() {
     //Lấy thông tin người dùng
     const { isAuthenticated, user, roleName } = useAuthStore();
     const isPrenium = user?.isPremium;
-    const finalRoleName = roleName || localStorage.getItem("roleName") || "null";
-
+    const finalRoleName: Role = (roleName as Role) || (typeof window !== "undefined" ? localStorage.getItem("roleName") as Role : "null");
 
     const logoutMutation = useLogoutMutation();
 
@@ -89,18 +88,18 @@ export default function Header() {
         });
         items.push({
             key: "admin",
-            label: <Link href="/admin/overview">Trang quản lý</Link>,
+            label: <Link href="/admin/song">Trang quản lý</Link>,
         });
     }
 
-     if (finalRoleName === Role.COMMERCE_MANAGER) {
+    if (finalRoleName === Role.COMMERCE_MANAGER) {
         items.push({
             key: "profile",
             label: <Link href="/profile">Hồ sơ cá nhân</Link>,
         });
         items.push({
             key: "admin",
-            label: <Link href="/admin/overview">Trang quản lý</Link>,
+            label: <Link href="/admin/product">Trang quản lý</Link>,
         });
     }
 

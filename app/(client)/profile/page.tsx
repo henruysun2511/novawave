@@ -1,7 +1,10 @@
 "use client";
 import Footer from "@/components/client/footer/footer";
 import { useGetUserInfoQuery } from "@/queries/useAuthQuery";
+import { useAuthStore } from "@/stores/useAuthStore";
 import { Avatar, Tabs } from "antd";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import ChangePassword from "./change-password";
 import "./profile.css";
 import UserFollow from "./user-follow";
@@ -19,7 +22,7 @@ export default function ProfilePage() {
         {
             label: 'Thông tin chung',
             key: '1',
-            children: (<UserInfo user={user} isPending={isPending}/>),
+            children: (<UserInfo user={user} isPending={isPending} />),
         },
         {
             label: 'Playlist của tôi',
@@ -34,12 +37,12 @@ export default function ProfilePage() {
         {
             label: 'Nghệ sĩ đang theo dõi',
             key: '5',
-            children:  (<UserFollow />),
+            children: (<UserFollow />),
         },
         {
             label: 'Lịch sử mua hảng',
             key: '6',
-            children:  (<UserPurchaseHistory/>),
+            children: (<UserPurchaseHistory />),
         },
         {
             label: 'Bảo mật',
@@ -47,6 +50,14 @@ export default function ProfilePage() {
             children: (<ChangePassword />),
         },
     ];
+
+    const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+    const router = useRouter();
+    useEffect(() => {
+        if (!isAuthenticated) {
+            router.replace("/auth/login"); 
+        }
+    }, [isAuthenticated, router]);
 
 
 
