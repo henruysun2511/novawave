@@ -8,6 +8,9 @@ export function useNotificationSocket() {
 
   useEffect(() => {
     const socket = getSocket();
+    if(socket){
+      console.log(socket)
+    }
     if (!socket) return;
 
     socket.on("notification", (data) => {
