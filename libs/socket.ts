@@ -21,9 +21,6 @@ export const connectSocket = () => {
         console.log("✅ Socket connected:", socket?.id);
     });
 
-    // socket.on("connect_error", (err) => {
-    //     console.error("❌ Socket connect error:", err.message);
-    // });
 
     socket.on("disconnect", (reason) => {
         console.warn("⚠️ Socket disconnected:", reason);
