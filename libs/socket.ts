@@ -13,7 +13,7 @@ export const connectSocket = () => {
 
     console.log("🟢 Connecting socket...");
 
-    socket = io("http://localhost:3000", {
+    socket = io("http://novawave-backend.onrender.com", {
         transports: ["websocket"],
         auth: {
             token:token,
