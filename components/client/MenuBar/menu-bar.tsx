@@ -10,7 +10,7 @@ export default function MenuBar() {
         { key: '/playlist', icon: <PlayCircleOutlined />, label: <span className="text-lg font-semibold">Playlist mới nhất</span> },
         { key: '/genre', icon: <AudioOutlined />, label: <span className="text-lg font-semibold">Khám phá thể loại</span> },
         { key: '/artist', icon: <UserOutlined />, label: <span className="text-lg font-semibold">Nghệ sĩ</span> },
-        { key: '/room', icon: <CoffeeOutlined />, label: <span className="text-lg font-semibold">Phòng nhạc</span> },
+        { key: '/album', icon: <CoffeeOutlined />, label: <span className="text-lg font-semibold">Album thịnh hành</span> },
         { key: '/news', icon: <BookOutlined />, label: <span className="text-lg font-semibold">Tin tức</span> },
         { key: '/product', icon: <ShoppingCartOutlined />, label: <span className="text-lg font-semibold">Mua bán</span> },
     ];
