@@ -93,6 +93,8 @@ export default function Header() {
                     alt="Logo"
                     width={180}
                     height={180}
+                    onClick={() => router.push("/")}
+                    className='cursor-pointer'
                 />
 
                 <Search

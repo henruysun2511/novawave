@@ -1,13 +1,23 @@
 import http from "@/libs/http";
 import { ApiResponse } from "@/types/body.type";
 import { UserDashboard } from "@/types/object.type";
-import { UserDashboardParam } from "@/types/param.type";
+import { DashboardParam } from "@/types/param.type";
 
 const prefix = 'dashboard'
 
 export const DashboardService = {
-    getUserDashboardData(params: UserDashboardParam) {
-        return http.get<ApiResponse<UserDashboard[]>>(`/${prefix}`, {
+    getUserDashboard(params: DashboardParam) {
+        return http.get<ApiResponse<UserDashboard[]>>(`/${prefix}/users`, {
+            params,
+        });
+    },
+    getArtistDashboard(params: DashboardParam) {
+        return http.get<ApiResponse<UserDashboard[]>>(`/${prefix}/artists`, {
+            params,
+        });
+    },
+    getRevenueDashboard(params: DashboardParam) {
+        return http.get<ApiResponse<UserDashboard[]>>(`/${prefix}/revenue`, {
             params,
         });
     },

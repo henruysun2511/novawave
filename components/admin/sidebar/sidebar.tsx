@@ -1,7 +1,7 @@
 "use client";
 import { useToast } from "@/libs/toast";
 import { useLogoutMutation } from "@/queries/useAuthQuery";
-import { AudioOutlined, BookOutlined, FormatPainterOutlined, HomeOutlined, PlayCircleOutlined, SettingOutlined, ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
+import { AudioOutlined, BookOutlined, FormatPainterOutlined, HomeOutlined, PlayCircleOutlined, ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Menu, MenuProps } from "antd";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -90,16 +90,16 @@ export default function SideBar() {
                 },
             ]
         },
-        {
-            key: '8', icon: <SettingOutlined />, label: <span className="text-lg font-semibold">Cài đặt chung</span>, children: [
-                {
-                    key: '/admin/profile', label: <span className="text-lg font-semibold">Giao diện website</span>
-                },
-                {
-                    key: '/admin/myAccount', label: <span className="text-lg font-semibold">Tài khoản của tôi</span>
-                }
-            ]
-        }
+        // {
+        //     key: '8', icon: <SettingOutlined />, label: <span className="text-lg font-semibold">Cài đặt chung</span>, children: [
+        //         {
+        //             key: '/admin/profile', label: <span className="text-lg font-semibold">Giao diện website</span>
+        //         },
+        //         {
+        //             key: '/admin/myAccount', label: <span className="text-lg font-semibold">Tài khoản của tôi</span>
+        //         }
+        //     ]
+        // }
     ];
 
     const router = useRouter();
@@ -128,7 +128,8 @@ export default function SideBar() {
                         alt="Logo"
                         width={150}
                         height={130}
-                        className="rounded-2xl mx-auto mb-4"
+                        className="rounded-2xl mx-auto mb-4 cursor-pointer"
+                        onClick={() => router.push("/")}
                     />
 
                     <Menu

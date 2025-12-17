@@ -48,6 +48,6 @@ export interface PermissionParam extends PaginationParam {
     module?: string;
 }
 
-export interface UserDashboardParam {
+export interface DashboardParam {
     year: number;
 }

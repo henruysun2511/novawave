@@ -7,6 +7,7 @@ export const ARTIST_QUERY_KEY = ["artists"];
 export const ARTIST_ADMIN_QUERY_KEY = ["artists", "admin"];
 export const ARTIST_PROFILE_QUERY_KEY = ["artist", "profile"];
 export const VERIFICATION_QUERY_KEY = ["artist-verifications"];
+export const TOP_ARTIRST_QUERY_KEY = [...ARTIST_QUERY_KEY, "top"];
 
 export const useArtistList = (params: ArtistParam) =>
     useQuery({
@@ -72,5 +73,16 @@ export const useUpdateVerification = () => {
         onSuccess: () => {
             qc.invalidateQueries({ queryKey: VERIFICATION_QUERY_KEY });
         },
+    });
+};
+
+export const useTopArtists = () => {
+    return useQuery({
+        queryKey: TOP_ARTIRST_QUERY_KEY,
+        queryFn: async () => {
+            const response = await ArtistService.getTopArtists();
+            return response.data;
+        },
+        staleTime: 1000 * 60 * 5, 
     });
 };

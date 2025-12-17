@@ -48,4 +48,8 @@ export const ArtistService = {
             data
         );
     },
+
+    getTopArtists() {
+        return http.get<ApiResponse<Artist[]>>(`/${prefix}/top10`);
+    },
 };

@@ -25,6 +25,7 @@ export default function SongBar() {
   //Lấy type hiện tại: 'song' hoặc 'advertisement'
   const nowPlayingType = usePlayerStore(state => state.status.nowPlayingType);
   const isCurrentAd = nowPlayingType === PlaySongType.ADVERTISEMENT;
+  console.log(nowPlayingType)
 
 
 
@@ -102,7 +103,6 @@ export default function SongBar() {
   useEffect(() => {
     const playerInstance = playerRef.current as any;
 
-    // ✅ 1. Kiểm tra cả 3 cấp độ tồn tại để đảm bảo native audio element đã sẵn sàng
     if (playerInstance && playerInstance.audio && playerInstance.audio.current) {
       const audioElement = playerInstance.audio.current;
       setAudioRef(audioElement);
@@ -111,14 +111,10 @@ export default function SongBar() {
         setAudioRef(null); // Cleanup khi component unmount
       }
     }
-    // ✅ 2. Thêm audioSource vào dependency array
-    // Điều này buộc useEffect phải chạy lại khi đường dẫn audio thay đổi (bài hát mới)
-    // để gán lại audioRef mới.
   }, [setAudioRef, audioSource]); //
 
   const handleListen = (e: any) => {
     if (isCurrentAd) return;
-    // ✅ 3. Thêm kiểm tra audioSource (Nếu không có source thì không nên cập nhật)
     if (!audioSource) return;
     setCurrentTime(e.target.currentTime);
   };

@@ -6,18 +6,18 @@ import Footer from "@/components/client/footer/footer";
 import NewsList from "@/components/client/NewsList/news-list";
 import SongList from "@/components/client/SongList/song-list";
 import SongList2 from "@/components/client/SongList/song-list-2";
+import TopSong2 from "@/components/client/SongList/top-song-2";
 import SquareSkeleton from "@/components/ui/skeleton";
 import Title from "@/components/ui/title";
 import { useAlbumList } from "@/queries/useAlbumQuery";
 import { useArtistList } from "@/queries/useArtistQuery";
-import { useSongList } from "@/queries/useSongQuery";
+import { useSongList, useTopSongs } from "@/queries/useSongQuery";
 import { useRouter } from "next/navigation";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Autoplay, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import AdvertisementBanner from "./advertisement-banner";
-import TopSong from "./top-song";
 
 export default function HomePage() {
     const router = useRouter();
@@ -53,6 +53,9 @@ export default function HomePage() {
     const { data: albumData, isPending: isAlbumPending } = useAlbumList({
     })
     const albums = albumData?.data || [];
+
+    const { data: topSongData, isLoading } = useTopSongs();
+    const topSongs = topSongData?.data;
 
     return (
         <>
@@ -155,10 +158,16 @@ export default function HomePage() {
 
 
                 <div className="mt-16 flex justify-between items-center">
-                    <Title>Bảng xếp hạng nhạc mới</Title>
-                    <a className="text-base text-text-secondary">Xem tất cả</a>
+                    <Title>Bảng xếp hạng bài hát được yêu thích</Title>
                 </div>
-                <TopSong />
+                {isLoading ? (
+                    <SquareSkeleton />
+                ) : topSongs?.length ? (
+                    <TopSong2 songs={topSongs} />
+                ) : (
+                    <div className="text-text-primary">Chưa có bài hát nào</div>
+                )}
+
 
 
                 <div className="mt-16 flex justify-between items-center">

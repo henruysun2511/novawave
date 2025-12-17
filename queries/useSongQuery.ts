@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const SONG_QUERY_KEY = ["songs"];
 export const SONG_ADMIN_QUERY_KEY = ["songs", "admin"];
+export const TOP_SONGS_QUERY_KEY = [...SONG_QUERY_KEY, "top"];
 
 export const useSongList = (params: SongParam) =>
     useQuery({
@@ -84,5 +85,16 @@ export const useUpdateSongStatus = () => {
         onSuccess: () => {
             qc.invalidateQueries({ queryKey: SONG_QUERY_KEY });
         },
+    });
+};
+
+export const useTopSongs = () => {
+    return useQuery({
+        queryKey: TOP_SONGS_QUERY_KEY,
+        queryFn: async () => {
+            const response = await SongService.getTopSongs();
+            return response.data;
+        },
+        staleTime: 1000 * 60 * 5, 
     });
 };

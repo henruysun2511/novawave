@@ -63,4 +63,8 @@ export const SongService = {
     updateStatus(body: any) {
         return http.patch<ApiResponse<Song>>(`/${prefix}/update-status`, body);
     },
+
+    getTopSongs() {
+        return http.get<ApiResponse<Song[]>>(`/${prefix}/top`);
+    },
 };

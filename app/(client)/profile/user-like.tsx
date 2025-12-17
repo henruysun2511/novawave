@@ -12,7 +12,6 @@ export default function UserLike() {
 
     const { data: songData, isPending: isSongPending } = useUserLike(params)
     const songs = songData?.data || [];
-    console.log(songs)
     const meta = songData?.meta;
     return (
         <>
