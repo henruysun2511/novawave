@@ -3,6 +3,9 @@ import { io, Socket } from "socket.io-client";
 let socket: Socket | null = null;
 
 export const connectSocket = () => {
+    const token = sessionStorage.getItem("accessToken") || localStorage.getItem("accessToken");
+    if (!token) return;
+
     if (socket) {
         console.log("🟡 Socket already connected");
         return socket;
@@ -10,10 +13,10 @@ export const connectSocket = () => {
 
     console.log("🟢 Connecting socket...");
 
-    socket = io("https://novawave-backend.onrender.com/api/v1", {
+    socket = io("https://novawave-backend.onrender.com", {
         transports: ["websocket"],
         auth: {
-            token: sessionStorage.getItem("accessToken"),
+            token: token,
         },
     });
 
