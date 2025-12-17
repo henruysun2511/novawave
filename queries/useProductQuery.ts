@@ -27,3 +27,17 @@ export const useUpdateProduct = () => {
         onSuccess: () => qc.invalidateQueries({ queryKey: PRODUCT_QUERY_KEY }),
     });
 };
+
+export const useDeleteProduct = () => {
+    const qc = useQueryClient();
+    
+    return useMutation({
+        mutationFn: (id: string) => ProductService.delete(id),
+        onSuccess: () => {
+            qc.invalidateQueries({ queryKey: PRODUCT_QUERY_KEY });
+        },
+        onError: (error) => {
+            console.error("Xóa thất bại:", error);
+        }
+    });
+};

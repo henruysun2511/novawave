@@ -21,6 +21,9 @@ export const ProductService = {
         return http.patch<ApiResponse<Product>>(`/${prefix}/${id}`, payload
         );
     },
+    delete(id: string) {
+        return http.delete<ApiResponse<any>>(`/${prefix}/${id}`);
+    },
 };
 
 

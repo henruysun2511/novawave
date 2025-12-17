@@ -301,7 +301,9 @@ export default function SongInfo() {
                     </div>
                 )}
                 <div className="mt-10"></div>
-                <Vinyl img={currentSong?.imageUrl} />
+                {
+                    isCurrentAd ? "" : (<Vinyl img={currentSong?.imageUrl} />)
+                }
             </div>
         </div>
     );

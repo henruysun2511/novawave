@@ -62,6 +62,43 @@ export default function Header() {
     // CÁC ROLE ADMIN
     if (finalRoleName === Role.ADMIN) {
         items.push({
+            key: "profile",
+            label: <Link href="/profile">Hồ sơ cá nhân</Link>,
+        });
+        items.push({
+            key: "admin",
+            label: <Link href="/admin/overview">Trang quản lý</Link>,
+        });
+    }
+
+    if (finalRoleName === Role.SUPER_ADMIN) {
+        items.push({
+            key: "profile",
+            label: <Link href="/profile">Hồ sơ cá nhân</Link>,
+        });
+        items.push({
+            key: "admin",
+            label: <Link href="/admin/overview">Trang quản lý</Link>,
+        });
+    }
+
+    if (finalRoleName === Role.CONTENT_MODERATOR) {
+        items.push({
+            key: "profile",
+            label: <Link href="/profile">Hồ sơ cá nhân</Link>,
+        });
+        items.push({
+            key: "admin",
+            label: <Link href="/admin/overview">Trang quản lý</Link>,
+        });
+    }
+
+     if (finalRoleName === Role.COMMERCE_MANAGER) {
+        items.push({
+            key: "profile",
+            label: <Link href="/profile">Hồ sơ cá nhân</Link>,
+        });
+        items.push({
             key: "admin",
             label: <Link href="/admin/overview">Trang quản lý</Link>,
         });

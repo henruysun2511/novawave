@@ -8,7 +8,7 @@ export enum Gender {
 
 export enum Role {
     ADMIN = "ADMIN",
-    SUPER_ADMIN = "SUPER ADMIN",
+    SUPER_ADMIN = "SUPPER ADMIN",
     USER = "USER",
     ARTIST = "ARTIST",
     CONTENT_MODERATOR = "CONTENT MODERATOR",
