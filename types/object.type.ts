@@ -221,11 +221,17 @@ export interface NextTrack {
   previous?: boolean;
 }
 
-export interface PurchaseHistory{
+export interface PurchaseHistory {
   products: Product[];
   shippingAddress: {
     fullName: string,
     address: string,
     phone: string
   }
+}
+
+export interface UserDashboard {
+  year: number;
+  month: number;
+  count: number;
 }

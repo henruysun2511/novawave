@@ -27,7 +27,9 @@ export default function SongDetailPage() {
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
     const [isPlaylistModalOpen, setIsPlaylistModalOpen] = useState(false);
     const currentTime = usePlayerStore((state) => state.currentTime);
-    const setStoreCurrentTime = usePlayerStore((state) => state.setCurrentTime);
+    const { nowPlaying } = usePlayerStore(state => state.status);
+
+    const seekToTime = usePlayerStore((state) => state.seekToTime);
     const nowPlayingType = usePlayerStore(state => state.status.nowPlayingType);
     const isCurrentAd = nowPlayingType === PlaySongType.ADVERTISEMENT;
 
@@ -50,7 +52,7 @@ export default function SongDetailPage() {
     const song = songRes.data;
 
 
-
+    const isThisSongCurrentlyPlaying = song._id === nowPlaying;
     const isLiked = likeRes?.data?.some(
         (l: any) => l.songId?._id === song._id
     );
@@ -102,6 +104,32 @@ export default function SongDetailPage() {
         });
     };
 
+    const handleWaveSeek = (newTime: number) => {
+        const currentState = usePlayerStore.getState();
+        const currentPlayingId = currentState.status.nowPlaying;
+
+        if (song._id !== currentPlayingId) {
+            // Nếu bài hát đang hiển thị không phải là bài đang chơi, 
+            // ta có thể coi đây là lỗi hoặc yêu cầu người dùng nhấn Play trước.
+            // Tùy chọn 1: Bỏ qua (không làm gì)
+            toast.error("Vui lòng nhấn nút Play trước khi tua!");
+            return;
+
+            /* Tùy chọn 2: Phát bài hát rồi seek
+            // startPlayerMutation({ songId: song._id }, {
+            //     onSuccess: () => {
+            //         // Sau khi phát thành công, đợi một chút rồi seek
+            //         setTimeout(() => seekToTime(newTime), 500); 
+            //     }
+            // });
+            // return;
+            */
+        }
+
+        // Nếu đang chơi đúng bài hát này, thực hiện seek
+        seekToTime(newTime);
+    };
+
 
 
     return (
@@ -135,7 +163,8 @@ export default function SongDetailPage() {
                         <div className="w-full">
                             <WavePlayer
                                 url={song?.mp3Link}
-                                currentTime={currentTime}
+                                currentTime={isThisSongCurrentlyPlaying ? currentTime : 0} 
+                                onSeek={isThisSongCurrentlyPlaying ? handleWaveSeek : undefined}
                             />
                         </div>
                     </div>

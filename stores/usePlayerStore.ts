@@ -16,22 +16,25 @@ interface PlayerStore {
     pause: () => void;
     currentTime: number;
     setCurrentTime: (time: number) => void;
+    audioRef: HTMLAudioElement | null;
+    setAudioRef: (ref: HTMLAudioElement | null) => void;
+    seekToTime: (time: number) => void;
 }
 
 export const usePlayerStore = create<PlayerStore>()(
     persist(
-        (set) => ({
-            // Trạng thái khởi tạo BẮT BUỘC phải khớp với PlayerStore interface
+        (set, get) => ({
+            // Trạng thái khởi tạo
             status: {
                 nowPlaying: null,
                 queue: [],
                 nowPlayingType: null,
             },
             isPlaying: false,
-
-            // ✅ SỬA LỖI: Thêm giá trị khởi tạo cho currentTime
             currentTime: 0,
+            audioRef: null,
 
+            // Actions
             setPlayerStatus: (newStatus) => set({ status: newStatus, isPlaying: true }),
             setNowPlaying: (newTrackId, newType) => set(state => ({
                 status: {
@@ -43,15 +46,26 @@ export const usePlayerStore = create<PlayerStore>()(
             })),
             play: () => set({ isPlaying: true }),
             pause: () => set({ isPlaying: false }),
+
+            setAudioRef: (ref) => set({ audioRef: ref }),
             setCurrentTime: (time) => set({ currentTime: time }),
+
+            // Logic Seek
+            seekToTime: (time) => {
+                const audio = get().audioRef;
+                if (audio) {
+                    audio.currentTime = time;
+                    // Gọi action setCurrentTime của chính store
+                    get().setCurrentTime(time);
+                }
+            },
 
         }),
         {
             name: 'music-player-storage',
             partialize: (state) => ({
                 status: state.status,
-                // ✅ NẾU MUỐN LƯU VỊ TRÍ TUA KHI LOAD LẠI TRANG, thêm currentTime vào đây:
-                // currentTime: state.currentTime, 
+                currentTime: state.currentTime,
             }),
             onRehydrateStorage: () => (state) => {
                 if (state) {

@@ -23,8 +23,8 @@ const WavePlayer: React.FC<WavePlayerProps> = ({
       container: waveformRef.current,
 
       waveColor: "rgba(255,255,255,0.45)",
-      progressColor: "#1DB954",   // ✅ xanh lá đang chạy
-      cursorColor: "#1DB954",     // ✅ line chạy rõ
+      progressColor: "#1DB954",   
+      cursorColor: "#1DB954",     
       cursorWidth: 2,
 
       barWidth: 2,
@@ -40,7 +40,6 @@ const WavePlayer: React.FC<WavePlayerProps> = ({
     wavesurferRef.current = ws;
     ws.load(url);
 
-    // ⚠️ FIX TYPE: ép any cho event
     (ws as any).on("seek", (progress: number) => {
       if (!ws.getDuration()) return;
       const time = progress * ws.getDuration();
@@ -53,7 +52,7 @@ const WavePlayer: React.FC<WavePlayerProps> = ({
     };
   }, [url]);
 
-  // SYNC PLAYER -> WAVESURFER
+
   useEffect(() => {
     const ws = wavesurferRef.current;
     if (!ws || !ws.getDuration()) return;

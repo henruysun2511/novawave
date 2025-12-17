@@ -8,6 +8,7 @@ import { useSidebarStore } from "@/stores/useSidebarStore";
 import { PlaySongType } from "@/types/constant.type";
 import { CloseOutlined, MenuFoldOutlined, UpSquareOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
+import { useEffect, useRef } from "react";
 import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
 import './song-bar.css';
@@ -18,7 +19,7 @@ export default function SongBar() {
   const hidePanel = useSidebarStore((s) => s.hideRightPanel);
   const toast = useToast();
 
-  const { isPlaying, play, pause, status, setCurrentTime } = usePlayerStore();
+  const { isPlaying, play, pause, status, setCurrentTime, setAudioRef } = usePlayerStore();
   const { nowPlaying } = status;
 
   //Lấy type hiện tại: 'song' hoặc 'advertisement'
@@ -76,10 +77,7 @@ export default function SongBar() {
     nextMutation.mutate({ currentSongId: nowPlaying });
   };
 
-  const handleListen = (e: any) => {
-        if (isCurrentAd) return; 
-        setCurrentTime(e.target.currentTime);
-    };
+
 
   // Dữ liệu cho phần hiển thị
   const displayImageUrl = isCurrentAd
@@ -98,6 +96,33 @@ export default function SongBar() {
     ? currentAd?.audioUrl
     : currentSong?.mp3Link;
 
+  const playerRef = useRef(null);
+
+
+  useEffect(() => {
+    const playerInstance = playerRef.current as any;
+
+    // ✅ 1. Kiểm tra cả 3 cấp độ tồn tại để đảm bảo native audio element đã sẵn sàng
+    if (playerInstance && playerInstance.audio && playerInstance.audio.current) {
+      const audioElement = playerInstance.audio.current;
+      setAudioRef(audioElement);
+
+      return () => {
+        setAudioRef(null); // Cleanup khi component unmount
+      }
+    }
+    // ✅ 2. Thêm audioSource vào dependency array
+    // Điều này buộc useEffect phải chạy lại khi đường dẫn audio thay đổi (bài hát mới)
+    // để gán lại audioRef mới.
+  }, [setAudioRef, audioSource]); //
+
+  const handleListen = (e: any) => {
+    if (isCurrentAd) return;
+    // ✅ 3. Thêm kiểm tra audioSource (Nếu không có source thì không nên cập nhật)
+    if (!audioSource) return;
+    setCurrentTime(e.target.currentTime);
+  };
+
   return (
     <div className="bg-black fixed bottom-0 right-0 w-full z-10 h-[64px] flex items-center px-4 text-white">
       <div className="w-[25%] flex gap-3.5 items-center">
@@ -115,6 +140,7 @@ export default function SongBar() {
       {/* Audio player */}
       <div className="w-[50%]">
         <AudioPlayer
+          ref={playerRef}
           src={audioSource}
           autoPlay={isPlaying}
           onPlay={play}
