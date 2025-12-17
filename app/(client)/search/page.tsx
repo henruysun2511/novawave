@@ -16,7 +16,6 @@ export default function SearchPage() {
   localStorage.setItem("keyword" ,keyword);
 
   const { data, isPending } = useSearch(keyword);
-  console.log(data)
 
   if(!data) return null;
   if (isPending) return null;

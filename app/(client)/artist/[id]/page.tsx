@@ -74,11 +74,9 @@ export default function ArtistDetailPage() {
 
     const { data: songRes } = useSongListByArtist(id);
     const songs = songRes?.data;
-    console.log(songs)
 
     const { data: albumRes } = useAlbumListByArtist(id);
     const albums = albumRes?.data;
-    console.log(albums)
 
     if (isLoading) return <div>Đang tải...</div>;
     if (!artist) return <div>Không tìm thấy Nghệ sĩ.</div>;

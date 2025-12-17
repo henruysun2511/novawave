@@ -25,8 +25,6 @@ export default function SongBar() {
   //Lấy type hiện tại: 'song' hoặc 'advertisement'
   const nowPlayingType = usePlayerStore(state => state.status.nowPlayingType);
   const isCurrentAd = nowPlayingType === PlaySongType.ADVERTISEMENT;
-  console.log(nowPlayingType)
-
 
 
   // 1. Lấy chi tiết bài hát (chỉ chạy nếu type là 'song')

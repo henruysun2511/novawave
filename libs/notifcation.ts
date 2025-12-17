@@ -11,7 +11,7 @@ export function useNotificationSocket() {
     if (!socket) return;
 
     socket.on("notification", (data) => {
-      console.log("Received socket notification:", data);
+      console.log(data);
       notify({
         message: data.title,
         description: data.message,
