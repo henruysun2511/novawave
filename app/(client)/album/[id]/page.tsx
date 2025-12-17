@@ -27,6 +27,7 @@ export default function AlbumDetailPage() {
 
     const { data: artistRes, isPending } = useArtistDetail(album?.artist ?? "");
     const artist = artistRes?.data;
+    console.log(artist);
 
     const { data: songRes } = useSongsInAlbum(id);
     const songs = songRes?.data;
@@ -64,13 +65,10 @@ export default function AlbumDetailPage() {
 
     if (albumLoading) return <div>Loading...</div>;
     if (!album) return <div>Không tìm thấy album</div>;
-    if (!artist) return <div>Không tìm thấy artist</div>;
 
     return (
         <>
             <div className="relative w-full h-[350px]">
-                {/* <div className="absolute inset-0 bg-gradient-to-r from-[#7f1d1d] via-[#991b1b] to-[#7c2d12]" /> */}
-
                 <div className="absolute inset-0 bg-black/10"></div>
 
                 <div className="absolute inset-0 z-10 gap-5 flex items-center p-4">
@@ -141,12 +139,17 @@ export default function AlbumDetailPage() {
 
                 <div className="my-10">
                     <Title>Nghệ sĩ</Title>
+
                     {isPending ? (
-                        <div>Đang tải nghệ sĩ...</div>
+                        <div className="text-gray-400 italic">
+                            Đang tải nghệ sĩ...
+                        </div>
                     ) : artist ? (
                         <ArtistCard artist={artist} />
                     ) : (
-                        <div>Không tìm thấy nghệ sĩ</div>
+                        <div className="text-gray-400 italic">
+                            Không có thông tin nghệ sĩ
+                        </div>
                     )}
                 </div>
 
