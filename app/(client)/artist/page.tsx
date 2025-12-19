@@ -55,7 +55,7 @@ export default function ArtistPage() {
                             <Pagination
                                 current={meta?.page ?? 1}
                                 pageSize={meta?.size ?? 10}
-                                total={meta?.totalElements ?? 0}
+                                total={20}
                                 onChange={(page, size) =>
                                     setParams((prev) => ({
                                         ...prev,
