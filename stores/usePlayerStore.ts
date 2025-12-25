@@ -1,25 +1,9 @@
-import { Player } from '@/types/object.type';
+import { PlayerStore } from '@/types/state.type';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 
-interface PlayerStatus extends Player {
-    nowPlayingType: 'song' | 'advertisement' | null;
-}
 
-interface PlayerStore {
-    status: PlayerStatus;
-    isPlaying: boolean;
-    setPlayerStatus: (newStatus: PlayerStatus) => void;
-    setNowPlaying: (newTrackId: string, newType: 'song' | 'advertisement') => void;
-    play: () => void;
-    pause: () => void;
-    currentTime: number;
-    setCurrentTime: (time: number) => void;
-    audioRef: HTMLAudioElement | null;
-    setAudioRef: (ref: HTMLAudioElement | null) => void;
-    seekToTime: (time: number) => void;
-}
 
 export const usePlayerStore = create<PlayerStore>()(
     persist(
