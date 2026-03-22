@@ -18,7 +18,6 @@ export default function SideBar() {
     
     // Lấy thông tin role từ store
     const { roleName } = useAuthStore();
-    const finalRoleName = roleName || (typeof window !== 'undefined' ? localStorage.getItem("roleName") : null);
 
     // 1. Định nghĩa các nhóm Menu theo chức năng
     const menuGroups = {
@@ -72,7 +71,7 @@ export default function SideBar() {
         const items: MenuItem[] = [];
 
         // SUPER ADMIN: Có tất cả trừ Artist
-        if (finalRoleName === Role.SUPER_ADMIN) {
+        if (roleName === Role.SUPER_ADMIN) {
             return [
                 menuGroups.overview,
                 menuGroups.accounts,
@@ -84,21 +83,21 @@ export default function SideBar() {
         }
 
         // ADMIN: Overview, Accounts, Plans, Ads, Commerce
-        if (finalRoleName === Role.ADMIN) {
+        if (roleName === Role.ADMIN) {
             items.push(menuGroups.overview, menuGroups.accounts, menuGroups.plans, menuGroups.ads, menuGroups.commerce);
         }
 
         // ARTIST: Chỉ menu dành cho nghệ sĩ
-        if (finalRoleName === Role.ARTIST) {
+        if (roleName === Role.ARTIST) {
             items.push(menuGroups.artist);
         }
 
         // CONTENT MODERATOR: Chỉ menu Âm nhạc
-        if (finalRoleName === Role.CONTENT_MODERATOR) {
+        if (roleName === Role.CONTENT_MODERATOR) {
             items.push(menuGroups.music);
         }
 
-        if (finalRoleName === Role.COMMERCE_MANAGER) {
+        if (roleName === Role.COMMERCE_MANAGER) {
             items.push(menuGroups.commerce);
         }
 

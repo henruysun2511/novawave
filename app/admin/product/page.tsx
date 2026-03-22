@@ -15,9 +15,8 @@ export default function ProductManagementPage() {
     const [openCreateModal, setOpenCreateModal] = useState(false);
     const { roleName } = useAuthStore();
     
-    const finalRoleName = roleName || (typeof window !== 'undefined' ? localStorage.getItem("roleName") : "null");
-    const isSystemAdmin = finalRoleName === Role.SUPER_ADMIN || finalRoleName === Role.ADMIN;
-    const isCommerceManager = finalRoleName === Role.COMMERCE_MANAGER;
+    const isSystemAdmin = roleName === Role.SUPER_ADMIN || roleName === Role.ADMIN;
+    const isCommerceManager = roleName === Role.COMMERCE_MANAGER;
 
     const [params, setParams] = useState({
         page: 1,

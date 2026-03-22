@@ -11,14 +11,16 @@ export const useLoginMutation = () => {
     mutationFn: AuthService.login,
 
     onSuccess: async (data) => {
-      sessionStorage.setItem("accessToken", data.accessToken);
+      // sessionStorage.setItem("accessToken", data.accessToken);
+      document.cookie = `accessToken=${data.accessToken}; path=/; max-age=${30 * 24 * 60 * 60}; SameSite=Lax`;
+      document.cookie = `roleName=${data.roleName}; path=/; max-age=${30 * 24 * 60 * 60}; SameSite=Lax`;
 
       const payload = jwtDecode<UserJwtPayload>(data.accessToken);
       console.log(payload)
       
       useAuthStore.getState().setAuth(data.accessToken, payload);
       useAuthStore.getState().setRoleName(data.roleName);
-      localStorage.setItem("roleName", data.roleName);
+      // localStorage.setItem("roleName", data.roleName);
 
       //Mở sidebar
       useSidebarStore.getState().showInfo();
@@ -37,14 +39,18 @@ export const useLogoutMutation = () => {
     mutationFn: AuthService.logout,
 
     onSuccess: () => {
-      sessionStorage.removeItem("accessToken");
+      // sessionStorage.removeItem("accessToken");
+      document.cookie = "accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite=Lax";
+      document.cookie = "roleName=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite=Lax";
       useAuthStore.getState().logout();
       useSidebarStore.getState().resetLayout();
     },
 
     onError: () => {
-      sessionStorage.removeItem("accessToken");
-      localStorage.removeItem("roleName");
+      // sessionStorage.removeItem("accessToken");
+      // localStorage.removeItem("roleName");
+      document.cookie = "accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite=Lax";
+      document.cookie = "roleName=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite=Lax";
       useAuthStore.getState().logout();
       useSidebarStore.getState().resetLayout();
     }

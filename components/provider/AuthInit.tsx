@@ -15,7 +15,13 @@ export default function AuthInitializer({
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const token = sessionStorage.getItem("accessToken");
+    const getCookie = (name: string) => {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop()?.split(';').shift();
+    }
+    const token = getCookie("accessToken");
+    const roleName = getCookie("roleName");
 
     if (!token) {
       setReady(true);
@@ -27,15 +33,18 @@ export default function AuthInitializer({
 
       if (user.exp * 1000 < Date.now() + 30_000) {
         logout();
-        sessionStorage.removeItem("accessToken");
+        document.cookie = "accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite=Lax";
+        document.cookie = "roleName=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite=Lax";
         setReady(true);
         return;
       }
 
       setAuth(token, user);
+      if (roleName) useAuthStore.getState().setRoleName(roleName);
     } catch {
       logout();
-      sessionStorage.removeItem("accessToken");
+      document.cookie = "accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite=Lax";
+      document.cookie = "roleName=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite=Lax";
     } finally {
       setReady(true);
     }

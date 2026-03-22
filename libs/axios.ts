@@ -89,6 +89,7 @@ axiosClient.interceptors.response.use(
         }
 
         useAuthStore.getState().setAuth(accessToken, user);
+        document.cookie = `accessToken=${accessToken}; path=/; max-age=${30 * 24 * 60 * 60}; SameSite=Lax`;
 
         if (originalConfig.headers) {
           originalConfig.headers["Authorization"] = `Bearer ${accessToken}`;

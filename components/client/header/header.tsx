@@ -23,7 +23,6 @@ export default function Header() {
     //Lấy thông tin người dùng
     const { isAuthenticated, user, roleName } = useAuthStore();
     const isPrenium = user?.isPremium;
-    const finalRoleName: Role = (roleName as Role) || (typeof window !== "undefined" ? localStorage.getItem("roleName") as Role : "null");
 
     const logoutMutation = useLogoutMutation();
 
@@ -39,7 +38,7 @@ export default function Header() {
     const items: MenuProps["items"] = [];
 
     // USER
-    if (finalRoleName === Role.USER) {
+    if (roleName === Role.USER) {
         items.push({
             key: "profile",
             label: <Link href="/profile">Hồ sơ cá nhân</Link>,
@@ -47,7 +46,7 @@ export default function Header() {
     }
 
     // ARTIST
-    if (finalRoleName === Role.ARTIST) {
+    if (roleName === Role.ARTIST) {
         items.push({
             key: "profile",
             label: <Link href="/profile">Hồ sơ cá nhân</Link>,
@@ -59,7 +58,7 @@ export default function Header() {
     }
 
     // CÁC ROLE ADMIN
-    if (finalRoleName === Role.ADMIN) {
+    if (roleName === Role.ADMIN) {
         items.push({
             key: "profile",
             label: <Link href="/profile">Hồ sơ cá nhân</Link>,
@@ -70,7 +69,7 @@ export default function Header() {
         });
     }
 
-    if (finalRoleName === Role.SUPER_ADMIN) {
+    if (roleName === Role.SUPER_ADMIN) {
         items.push({
             key: "profile",
             label: <Link href="/profile">Hồ sơ cá nhân</Link>,
@@ -81,7 +80,7 @@ export default function Header() {
         });
     }
 
-    if (finalRoleName === Role.CONTENT_MODERATOR) {
+    if (roleName === Role.CONTENT_MODERATOR) {
         items.push({
             key: "profile",
             label: <Link href="/profile">Hồ sơ cá nhân</Link>,
@@ -92,7 +91,7 @@ export default function Header() {
         });
     }
 
-    if (finalRoleName === Role.COMMERCE_MANAGER) {
+    if (roleName === Role.COMMERCE_MANAGER) {
         items.push({
             key: "profile",
             label: <Link href="/profile">Hồ sơ cá nhân</Link>,
@@ -144,7 +143,7 @@ export default function Header() {
 
                 <div className="flex items-center gap-4 pr-4">
 
-                    {isAuthenticated && finalRoleName === "USER" && (
+                    {isAuthenticated && roleName === Role.USER && (
                         <Link href={"/artist/createArtist"}>
                             <div className="base-button">Đăng ký nghệ sĩ</div>
                         </Link>
@@ -161,7 +160,7 @@ export default function Header() {
                         <>
                             <Notification />
 
-                            {(finalRoleName === "USER" || finalRoleName === "ARTIST") && (
+                            {(roleName === Role.USER || roleName === Role.ARTIST) && (
                                 <Tooltip title="Giỏ hàng">
                                     <Link href="/cart">
                                         <ShoppingCartOutlined className="text-green text-2xl cursor-pointer" />

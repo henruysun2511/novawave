@@ -22,11 +22,10 @@ export default function ProductTable({ data, loading, pagination }: Props) {
     const toast = useToast();
 
     const { roleName } = useAuthStore();
-    const finalRoleName = roleName || localStorage.getItem("roleName") || "null";
 
 
-    const isSystemAdmin = finalRoleName === Role.SUPER_ADMIN || finalRoleName === Role.ADMIN;
-    const isCommerceManager = finalRoleName === Role.COMMERCE_MANAGER;
+    const isSystemAdmin = roleName === Role.SUPER_ADMIN || roleName === Role.ADMIN;
+    const isCommerceManager = roleName === Role.COMMERCE_MANAGER;
 
     const handleDelete = (id: string) => {
         const mutationCallbacks = {
