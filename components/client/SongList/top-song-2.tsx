@@ -1,5 +1,6 @@
 import { useToast } from "@/libs/toast";
 import { useStartPlayer } from "@/queries/usePlayerQuery";
+import { useAuthStore } from "@/stores/useAuthStore";
 import { usePlayerStore } from "@/stores/usePlayerStore";
 import { PlayerDto } from "@/types/body.type";
 import { PlaySongType } from "@/types/constant.type";
@@ -24,6 +25,7 @@ export default function TopSong2({ songs }: TopSongProps) {
     const toast = useToast();
     const nowPlayingType = usePlayerStore(state => state.status.nowPlayingType);
     const isCurrentAd = nowPlayingType === PlaySongType.ADVERTISEMENT;
+    const isAuthenticated = useAuthStore(state => state.isAuthenticated);
 
     const { mutate: startPlayerMutation, isPending: isStartingPlayer } =
         useStartPlayer();
@@ -33,6 +35,11 @@ export default function TopSong2({ songs }: TopSongProps) {
         songId: string
     ) => {
         e.stopPropagation();
+
+        if (!isAuthenticated) {
+            toast.error("Vui lòng đăng nhập để thực hiện tính năng này");
+            return;
+        }
 
         if (isCurrentAd) {
             toast.info("Nghe nhạc free thì chịu nghe quảng cáo đi");

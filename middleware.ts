@@ -1,24 +1,25 @@
-import { NextResponse, NextRequest } from 'next/server';
 import { jwtDecode } from 'jwt-decode';
+import { NextRequest, NextResponse } from 'next/server';
 import { UserJwtPayload } from './types/body.type';
 
 // Define public routes that don't require authentication
-const publicRoutes = ['/login', '/register', '/forgot-password', '/verify-otp', '/reset-password'];
+const publicContentRoutes = ['/song', '/album', '/artist', '/genre', '/playlist', '/search', '/news'];
+const authRoutes = ['/auth/login', '/auth/register', '/auth/forgot-password', '/auth/verify-otp', '/auth/reset-password'];
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // 1. Check if the route is public
-  const isPublicRoute = publicRoutes.some((route) => pathname.startsWith(route));
-  
+  const isPublicContentRoute = publicContentRoutes.some((route) => pathname.startsWith(route));
+  const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
+  const isPublicRoute = isPublicContentRoute || isAuthRoute || pathname === '/';
+
   // 2. Get the token from cookies
   const token = request.cookies.get('accessToken')?.value;
 
   // 3. If no token and not a public route, redirect to login
   if (!token && !isPublicRoute) {
-    if (pathname === '/') return NextResponse.next(); // Root might be a landing page, adjust if needed
-    
-    const url = new URL('/login', request.url);
+    const url = new URL('/auth/login', request.url);
     // Optional: save the intended destination to redirect back after login
     // url.searchParams.set('callbackUrl', encodeURIComponent(pathname));
     return NextResponse.redirect(url);
@@ -32,7 +33,7 @@ export function middleware(request: NextRequest) {
 
       // If token expired, clear cookie and redirect to login
       if (decoded.exp < currentTime) {
-        const response = NextResponse.redirect(new URL('/login', request.url));
+        const response = NextResponse.redirect(new URL('/auth/login', request.url));
         response.cookies.delete('accessToken');
         return response;
       }
@@ -51,16 +52,16 @@ export function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL('/403', request.url));
       }
 
-      // If the user is logged in and trying to access login/register, redirect to home
-      if (isPublicRoute && pathname !== '/reset-password') {
+      // If the user is logged in and trying to access auth pages, redirect to home
+      if (isAuthRoute && pathname !== '/auth/reset-password') {
         return NextResponse.redirect(new URL('/', request.url));
       }
     } catch (error) {
-       console.error("Middleware decode error:", error);
-       // Invalid token, treat as unauthenticated
-       const response = NextResponse.redirect(new URL('/login', request.url));
-       response.cookies.delete('accessToken');
-       return response;
+      console.error("Middleware decode error:", error);
+      // Invalid token, treat as unauthenticated
+      const response = NextResponse.redirect(new URL('/auth/login', request.url));
+      response.cookies.delete('accessToken');
+      return response;
     }
   }
 

@@ -32,6 +32,7 @@ export default function SongDetailPage() {
     const seekToTime = usePlayerStore((state) => state.seekToTime);
     const nowPlayingType = usePlayerStore(state => state.status.nowPlayingType);
     const isCurrentAd = nowPlayingType === PlaySongType.ADVERTISEMENT;
+    const isAuthenticated = useAuthStore(state => state.isAuthenticated);
 
     const toast = useToast();
 
@@ -83,6 +84,11 @@ export default function SongDetailPage() {
 
     const handlePlaySong = (e: React.MouseEvent) => {
         e.stopPropagation();
+
+        if (!isAuthenticated) {
+            toast.error("Vui lòng đăng nhập để thực hiện tính năng này");
+            return;
+        }
 
         if (isCurrentAd) {
             toast.info("Nghe nhạc free thì chịu nghe quảng cáo đi");
@@ -163,7 +169,7 @@ export default function SongDetailPage() {
                         <div className="w-full">
                             <WavePlayer
                                 url={song?.mp3Link}
-                                currentTime={isThisSongCurrentlyPlaying ? currentTime : 0} 
+                                currentTime={isThisSongCurrentlyPlaying ? currentTime : 0}
                                 onSeek={isThisSongCurrentlyPlaying ? handleWaveSeek : undefined}
                             />
                         </div>
