@@ -1,6 +1,6 @@
 import http from "@/libs/http";
 import { ApiResponse } from "@/types/body.type";
-import { Song } from "@/types/object.type";
+import { LeaderboardType, Song, SongLeaderboard } from "@/types/object.type";
 import { SongParam } from "@/types/param.type";
 
 const prefix = "songs";
@@ -66,5 +66,15 @@ export const SongService = {
 
     getTopSongs() {
         return http.get<ApiResponse<Song[]>>(`/${prefix}/top`);
+    },
+    incrementViews(id: string) {
+        return http.patch<ApiResponse<{ views: number }>>(`/${prefix}/${id}/view`);
+    },
+
+    // Lấy bảng xếp hạng
+    getLeaderboard(type: LeaderboardType = 'all') {
+        return http.get<ApiResponse<SongLeaderboard[]>>(`/${prefix}/leaderboard`, {
+            params: { type }
+        });
     },
 };

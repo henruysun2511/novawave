@@ -14,6 +14,7 @@ export default function SongQueue() {
     const { mutate: playFromQueue, isPending } = usePlayFromQueue();
 
     const handlePlayFromQueue = (songId: string) => {
+        console.log("Đang click vào bài hát trong hàng đợi ID:", songId);
         if (isPending) return;
         playFromQueue({ songId });
     };
@@ -36,13 +37,13 @@ export default function SongQueue() {
 
                 {/* PHẦN ĐANG PHÁT */}
                 <h3 className="text-base my-3 text-text-primary font-bold">Đang phát</h3>
-                
+
                 <div className="min-h-[80px]">
                     {nowPlayingId && !nowPlayingSong ? (
                         <div className="text-gray-400">Đang tải chi tiết bài hát...</div>
                     ) : nowPlayingSong ? (
-                        <NewSongCard 
-                            song={nowPlayingSong} 
+                        <NewSongCard
+                            song={nowPlayingSong}
                             isCurrentSong={true}
                             fullQueueIds={queueIds}
                         />
@@ -53,15 +54,16 @@ export default function SongQueue() {
 
                 {/* PHẦN TIẾP THEO (HÀNG ĐỢI) */}
                 <h3 className="text-base my-3 text-text-primary font-bold">Tiếp theo</h3>
-                
+
                 <div className="min-h-[80px]">
                     {nextSongs.length > 0 ? (
                         nextSongs.map((song) => (
-                            <NewSongCard 
-                                key={song._id} 
-                                song={song} 
+                            <NewSongCard
+                                key={song._id}
+                                song={song}
                                 isCurrentSong={false}
                                 fullQueueIds={queueIds}
+                                // Trigger mutation: Backend sẽ xử lý việc cắt queue
                                 onPlay={() => handlePlayFromQueue(song._id)}
                             />
                         ))

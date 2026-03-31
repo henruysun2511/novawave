@@ -8,6 +8,7 @@ import PlaylistList from "@/components/client/Playlist/playlist-list";
 import SongList from "@/components/client/SongList/song-list";
 import SongList2 from "@/components/client/SongList/song-list-2";
 import TopSong2 from "@/components/client/SongList/top-song-2";
+import TopSong3 from "@/components/client/SongList/top-song-3";
 import SquareSkeleton from "@/components/common/skeleton";
 import Title from "@/components/common/title";
 import { useAlbumList } from "@/queries/useAlbumQuery";
@@ -15,7 +16,7 @@ import { useArtistList } from "@/queries/useArtistQuery";
 import { useNewsList } from "@/queries/useNewsQuery";
 import { usePlaylistList } from "@/queries/usePlaylistQuery";
 import { useSettings } from "@/queries/useSettingQuery";
-import { useSongList, useTopSongs } from "@/queries/useSongQuery";
+import { useSongList } from "@/queries/useSongQuery";
 import { NewsStatus } from "@/types/constant.type";
 import { useRouter } from "next/navigation";
 
@@ -57,8 +58,6 @@ export default function HomePage() {
     })
     const albums = albumData?.data || [];
 
-    const { data: topSongData, isLoading } = useTopSongs();
-    const topSongs = topSongData?.data;
 
     const { data: playlistData, isPending: isPlaylistPending } = usePlaylistList({
         size: 10
@@ -132,6 +131,14 @@ export default function HomePage() {
                         : <div className="text-text-primary text-base">Chưa có bài hát nào thuộc thể loại này</div>
                 }
 
+                <div className="mt-16 flex justify-between items-center">
+                    <Title>Bảng xếp hạng bài hát được nghe nhiều nhất</Title>
+                </div>
+                <TopSong2 />
+
+
+
+
 
 
                 <div className="mt-16 flex justify-between items-center">
@@ -179,17 +186,10 @@ export default function HomePage() {
                     </div>
                 )}
 
-                <div className="mt-16 flex justify-between items-center">
-                    <Title>Bảng xếp hạng bài hát được yêu thích</Title>
-                </div>
-                {isLoading ? (
-                    <SquareSkeleton />
-                ) : topSongs?.length ? (
-                    <TopSong2 songs={topSongs} />
-                ) : (
-                    <div className="text-text-primary">Chưa có bài hát nào</div>
-                )}
 
+                <div className="py-10">
+                    <TopSong3 />
+                </div>
 
 
                 <div className="mt-16 flex justify-between items-center">

@@ -1,11 +1,12 @@
 import { useToast } from "@/libs/toast";
 import { useNextSong, usePreviousSong } from "@/queries/usePlayerQuery";
+import { useIncrementSongView } from "@/queries/useSongQuery";
 import { usePlayerStore } from "@/stores/usePlayerStore";
 import { useSidebarStore } from "@/stores/useSidebarStore";
 import { PlaySongType } from "@/types/constant.type";
 import { CloseOutlined, MenuFoldOutlined, UpSquareOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
 import './song-bar.css';
@@ -27,9 +28,12 @@ export default function SongBar() {
   const currentAd = isCurrentAd ? currentData : null;
   const currentArtist = currentSong?.artistId; // Artist đã được populate từ backend
 
+  // State để theo dõi xem view đã được ghi nhận chưa
+  const [viewCounted, setViewCounted] = useState<string | null>(null);
 
   const nextMutation = useNextSong();
   const previousMutation = usePreviousSong();
+  const { mutate: incrementView } = useIncrementSongView();
   const isSkipLoading = nextMutation.isPending || previousMutation.isPending;
 
   const handleNext = () => {
@@ -104,12 +108,26 @@ export default function SongBar() {
         setAudioRef(null); // Cleanup khi component unmount
       }
     }
-  }, [setAudioRef, audioSource]); //
+  }, [setAudioRef, audioSource]);
+
+  // Reset viewCounted khi bài hát thay đổi
+useEffect(() => {
+    // Reset lại trạng thái tính view mỗi khi ID bài hát thay đổi
+    if (nowPlayingId) {
+        setViewCounted(null);
+    }
+}, [nowPlayingId]);
 
   const handleListen = (e: any) => {
     if (isCurrentAd) return;
     if (!audioSource) return;
-    setCurrentTime(e.target.currentTime);
+    
+    const currentTime = e.target.currentTime;
+
+    if (!isCurrentAd && currentTime >= 30 && viewCounted !== nowPlayingId) {
+        incrementView(nowPlayingId);
+        setViewCounted(nowPlayingId); // Đánh dấu ID bài hát đã được tính
+    }
   };
 
   // Thêm listener cho sự kiện timeupdate để đảm bảo sync với WavePlayer

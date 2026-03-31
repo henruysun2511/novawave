@@ -1,7 +1,7 @@
 import { useStartPlayer } from "@/queries/usePlayerQuery";
 import { usePlayerStore } from "@/stores/usePlayerStore";
 import { Song } from "@/types/object.type";
-import { CaretRightFilled, LoadingOutlined } from "@ant-design/icons";
+import { CaretRightFilled } from "@ant-design/icons";
 
 interface Props {
     song: Song;
@@ -32,7 +32,7 @@ export default function NewSongCard({ song, isCurrentSong, fullQueueIds, onPlay 
     };
 
 
-    const artistName = (song?.artistId as any)?.name || song?.artist?.name || "Đang cập nhật";
+    const artistName = (song?.artistId as any)?.name || song?.artistId?.name || "Đang cập nhật";
     
     const baseClasses = "group flex items-center cursor-pointer my-2 w-full rounded-xl p-2 transition";
     const playingClasses = isCurrentSong ? "bg-green/20" : "hover:bg-[var(--background-tertiary)]";

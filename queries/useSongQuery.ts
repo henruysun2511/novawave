@@ -1,10 +1,13 @@
 import { SongService } from "@/services/song.service";
+import { LeaderboardType } from "@/types/object.type";
 import { SongParam } from "@/types/param.type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const SONG_QUERY_KEY = ["songs"];
 export const SONG_ADMIN_QUERY_KEY = ["songs", "admin"];
 export const TOP_SONGS_QUERY_KEY = [...SONG_QUERY_KEY, "top"];
+export const LEADERBOARD_QUERY_KEY = [...SONG_QUERY_KEY, "leaderboard"];
+
 
 export const useSongList = (params: SongParam) =>
     useQuery({
@@ -96,5 +99,29 @@ export const useTopSongs = () => {
             return response.data;
         },
         staleTime: 1000 * 60 * 5, 
+    });
+};
+
+
+// Hook tăng view
+export const useIncrementSongView = () => {
+    const qc = useQueryClient();
+
+    return useMutation({
+        mutationFn: (id: string) => SongService.incrementViews(id),
+        onSuccess: (res, id) => {
+            // Cập nhật lại cache detail của bài hát đó nếu cần
+            qc.invalidateQueries({ queryKey: [...SONG_QUERY_KEY, id] });
+            // Không cần invalidate toàn bộ list để tránh load lại quá nhiều
+        },
+    });
+};
+
+// Hook lấy bảng xếp hạng
+export const useSongLeaderboard = (type: LeaderboardType) => {
+    return useQuery({
+        queryKey: [...LEADERBOARD_QUERY_KEY, type],
+        queryFn: async () => (await SongService.getLeaderboard(type)).data,
+        staleTime: 1000 * 60 * 5, // Dữ liệu BXH có thể giữ cũ trong 5 phút để tối ưu performance
     });
 };

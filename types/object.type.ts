@@ -257,33 +257,40 @@ export interface News {
 
 // Trong @/types/object.type.ts
 export interface BannerItem {
-    imageUrl: string;
-    redirectLink: string;
-    title: string;
-    description: string;
+  imageUrl: string;
+  redirectLink: string;
+  title: string;
+  description: string;
 }
 
 export interface ChildrenBanner {
-    artistPage: string;
-    playlistPage: string;
-    albumPage: string;
-    genrePage: string;
-    newsPage: string;
-    roomPage: string;
-    planPage: string;
-    productPage: string;
+  artistPage: string;
+  playlistPage: string;
+  albumPage: string;
+  genrePage: string;
+  newsPage: string;
+  roomPage: string;
+  planPage: string;
+  productPage: string;
 }
 
 export interface Setting {
-    _id: string;
-    logo: string;
-    contactPhone: string;
-    authBanner: string;
-    siteName: string;
-    contactEmail: string;
-    mainBanner: BannerItem[];
-    miniBanner: BannerItem[];
-    childrenBanner: ChildrenBanner;
-    createdAt: string;
-    updatedAt: string;
+  _id: string;
+  logo: string;
+  contactPhone: string;
+  authBanner: string;
+  siteName: string;
+  contactEmail: string;
+  mainBanner: BannerItem[];
+  miniBanner: BannerItem[];
+  childrenBanner: ChildrenBanner;
+  createdAt: string;
+  updatedAt: string;
 }
+
+export interface SongLeaderboard extends Song {
+  views: number;
+  listenCount: number;
+}
+
+export type LeaderboardType = 'all' | 'week' | 'month';
