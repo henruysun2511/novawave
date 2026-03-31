@@ -1,9 +1,6 @@
 "use client";
 import { useToast } from "@/libs/toast";
-import { useAdvertisementDetail } from "@/queries/useAdvertisementQuery";
-import { useArtistDetail } from "@/queries/useArtistQuery";
 import { useFollow, useUnfollow, useUserFollow } from "@/queries/useFollowQuery";
-import { useSongDetail } from "@/queries/useSongQuery";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { usePlayerStore } from "@/stores/usePlayerStore";
 import { useSidebarStore } from "@/stores/useSidebarStore";
@@ -13,16 +10,6 @@ import Vinyl from "./vinyl";
 
 
 
-// Giả định cấu trúc Advertisement Detail (từ API response của bạn)
-interface AdvertisementDetail {
-    _id: string;
-    title: string;
-    description: string;
-    partner: string;
-    audioUrl: string;
-    bannerUrl: string;
-    // ... các trường khác
-}
 
 export default function SongInfo() {
     const hidePanel = useSidebarStore((s) => s.hideRightPanel);
@@ -30,29 +17,15 @@ export default function SongInfo() {
     const currentUser = useAuthStore((state) => state.user);
 
     const { status } = usePlayerStore();
-    const { nowPlaying } = status;
+    const { nowPlayingId, nowPlaying: currentData } = status;
     // Lấy type hiện tại: 'song' hoặc 'advertisement'
-    const nowPlayingType = usePlayerStore(state => state.status.nowPlayingType);
+    const nowPlayingType = currentData?.type;
     const isCurrentAd = nowPlayingType === 'advertisement';
 
 
-    // 1. Query chi tiết BÀI HÁT (chỉ chạy nếu type là 'song')
-    const { data: songRes, isLoading: songLoading } = useSongDetail(
-        nowPlaying && !isCurrentAd ? nowPlaying : ""
-    );
-    const currentSong = songRes?.data;
-
-    // 2. Query chi tiết QUẢNG CÁO (chỉ chạy nếu type là 'advertisement')
-    const { data: adRes, isLoading: adLoading } = useAdvertisementDetail(
-        nowPlaying && isCurrentAd ? nowPlaying : ""
-    );
-    const currentAd = adRes?.data as AdvertisementDetail;
-
-    // 3. Query chi tiết nghệ sĩ chính (chỉ chạy khi là bài hát)
-    const artistId =
-        typeof currentSong?.artistId === "string" && !isCurrentAd ? currentSong.artistId : undefined;
-    const { data: artistRes, isLoading: artistLoading } = useArtistDetail(artistId);
-    const currentArtist = artistRes?.data;
+    const currentSong = !isCurrentAd ? currentData : null;
+    const currentAd = isCurrentAd ? currentData : null;
+    const currentArtist = currentSong?.artistId;
 
     // 4. Lấy danh sách nghệ sĩ mà người dùng đang theo dõi (chỉ cần nếu là bài hát)
     const { data: FollowRes } = useUserFollow({
@@ -110,15 +83,7 @@ export default function SongInfo() {
     };
 
 
-    if (songLoading || artistLoading || adLoading) {
-        return (
-            <div className="flex items-center justify-center w-full h-full bg-[var(--background-secondary)] rounded-2xl">
-                <LoadingOutlined className="text-3xl text-text-primary animate-spin" />
-            </div>
-        );
-    }
-
-    if (!nowPlaying || (!currentSong && !currentAd)) {
+    if (!nowPlayingId || (!currentSong && !currentAd)) {
         return (
             <div className="flex flex-col items-center justify-center w-full h-full p-5 bg-[var(--background-secondary)] rounded-2xl text-text-primary">
                 <h1 className="text-xl">Không có bài hát nào đang phát.</h1>

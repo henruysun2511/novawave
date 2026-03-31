@@ -78,6 +78,12 @@ export enum PlaySongType{
     SONG = 'song'
 }
 
+export enum NewsStatus {
+    DRAFT = 'draft',
+    PUBLISHED = 'published',
+    ARCHIVED = 'archived'
+}
+
 export const NOTIFICATION_CONFIG = {
     [NotificationType.SONG_FEAT_REQUEST]: { 
         icon: UserAddOutlined, 

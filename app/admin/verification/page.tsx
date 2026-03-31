@@ -1,5 +1,5 @@
 "use client";
-import Title from "@/components/ui/title";
+import Title from "@/components/common/title";
 import { useVerificationList } from "@/queries/useArtistQuery";
 import { useState } from "react";
 import { VerificationTable } from "./verification-table";

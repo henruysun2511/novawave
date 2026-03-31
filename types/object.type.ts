@@ -72,8 +72,7 @@ export interface Report {
 export interface Song {
   _id: string,
   name: string,
-  artist: Artist,
-  artistId: string | Artist,
+  artistId: Artist,
   mp3Link: string,
   lyrics?: string,
   imageUrl: string,
@@ -147,6 +146,7 @@ export interface Playlist {
   description: string,
   status: PlaylistStatus,
   img: string,
+  songImages?: string[],
 }
 
 export interface Permission {
@@ -175,8 +175,11 @@ export interface Notification {
 }
 
 export interface Player {
-  nowPlaying: string | null,
-  queue: string[]
+  nowPlayingId: string | null;
+  nowPlaying: any;
+  queueIds: string[];
+  queue: any[];
+  history: any[];
 }
 
 export interface Cart {
@@ -219,6 +222,7 @@ export interface NextTrack {
   trackId: string;
   random?: boolean;
   previous?: boolean;
+  [key: string]: any;
 }
 
 export interface PurchaseHistory {
@@ -234,4 +238,52 @@ export interface UserDashboard {
   year: number;
   month: number;
   count: number;
+}
+
+export interface News {
+  _id: string;
+  title: string;
+  content: string;
+  imageUrl?: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  createdBy?: {
+    _id: string;
+    username: string;
+    avatar?: string;
+  }
+}
+
+// Trong @/types/object.type.ts
+export interface BannerItem {
+    imageUrl: string;
+    redirectLink: string;
+    title: string;
+    description: string;
+}
+
+export interface ChildrenBanner {
+    artistPage: string;
+    playlistPage: string;
+    albumPage: string;
+    genrePage: string;
+    newsPage: string;
+    roomPage: string;
+    planPage: string;
+    productPage: string;
+}
+
+export interface Setting {
+    _id: string;
+    logo: string;
+    contactPhone: string;
+    authBanner: string;
+    siteName: string;
+    contactEmail: string;
+    mainBanner: BannerItem[];
+    miniBanner: BannerItem[];
+    childrenBanner: ChildrenBanner;
+    createdAt: string;
+    updatedAt: string;
 }

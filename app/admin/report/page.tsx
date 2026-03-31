@@ -1,5 +1,5 @@
 "use client";
-import Title from "@/components/ui/title";
+import Title from "@/components/common/title";
 import { useReportList } from "@/queries/useReportQuery";
 import { ReportTargetType } from "@/types/constant.type";
 import { FilterTargetType, ReportParam } from "@/types/param.type";

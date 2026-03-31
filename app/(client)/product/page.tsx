@@ -2,6 +2,7 @@
 import Footer from "@/components/client/footer/footer";
 import ProductCard from "@/components/client/Product/product-card";
 import { useProductList } from "@/queries/useProductQuery";
+import { useSettings } from "@/queries/useSettingQuery";
 import { Product } from "@/types/object.type";
 import { Input, Pagination } from "antd";
 import { useState } from "react";
@@ -18,8 +19,10 @@ export default function ProductPage() {
     });
 
     const { data, isPending } = useProductList(params);
+    const { data: settingsData } = useSettings();
     const products = data?.data ?? [];
     const meta = data?.meta;
+    const bannerImage = settingsData?.data?.childrenBanner?.productPage || "https://i.pinimg.com/1200x/ea/70/ec/ea70ec7e95451cc072affd66366d06d8.jpg";
 
     const handleAddToCart = (product: Product) => {
         console.log("Add to cart:", product);
@@ -29,7 +32,8 @@ export default function ProductPage() {
         <>
             <div className="relative w-full h-[450px]">
                 <img
-                    src="https://i.pinimg.com/1200x/ea/70/ec/ea70ec7e95451cc072affd66366d06d8.jpg"
+                    src={bannerImage}
+                    alt="Product Banner"
                     className="w-full h-full object-cover rounded-2xl"
                 />
                 <div className="absolute inset-0 bg-black/10"></div>

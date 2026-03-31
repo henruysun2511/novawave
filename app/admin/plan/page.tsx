@@ -1,5 +1,5 @@
 "use client"
-import Title from '@/components/ui/title';
+import Title from '@/components/common/title';
 import { usePlans } from '@/queries/usePlanQuery';
 import { PlusOutlined } from '@ant-design/icons';
 import { Alert, Button, Spin } from 'antd';

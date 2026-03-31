@@ -1,9 +1,10 @@
 "use client";
 import Footer from "@/components/client/footer/footer";
 import SongCard from "@/components/client/SongList/song-card";
-import { default as SquareSkeleton } from "@/components/ui/skeleton";
-import Title from "@/components/ui/title";
+import { default as SquareSkeleton } from "@/components/common/skeleton";
+import Title from "@/components/common/title";
 import { useGenreList } from "@/queries/useGenreQuery";
+import { useSettings } from "@/queries/useSettingQuery";
 import { useSongList } from "@/queries/useSongQuery";
 import { Genre, Song } from "@/types/object.type";
 import { Pagination } from "antd";
@@ -27,7 +28,9 @@ export const getRandomColor = () => {
 
 export default function GenrePage() {
     const { data: genreData, isPending: isGenrePending } = useGenreList();
+    const { data: settingsData } = useSettings();
     const genres = genreData?.data;
+    const bannerImage = settingsData?.data?.childrenBanner?.genrePage || "https://i.pinimg.com/1200x/0c/44/a9/0c44a9d36d243a3929cafc07a33a24c9.jpg";
 
     const [genreName, setGenreName] = useState<string>("");
 
@@ -63,8 +66,8 @@ export default function GenrePage() {
         <>
             <div className="relative w-full h-[450px] mb-10">
                 <img
-                    src="https://i.pinimg.com/1200x/0c/44/a9/0c44a9d36d243a3929cafc07a33a24c9.jpg"
-                    alt="Logo"
+                    src={bannerImage}
+                    alt="Genre Banner"
                     className="w-full h-full object-cover rounded-2xl"
                 />
                 <div className="absolute inset-0 bg-black/10"></div>

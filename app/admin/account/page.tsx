@@ -1,5 +1,5 @@
 "use client"
-import Title from "@/components/ui/title";
+import Title from "@/components/common/title";
 import { useRoleList } from "@/queries/useRoleQuery";
 import { useUserList } from "@/queries/useUserQuery";
 import { UserStatus } from "@/types/constant.type";

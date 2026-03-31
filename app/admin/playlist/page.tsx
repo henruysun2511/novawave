@@ -1,6 +1,6 @@
 "use client";
 import PlaylistCreateModal from "@/components/client/Playlist/playlist-create-modal";
-import Title from "@/components/ui/title";
+import Title from "@/components/common/title";
 import { useAdminPlaylistList } from "@/queries/usePlaylistQuery";
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Space } from "antd";

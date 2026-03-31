@@ -1,5 +1,5 @@
 "use client";
-import Title from "@/components/ui/title";
+import Title from "@/components/common/title";
 import { useGenreList } from "@/queries/useGenreQuery";
 import { useSongListByAdmin } from "@/queries/useSongQuery";
 import { Input, Select, Space } from "antd";

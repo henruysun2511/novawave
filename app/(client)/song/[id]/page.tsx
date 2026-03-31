@@ -4,7 +4,9 @@ import AlbumCard from "@/components/client/AlbumList/album-card";
 import ArtistCard from "@/components/client/ArtistList/artist-card";
 import ReportModal from "@/components/client/Report/report-modal";
 import WavePlayer from "@/components/client/WavePlayer/wave-player";
-import Title from "@/components/ui/title";
+import Loading from "@/components/common/loading";
+import NotFoundUI from "@/components/common/not-found-ui";
+import Title from "@/components/common/title";
 import { useToast } from "@/libs/toast";
 import { useLikeSong, useUnlikeSong, useUserLike } from "@/queries/useLikeQuery";
 import { useStartPlayer } from "@/queries/usePlayerQuery";
@@ -16,7 +18,7 @@ import { PlaySongType, ReportTargetType } from "@/types/constant.type";
 import { CaretRightFilled, FlagOutlined, HeartFilled, HeartOutlined, LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { Input } from 'antd';
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import LyricsPreview from "../lyrics-preview";
 import SongAddPlaylistModal from "./song-add-playlist-modal";
 import SongComment from "./song-comment";
@@ -27,7 +29,9 @@ export default function SongDetailPage() {
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
     const [isPlaylistModalOpen, setIsPlaylistModalOpen] = useState(false);
     const currentTime = usePlayerStore((state) => state.currentTime);
-    const { nowPlaying } = usePlayerStore(state => state.status);
+    const { nowPlayingId, nowPlaying } = usePlayerStore(state => state.status);
+
+    const currentPlayingId = nowPlayingId || (nowPlaying && typeof nowPlaying !== 'string' ? nowPlaying._id : nowPlaying);
 
     const seekToTime = usePlayerStore((state) => state.seekToTime);
     const nowPlayingType = usePlayerStore(state => state.status.nowPlayingType);
@@ -48,12 +52,20 @@ export default function SongDetailPage() {
     const { mutate: unlikeSong } = useUnlikeSong();
     const { mutate: startPlayerMutation, isPending: isStartingPlayer } = useStartPlayer();
 
-    if (isLoading) return <div>Loading...</div>;
-    if (!songRes?.data) return <div>Không tìm thấy bài hát</div>;
+    if (isLoading) return <Loading />;
+    if (!songRes?.data)
+        return (
+            <NotFoundUI
+                message="Không tìm thấy Bài hát"
+                description="Bài hát bạn đang tìm kiếm không tồn tại hoặc đã bị xóa."
+                backUrl="/song"
+                backText="Xem danh sách bài hát"
+            />
+        );
     const song = songRes.data;
 
 
-    const isThisSongCurrentlyPlaying = song._id === nowPlaying;
+    const isThisSongCurrentlyPlaying = song._id === currentPlayingId;
     const isLiked = likeRes?.data?.some(
         (l: any) => l.songId?._id === song._id
     );
@@ -110,31 +122,17 @@ export default function SongDetailPage() {
         });
     };
 
-    const handleWaveSeek = (newTime: number) => {
+    const handleWaveSeek = useCallback((newTime: number) => {
         const currentState = usePlayerStore.getState();
-        const currentPlayingId = currentState.status.nowPlaying;
+        const currentPlayingId = currentState.status.nowPlayingId || (currentState.status.nowPlaying && typeof currentState.status.nowPlaying !== 'string' ? currentState.status.nowPlaying._id : currentState.status.nowPlaying);
 
         if (song._id !== currentPlayingId) {
-            // Nếu bài hát đang hiển thị không phải là bài đang chơi, 
-            // ta có thể coi đây là lỗi hoặc yêu cầu người dùng nhấn Play trước.
-            // Tùy chọn 1: Bỏ qua (không làm gì)
             toast.error("Vui lòng nhấn nút Play trước khi tua!");
             return;
-
-            /* Tùy chọn 2: Phát bài hát rồi seek
-            // startPlayerMutation({ songId: song._id }, {
-            //     onSuccess: () => {
-            //         // Sau khi phát thành công, đợi một chút rồi seek
-            //         setTimeout(() => seekToTime(newTime), 500); 
-            //     }
-            // });
-            // return;
-            */
         }
 
-        // Nếu đang chơi đúng bài hát này, thực hiện seek
         seekToTime(newTime);
-    };
+    }, [song._id, seekToTime]);
 
 
 
@@ -162,12 +160,13 @@ export default function SongDetailPage() {
                         </h3>
 
                         <div className="text-base text-white mb-4 font-bold">
-                            {song?.artist.name}
+                            {song?.artistId?.name || "Đang cập nhật"}
                         </div>
 
                         {/* WAVE */}
                         <div className="w-full">
                             <WavePlayer
+                                songId={song._id}
                                 url={song?.mp3Link}
                                 currentTime={isThisSongCurrentlyPlaying ? currentTime : 0}
                                 onSeek={isThisSongCurrentlyPlaying ? handleWaveSeek : undefined}
@@ -263,7 +262,7 @@ export default function SongDetailPage() {
                             </td>
 
                             <td className="py-3">
-                                {song?.artist?.name || "Đang cập nhật"}
+                                {song?.artistId?.name || "Đang cập nhật"}
                             </td>
 
                             <td className="py-3">
@@ -283,7 +282,7 @@ export default function SongDetailPage() {
 
                 <div className="my-10"></div>
                 <Title>Nghệ sĩ</Title>
-                <ArtistCard artist={song.artist} />
+                <ArtistCard artist={song.artistId} />
 
                 <div className="my-10"></div>
                 <Title>Nghệ sĩ cùng tham gia</Title>

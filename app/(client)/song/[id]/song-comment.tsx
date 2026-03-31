@@ -1,4 +1,4 @@
-import Title from "@/components/ui/title";
+import Title from "@/components/common/title";
 import { useToast } from "@/libs/toast";
 import { useCommentList, useCreateComment, useDeleteComment, useUpdateComment } from "@/queries/useCommentQuery";
 import { useAuthStore } from "@/stores/useAuthStore";

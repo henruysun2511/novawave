@@ -5,14 +5,14 @@ import { Player } from "./object.type";
 type RightPanelMode = "info" | "queue" | "hidden";
 
 interface PlayerStatus extends Player {
-    nowPlayingType: 'song' | 'advertisement' | null;
+    nowPlayingType?: 'song' | 'advertisement' | null;
 }
 
 export interface PlayerStore {
     status: PlayerStatus;
     isPlaying: boolean;
     setPlayerStatus: (newStatus: PlayerStatus) => void;
-    setNowPlaying: (newTrackId: string, newType: 'song' | 'advertisement') => void;
+    setNowPlaying: (fullStatus: PlayerStatus) => void;
     play: () => void;
     pause: () => void;
     currentTime: number;

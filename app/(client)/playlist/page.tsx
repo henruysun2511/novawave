@@ -1,9 +1,10 @@
 "use client";
 import Footer from "@/components/client/footer/footer";
 import PlaylistCard from "@/components/client/Playlist/playlist-card";
-import SquareSkeleton from "@/components/ui/skeleton";
-import Title from "@/components/ui/title";
+import SquareSkeleton from "@/components/common/skeleton";
+import Title from "@/components/common/title";
 import { usePlaylistList } from "@/queries/usePlaylistQuery";
+import { useSettings } from "@/queries/useSettingQuery";
 import { Playlist } from "@/types/object.type";
 import { Pagination } from "antd";
 import { useState } from "react";
@@ -13,15 +14,17 @@ export default function PlaylistPage() {
         page: 1,
     });
     const { data: playlistData, isPending } = usePlaylistList(params)
+    const { data: settingsData } = useSettings();
     const playlists = playlistData?.data || [];
+    const bannerImage = settingsData?.data?.childrenBanner?.playlistPage || "https://i.pinimg.com/1200x/84/5b/c7/845bc74d9403f7bf2a77ead71d01a9a7.jpg";
 
     const meta = playlistData?.meta;
     return (
         <>
             <div className="relative w-full h-[450px]">
                 <img
-                    src="https://i.pinimg.com/1200x/84/5b/c7/845bc74d9403f7bf2a77ead71d01a9a7.jpg"
-                    alt="Logo"
+                    src={bannerImage}
+                    alt="Playlist Banner"
                     className="w-full h-full object-cover rounded-2xl"
                 />
 

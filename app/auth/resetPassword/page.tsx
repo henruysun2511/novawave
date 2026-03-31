@@ -1,14 +1,16 @@
 "use client"
 import { useToast } from "@/libs/toast";
 import { useResetPasswordMutation } from "@/queries/useAuthQuery";
+import { useSettings } from "@/queries/useSettingQuery";
 import { ResetPasswordDto } from "@/types/body.type";
 import { Button, Form, Input } from "antd";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function ResetPassword() {
     const toast = useToast();
     const router = useRouter();
+    const { data: settingsData } = useSettings();
+    const logoUrl = settingsData?.data?.logo || "/images/logo.png";
 
     const { mutate, isPending } = useResetPasswordMutation();
 
@@ -32,8 +34,8 @@ export default function ResetPassword() {
                 <div className="bg-black p-10 w-full max-w-md flex flex-col items-center gap-4 rounded-3xl shadow-2xl">
 
                     {/* Logo */}
-                    <Image
-                        src="/images/logo.png"
+                    <img
+                        src={logoUrl}
                         alt="Logo"
                         width={180}
                         height={180}

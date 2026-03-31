@@ -1,4 +1,5 @@
 "use client";
+import Loading from "@/components/common/loading";
 import { useToast } from "@/libs/toast";
 import { useRemoveFromCart, useUserCart } from "@/queries/useCartQuery";
 import { Product } from "@/types/object.type";
@@ -17,7 +18,7 @@ export default function Cart() {
 
     // State lưu trữ các productId được chọn
     const [selectedProductIds, setSelectedProductIds] = useState<string[]>([]);
-    
+
     // Mutation xóa sản phẩm
     const { mutate: removeFromCart, isPending: removing } = useRemoveFromCart();
 
@@ -57,7 +58,7 @@ export default function Cart() {
             },
         });
     };
-    
+
     // Hàm xử lý chuyển sang trang thanh toán
     const handleCheckout = () => {
         if (selectedProducts.length === 0) {
@@ -66,7 +67,7 @@ export default function Cart() {
         }
 
         // Tạo dữ liệu để truyền qua trang thanh toán (dùng Query Params hoặc Local Storage)
-        
+
         // Phương án 1: Dùng Local Storage (Tốt hơn cho dữ liệu lớn)
         const checkoutData = {
             products: selectedProducts.map(p => ({
@@ -79,14 +80,14 @@ export default function Cart() {
             cartId: cart?._id, // Truyền cartId nếu cần
             totalPrice: totalSelectedPrice,
         };
-        
+
         localStorage.setItem('checkoutData', JSON.stringify(checkoutData));
-    
+
         router.push('/payment');
     };
 
 
-    if (isPending) return null;
+    if (isPending) return <Loading />;
 
     return (
         <>
@@ -97,8 +98,8 @@ export default function Cart() {
 
                 <div className="bg-[var(--background-tertiary)] p-6 rounded-xl shadow-lg">
                     {allProducts.length === 0 ? (
-                         <Empty 
-                            description={<span className="text-gray-400">Giỏ hàng của bạn đang trống</span>} 
+                        <Empty
+                            description={<span className="text-gray-400">Giỏ hàng của bạn đang trống</span>}
                             image={Empty.PRESENTED_IMAGE_SIMPLE}
                         />
                     ) : (
@@ -120,13 +121,13 @@ export default function Cart() {
                                         className="text-text-primary border-b border-[#2a2a2a] hover:bg-[#1a1a1a] transition"
                                     >
                                         <td className="py-4">
-                                            <Checkbox 
+                                            <Checkbox
                                                 checked={selectedProductIds.includes(item.productId)}
                                                 onChange={(e) => handleCheck(item.productId, e.target.checked)}
                                                 className="scale-110"
                                             />
                                         </td>
-                                        
+
                                         {/* ... Phần hiển thị sản phẩm giữ nguyên ... */}
                                         <td className="py-4 flex items-center gap-4">
                                             {
@@ -169,8 +170,8 @@ export default function Cart() {
 
                                         <td className="py-4">
                                             <Tooltip title="Xóa khỏi giỏ hàng">
-                                                <DeleteOutlined 
-                                                    onClick={() => handleRemove(item.productId)} 
+                                                <DeleteOutlined
+                                                    onClick={() => handleRemove(item.productId)}
                                                     className={`bg-red-500 p-1.5 rounded-sm cursor-pointer ${removing ? 'opacity-50' : ''}`}
                                                 />
                                             </Tooltip>
@@ -180,7 +181,7 @@ export default function Cart() {
                             </tbody>
                         </table>
                     )}
-                    
+
                     {/* Footer */}
                     {allProducts.length > 0 && (
                         <div className="mt-6 flex justify-between items-center bg-[#1c1c1c] p-4 rounded-lg">

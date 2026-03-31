@@ -1,5 +1,5 @@
 import TopArtist from "@/components/client/ArtistList/top-artist";
-import Title from "@/components/ui/title";
+import Title from "@/components/common/title";
 import { useTopArtists } from "@/queries/useArtistQuery";
 import { Spin } from "antd";
 

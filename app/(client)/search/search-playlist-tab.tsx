@@ -1,5 +1,5 @@
 import PlaylistCard from "@/components/client/Playlist/playlist-card";
-import Title from "@/components/ui/title";
+import Title from "@/components/common/title";
 
 export default function SearchPlaylistTab({ playlists }: { playlists: any[] }) {
   if (!playlists || playlists.length === 0) {

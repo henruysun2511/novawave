@@ -1,4 +1,4 @@
-import { ReportTargetType, UserStatus } from "./constant.type";
+import { NewsStatus, ReportTargetType, UserStatus } from "./constant.type";
 
 export interface PaginationParam {
     page?: number;
@@ -46,6 +46,12 @@ export interface PermissionParam extends PaginationParam {
     name?: string;
     method?: string;
     module?: string;
+}
+
+export interface NewsParam extends PaginationParam {
+    title?: string;
+    status?: NewsStatus;
+    sort?: string;
 }
 
 export interface DashboardParam {

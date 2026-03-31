@@ -1,4 +1,4 @@
-import Title from "@/components/ui/title";
+import Title from "@/components/common/title";
 import { useRevenueDashboard } from "@/queries/useDashboardQuery";
 import { Column } from "@ant-design/charts";
 import { Select, Spin } from "antd";

@@ -1,11 +1,11 @@
 "use client";
 import { useToast } from '@/libs/toast';
 import { useGetUserInfoQuery, useLogoutMutation } from '@/queries/useAuthQuery';
+import { useSettings } from '@/queries/useSettingQuery';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { Role } from '@/types/constant.type';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { Avatar, Dropdown, Input, MenuProps, Tooltip } from 'antd';
-import Image from "next/image";
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Notification from '../Notification/notification-dropdown';
@@ -15,6 +15,7 @@ const { Search } = Input;
 export default function Header() {
     const router = useRouter();
     const toast = useToast();
+    const { data: settingsData } = useSettings();
 
     //Lấy avatar
     const { data } = useGetUserInfoQuery();
@@ -23,6 +24,7 @@ export default function Header() {
     //Lấy thông tin người dùng
     const { isAuthenticated, user, roleName } = useAuthStore();
     const isPrenium = user?.isPremium;
+    const logoUrl = settingsData?.data?.logo || "/images/logo.png";
 
     const logoutMutation = useLogoutMutation();
 
@@ -123,13 +125,13 @@ export default function Header() {
     return (
         <>
             <div className="flex items-center justify-between py-2">
-                <Image
-                    src="/images/logo.png"
+                <img
+                    src={logoUrl}
                     alt="Logo"
-                    width={180}
-                    height={180}
+                    width={200}
+                    height={200}
                     onClick={() => router.push("/")}
-                    className='cursor-pointer'
+                    className='cursor-pointer pl-5'
                 />
 
                 <Search

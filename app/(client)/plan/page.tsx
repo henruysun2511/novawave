@@ -1,6 +1,6 @@
 "use client";
 import Footer from "@/components/client/footer/footer";
-import Title from "@/components/ui/title";
+import Title from "@/components/common/title";
 import { useToast } from "@/libs/toast";
 import { usePaymentPlan } from "@/queries/usePaymentQuery";
 import { usePlans } from "@/queries/usePlanQuery";

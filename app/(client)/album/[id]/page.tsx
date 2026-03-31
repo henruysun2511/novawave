@@ -2,7 +2,9 @@
 
 import ArtistCard from "@/components/client/ArtistList/artist-card";
 import ReportModal from "@/components/client/Report/report-modal";
-import Title from "@/components/ui/title";
+import Loading from "@/components/common/loading";
+import NotFoundUI from "@/components/common/not-found-ui";
+import Title from "@/components/common/title";
 import { useToast } from "@/libs/toast";
 import { useAlbumDetail, useSongsInAlbum } from "@/queries/useAlbumQuery";
 import { useArtistDetail } from "@/queries/useArtistQuery";
@@ -63,8 +65,15 @@ export default function AlbumDetailPage() {
         });
     };
 
-    if (albumLoading) return <div>Loading...</div>;
-    if (!album) return <div>Không tìm thấy album</div>;
+    if (albumLoading) return <Loading />;
+    if (!album) return (
+        <NotFoundUI
+            message="Không tìm thấy Album"
+            description="Album bạn đang tìm kiếm không tồn tại hoặc đã ngừng hoạt động."
+            backUrl="/album"
+            backText="Xem danh sách Album"
+        />
+    );
 
     return (
         <>

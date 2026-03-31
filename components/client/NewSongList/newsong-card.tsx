@@ -6,15 +6,33 @@ import { CaretRightFilled, LoadingOutlined } from "@ant-design/icons";
 interface Props {
     song: Song;
     isCurrentSong: boolean;
-    fullQueueIds: string[]; 
+    fullQueueIds: string[];
+    onPlay?: () => void;
 }
 
-export default function NewSongCard({ song, isCurrentSong, fullQueueIds }: Props) {
-    const isPlaying = usePlayerStore(s => s.isPlaying);
-    const { mutate: startPlayerMutation, isPending: isStartingPlayer } = useStartPlayer();
+export default function NewSongCard({ song, isCurrentSong, fullQueueIds, onPlay }: Props) {
+    const { isPlaying, play, pause } = usePlayerStore();
+    const { mutate: startPlayer } = useStartPlayer();
+
+    const handleCardClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        e.preventDefault();
+
+        if (isCurrentSong) {
+            if (isPlaying) pause();
+            else play();
+            return;
+        }
+
+        if (onPlay) {
+            onPlay();
+        } else {
+            startPlayer({ songId: song._id });
+        }
+    };
 
 
-    const artistName = song?.artist?.name || "Đang cập nhật"; 
+    const artistName = (song?.artistId as any)?.name || song?.artist?.name || "Đang cập nhật";
     
     const baseClasses = "group flex items-center cursor-pointer my-2 w-full rounded-xl p-2 transition";
     const playingClasses = isCurrentSong ? "bg-green/20" : "hover:bg-[var(--background-tertiary)]";
@@ -23,6 +41,7 @@ export default function NewSongCard({ song, isCurrentSong, fullQueueIds }: Props
     return (
         <div 
             className={`${baseClasses} ${playingClasses}`}
+            onClick={handleCardClick}
         >
             <div className="relative w-[70px] h-[70px] flex-shrink-0">
                 <img
@@ -33,12 +52,10 @@ export default function NewSongCard({ song, isCurrentSong, fullQueueIds }: Props
 
                 <div 
                     className={`absolute inset-0 flex items-center justify-center bg-black/40 rounded transition 
-                                opacity-0 group-hover:opacity-100 ${isCurrentSong || isStartingPlayer ? '!opacity-100' : ''}`
+                                opacity-0 group-hover:opacity-100 ${isCurrentSong ? '!opacity-100' : ''}`
                     }
                 >
-                    {isStartingPlayer ? (
-                        <LoadingOutlined className="text-xl text-green animate-spin" />
-                    ) : isCurrentSong && isPlaying ? (
+                    {isCurrentSong && isPlaying ? (
                          <span className="text-white text-base font-bold">||</span>
                     ) : (
                         <div className="w-8 h-8 rounded-full bg-green flex items-center justify-center shadow-lg">
@@ -49,15 +66,15 @@ export default function NewSongCard({ song, isCurrentSong, fullQueueIds }: Props
             </div>
 
             <div className="flex flex-col justify-center ml-4 overflow-hidden">
-                <a 
+                <span 
                     className={`text-base font-bold truncate ${textClasses}`}
                     title={song?.name}
                 >
                     {song?.name}
-                </a>
-                <a className="text-sm text-gray-400 truncate" title={artistName}>
+                </span>
+                <span className="text-sm text-gray-400 truncate" title={artistName}>
                     {artistName}
-                </a>
+                </span>
             </div>
             
             {isCurrentSong && (

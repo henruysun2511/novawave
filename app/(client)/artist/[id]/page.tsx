@@ -3,7 +3,9 @@ import AlbumCard from "@/components/client/AlbumList/album-card";
 import Footer from "@/components/client/footer/footer";
 import ReportModal from "@/components/client/Report/report-modal";
 import SongList from "@/components/client/SongList/song-list";
-import Title from "@/components/ui/title";
+import Loading from "@/components/common/loading";
+import NotFoundUI from "@/components/common/not-found-ui";
+import Title from "@/components/common/title";
 import { useToast } from "@/libs/toast";
 import { useAlbumListByArtist } from "@/queries/useAlbumQuery";
 import { useArtistDetail } from "@/queries/useArtistQuery";
@@ -78,8 +80,16 @@ export default function ArtistDetailPage() {
     const { data: albumRes } = useAlbumListByArtist(id);
     const albums = albumRes?.data;
 
-    if (isLoading) return <div>Đang tải...</div>;
-    if (!artist) return <div>Không tìm thấy Nghệ sĩ.</div>;
+    if (isLoading) return <Loading />;
+    if (!artist)
+        return (
+            <NotFoundUI
+                message="Không tìm thấy Nghệ sĩ"
+                description="Nghệ sĩ bạn đang tìm kiếm không tồn tại hoặc đã ngừng hoạt động."
+                backUrl="/artist"
+                backText="Xem danh sách nghệ sĩ"
+            />
+        );
 
     return (
         <>

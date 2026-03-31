@@ -1,8 +1,5 @@
 import { useToast } from "@/libs/toast";
-import { useAdvertisementDetail } from "@/queries/useAdvertisementQuery";
-import { useArtistDetail } from "@/queries/useArtistQuery";
 import { useNextSong, usePreviousSong } from "@/queries/usePlayerQuery";
-import { useSongDetail } from "@/queries/useSongQuery";
 import { usePlayerStore } from "@/stores/usePlayerStore";
 import { useSidebarStore } from "@/stores/useSidebarStore";
 import { PlaySongType } from "@/types/constant.type";
@@ -19,31 +16,16 @@ export default function SongBar() {
   const hidePanel = useSidebarStore((s) => s.hideRightPanel);
   const toast = useToast();
 
-  const { isPlaying, play, pause, status, setCurrentTime, setAudioRef } = usePlayerStore();
-  const { nowPlaying } = status;
+  const { isPlaying, play, pause, status, setCurrentTime, setAudioRef, audioRef } = usePlayerStore();
+  const { nowPlayingId, nowPlaying: currentData } = status;
 
-  //Lấy type hiện tại: 'song' hoặc 'advertisement'
-  const nowPlayingType = usePlayerStore(state => state.status.nowPlayingType);
+  // Lấy type hiện tại: 'song' hoặc 'advertisement'
+  const nowPlayingType = currentData?.type;
   const isCurrentAd = nowPlayingType === PlaySongType.ADVERTISEMENT;
 
-
-  // 1. Lấy chi tiết bài hát (chỉ chạy nếu type là 'song')
-  const { data: songRes, isLoading: songLoading } = useSongDetail(
-    nowPlaying && !isCurrentAd ? nowPlaying : ""
-  );
-  const currentSong = songRes?.data;
-
-  // 2. Lấy chi tiết quảng cáo (chỉ chạy nếu type là 'advertisement')
-  const { data: adRes, isLoading: adLoading } = useAdvertisementDetail(
-    nowPlaying && isCurrentAd ? nowPlaying : ""
-  );
-  const currentAd = adRes?.data;
-
-  // 3. Fetch chi tiết nghệ sĩ (chỉ chạy khi là bài hát)
-  const artistId =
-    typeof currentSong?.artistId === "string" && !isCurrentAd ? currentSong.artistId : undefined;
-  const { data: artistRes } = useArtistDetail(artistId);
-  const currentArtist = artistRes?.data;
+  const currentSong = !isCurrentAd ? currentData : null;
+  const currentAd = isCurrentAd ? currentData : null;
+  const currentArtist = currentSong?.artistId; // Artist đã được populate từ backend
 
 
   const nextMutation = useNextSong();
@@ -55,8 +37,8 @@ export default function SongBar() {
       toast.info("Nghe nhạc free thì chịu nghe quảng cáo đi");
       return;
     }
-    if (nowPlaying && !isSkipLoading && !isCurrentAd) { // Không next khi là QC
-      nextMutation.mutate({ currentSongId: nowPlaying });
+    if (nowPlayingId && !isSkipLoading && !isCurrentAd) { // Không next khi là QC
+      nextMutation.mutate({ currentSongId: nowPlayingId });
     }
   };
 
@@ -65,15 +47,28 @@ export default function SongBar() {
       toast.info("Nghe nhạc free thì chịu nghe quảng cáo đi");
       return;
     }
-    if (nowPlaying && !isSkipLoading && !isCurrentAd) { // Không previous khi là QC
-      previousMutation.mutate({ currentSongId: nowPlaying });
+
+    if (!nowPlayingId || isSkipLoading) return;
+
+    // Logic: Nếu đã phát quá 3s → reset bài về 0. Nếu dưới 3s → về bài trước.
+    const isPlayedLongEnough = usePlayerStore.getState().currentTime > 3;
+
+    if (isPlayedLongEnough) {
+      const audio = usePlayerStore.getState().audioRef;
+      if (audio) {
+        audio.currentTime = 0;
+        setCurrentTime(0);
+        return;
+      }
     }
+
+    previousMutation.mutate({ currentSongId: nowPlayingId });
   };
 
   const handleEnded = () => {
-    if (!nowPlaying || isSkipLoading) return;
+    if (!nowPlayingId || isSkipLoading) return;
 
-    nextMutation.mutate({ currentSongId: nowPlaying });
+    nextMutation.mutate({ currentSongId: nowPlayingId });
   };
 
 
@@ -117,6 +112,34 @@ export default function SongBar() {
     setCurrentTime(e.target.currentTime);
   };
 
+  // Thêm listener cho sự kiện timeupdate để đảm bảo sync với WavePlayer
+  useEffect(() => {
+    const audio = audioRef;
+    if (!audio) return;
+
+    const handleTimeUpdate = () => {
+      if (isCurrentAd) return;
+      setCurrentTime(audio.currentTime);
+    };
+
+    audio.addEventListener('timeupdate', handleTimeUpdate);
+    return () => {
+      audio.removeEventListener('timeupdate', handleTimeUpdate);
+    };
+  }, [audioRef, isCurrentAd, setCurrentTime]);
+
+  // Đảm bảo bài hát luôn được phát khi source thay đổi (giúp chuyển bài mượt hơn)
+  useEffect(() => {
+    if (isPlaying && audioRef && audioSource) {
+      const playPromise = audioRef.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((err) => {
+          console.warn("Autoplay was prevented or interrupted:", err);
+        });
+      }
+    }
+  }, [audioSource, isPlaying, audioRef]);
+
   return (
     <div className="bg-black fixed bottom-0 right-0 w-full z-10 h-[64px] flex items-center px-4 text-white">
       <div className="w-[25%] flex gap-3.5 items-center">
@@ -144,8 +167,7 @@ export default function SongBar() {
           onClickPrevious={handlePrev}
           onEnded={handleEnded}
           onListen={handleListen}
-          customProgressBarSection={isCurrentAd ? [] : undefined}
-          className="custom-audio-player"
+          className={`custom-audio-player ${isCurrentAd ? 'ad-mode' : ''}`}
         />
       </div>
 

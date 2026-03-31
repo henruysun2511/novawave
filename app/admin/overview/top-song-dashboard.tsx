@@ -1,5 +1,5 @@
 import TopSong1 from "@/components/client/SongList/top-song-1";
-import Title from "@/components/ui/title";
+import Title from "@/components/common/title";
 import { useTopSongs } from "@/queries/useSongQuery";
 import { Spin } from "antd";
 

@@ -1,7 +1,7 @@
 import AlbumCard from "@/components/client/AlbumList/album-card";
 import ArtistCard from "@/components/client/ArtistList/artist-card";
 import SongCard from "@/components/client/SongList/song-card";
-import Title from "@/components/ui/title";
+import Title from "@/components/common/title";
 import { useAlbumDetail } from "@/queries/useAlbumQuery";
 import { useArtistDetail } from "@/queries/useArtistQuery";
 import { getRandomColor } from "../genre/page";

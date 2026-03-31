@@ -1,3 +1,4 @@
+import { usePlayerStore } from "@/stores/usePlayerStore";
 import React, { useEffect, useRef } from "react";
 import WaveSurfer from "wavesurfer.js";
 
@@ -5,19 +6,33 @@ interface WavePlayerProps {
   url: string;
   currentTime: number;
   onSeek?: (time: number) => void;
+  songId: string;
 }
 
 const WavePlayer: React.FC<WavePlayerProps> = ({
   url,
   currentTime,
   onSeek,
+  songId,
 }) => {
   const waveformRef = useRef<HTMLDivElement | null>(null);
   const wavesurferRef = useRef<WaveSurfer | null>(null);
+  const audioRef = usePlayerStore((state) => state.audioRef);
+  const isPlaying = usePlayerStore((state) => state.isPlaying);
+  const status = usePlayerStore((state) => state.status);
+  const nowPlayingSongId = status.nowPlayingId || (status.nowPlaying && typeof status.nowPlaying !== 'string' ? status.nowPlaying._id : status.nowPlaying);
+  const onSeekRef = useRef<((time: number) => void) | null>(null);
 
-  // INIT WAVESURFER
+  // Chỉ hiển thị wave nếu đúng bài hát này đang phát
+  const isThisSongPlaying = songId === nowPlayingSongId;
+
   useEffect(() => {
-    if (!waveformRef.current) return;
+    onSeekRef.current = onSeek || null;
+  }, [onSeek]);
+
+  // INIT WAVESURFER - chỉ khởi tạo khi bài hát này đang phát
+  useEffect(() => {
+    if (!isThisSongPlaying || !waveformRef.current) return;
 
     const ws = WaveSurfer.create({
       container: waveformRef.current,
@@ -43,30 +58,59 @@ const WavePlayer: React.FC<WavePlayerProps> = ({
     (ws as any).on("seek", (progress: number) => {
       if (!ws.getDuration()) return;
       const time = progress * ws.getDuration();
-      onSeek?.(time);
+      onSeekRef.current?.(time);
     });
 
     return () => {
       ws.destroy();
       wavesurferRef.current = null;
     };
-  }, [url]);
+  }, [url, isThisSongPlaying]);
 
+  // Sync wave progress với audio player liên tục khi playing
+  useEffect(() => {
+    if (!audioRef || !isPlaying || !isThisSongPlaying) return;
 
+    const handleTimeUpdate = () => {
+      const ws = wavesurferRef.current;
+      if (!ws || !ws.getDuration() || !audioRef) return;
+
+      // Update wave progress based on audio currentTime
+      const progress = audioRef.currentTime / (audioRef.duration || 1);
+      ws.seekTo(progress);
+    };
+
+    audioRef.addEventListener('timeupdate', handleTimeUpdate);
+    return () => {
+      audioRef.removeEventListener('timeupdate', handleTimeUpdate);
+    };
+  }, [audioRef, isPlaying, isThisSongPlaying]);
+
+  // Sync wave position khi currentTime thay đổi (từ external seek)
   useEffect(() => {
     const ws = wavesurferRef.current;
-    if (!ws || !ws.getDuration()) return;
+    if (!ws || !ws.getDuration() || !isThisSongPlaying) return;
 
+    // Kiểm tra xem user đang drag hay không
+    // Nếu diff > 0.5s thì coi như external seek, không phải user drag
     const diff = Math.abs(ws.getCurrentTime() - currentTime);
-    if (diff > 0.3) {
+    if (diff > 0.5) {
       ws.seekTo(currentTime / ws.getDuration());
     }
-  }, [currentTime]);
+  }, [currentTime, isThisSongPlaying]);
 
   return (
-    <div className="wave-wrapper">
-      <div ref={waveformRef} id="waveform" />
-    </div>
+    <>
+      {isThisSongPlaying ? (
+        <div className="wave-wrapper">
+          <div ref={waveformRef} id="waveform" />
+        </div>
+      ) : (
+        <div className="wave-wrapper h-[90px] bg-[rgba(255,255,255,0.1)] rounded flex items-center justify-center">
+          <p className="text-text-secondary text-sm">Phát bài hát này để xem sóng âm thanh</p>
+        </div>
+      )}
+    </>
   );
 };
 

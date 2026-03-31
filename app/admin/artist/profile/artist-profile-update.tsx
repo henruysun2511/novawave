@@ -1,4 +1,4 @@
-import Title from "@/components/ui/title";
+import Title from "@/components/common/title";
 import { useToast } from "@/libs/toast";
 import { useUploadFile } from "@/libs/upload";
 import { useUpdateArtistProfile } from "@/queries/useArtistQuery";

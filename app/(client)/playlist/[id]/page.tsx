@@ -2,7 +2,9 @@
 import Footer from "@/components/client/footer/footer";
 import PlaylistAddSongModal from "@/components/client/Playlist/playlist-add-song-modal";
 import ReportModal from "@/components/client/Report/report-modal";
-import Title from "@/components/ui/title";
+import Loading from "@/components/common/loading";
+import NotFoundUI from "@/components/common/not-found-ui";
+import Title from "@/components/common/title";
 import { useToast } from "@/libs/toast";
 import { useStartPlayer } from "@/queries/usePlayerQuery";
 import { usePlaylistDetail, usePlaylistsSong, useRemoveSongFromPlaylist, useUserPlaylists } from "@/queries/usePlaylistQuery";
@@ -158,8 +160,15 @@ export default function PlaylistDetailPage() {
         });
     };
 
-    if (playlistLoading) return <div>Đang tải...</div>;
-    if (!playlist) return <div>Không tìm thấy Playlist.</div>;
+    if (playlistLoading) return <Loading />;
+    if (!playlist) return (
+        <NotFoundUI
+            message="Không tìm thấy Playlist"
+            description="Playlist bạn đang tìm kiếm không tồn tại hoặc đã ngừng hoạt động."
+            backUrl="/playlist"
+            backText="Xem danh sách Playlist"
+        />
+    );
 
 
     return (

@@ -1,26 +1,29 @@
 "use client";
 import AlbumList from "@/components/client/AlbumList/album-list";
 import ArtistList from "@/components/client/ArtistList/artist-list";
-import EventList from "@/components/client/EventList/event-list";
 import Footer from "@/components/client/footer/footer";
+import MainBanner from "@/components/client/MainBanner/main-banner";
 import NewsList from "@/components/client/NewsList/news-list";
+import PlaylistList from "@/components/client/Playlist/playlist-list";
 import SongList from "@/components/client/SongList/song-list";
 import SongList2 from "@/components/client/SongList/song-list-2";
 import TopSong2 from "@/components/client/SongList/top-song-2";
-import SquareSkeleton from "@/components/ui/skeleton";
-import Title from "@/components/ui/title";
+import SquareSkeleton from "@/components/common/skeleton";
+import Title from "@/components/common/title";
 import { useAlbumList } from "@/queries/useAlbumQuery";
 import { useArtistList } from "@/queries/useArtistQuery";
+import { useNewsList } from "@/queries/useNewsQuery";
+import { usePlaylistList } from "@/queries/usePlaylistQuery";
+import { useSettings } from "@/queries/useSettingQuery";
 import { useSongList, useTopSongs } from "@/queries/useSongQuery";
+import { NewsStatus } from "@/types/constant.type";
 import { useRouter } from "next/navigation";
-import "swiper/css";
-import "swiper/css/navigation";
-import { Autoplay, Navigation } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
-import AdvertisementBanner from "./advertisement-banner";
 
 export default function HomePage() {
     const router = useRouter();
+
+    const { data: settingsRes } = useSettings();
+    const miniBanners = settingsRes?.data?.miniBanner || [];
 
     const { data: songData, isPending } = useSongList({
         size: 8
@@ -57,26 +60,21 @@ export default function HomePage() {
     const { data: topSongData, isLoading } = useTopSongs();
     const topSongs = topSongData?.data;
 
+    const { data: playlistData, isPending: isPlaylistPending } = usePlaylistList({
+        size: 10
+    });
+    const playlists = playlistData?.data || [];
+
+    const { data: newsData, isPending: isNewsPending } = useNewsList({
+        size: 3,
+        status: NewsStatus.PUBLISHED,
+    });
+    const news = newsData?.data || [];
+
     return (
         <>
             <div className="p-6">
-                <Swiper
-                    modules={[Navigation, Autoplay]}
-                    navigation
-                    spaceBetween={20}
-                    slidesPerView={1}
-                    className="mySwiper"
-                    pagination={{ clickable: true }}
-                    speed={600}
-                    autoplay={{
-                        delay: 3000,
-                        disableOnInteraction: false,
-                    }}
-                >
-                    <SwiperSlide><AdvertisementBanner /></SwiperSlide>
-                    <SwiperSlide><AdvertisementBanner /></SwiperSlide>
-                    <SwiperSlide><AdvertisementBanner /></SwiperSlide>
-                </Swiper>
+                <MainBanner />
 
                 <div className="mt-16">
                     <Title>Dành cho bạn</Title>
@@ -136,15 +134,23 @@ export default function HomePage() {
 
 
 
-                {/* <div className="mt-16 flex justify-between items-center">
-                    <Title>Mới phát hành</Title>
-                    <a className="text-base text-text-secondary">Xem tất cả</a>
+                <div className="mt-16 flex justify-between items-center">
+                    <Title>Playlist dành cho bạn</Title>
+                    <a className="text-base text-text-secondary cursor-pointer" onClick={() => router.push('/playlist')}>Xem tất cả</a>
                 </div>
-                <NewSongList /> */}
+                {
+                    playlistData
+                        ? (
+                            isPlaylistPending
+                                ? <SquareSkeleton />
+                                : <PlaylistList playlists={playlists} />
+                        )
+                        : <div className="text-text-primary text-base">Chưa có playlist nào</div>
+                }
 
                 <div className="mt-16 flex justify-between items-center">
                     <Title>Album nổi bật</Title>
-                    <a className="text-base text-text-secondary" onClick={() => router.push('album')}>Xem tất cả</a>
+                    <a className="text-base text-text-secondary cursor-pointer" onClick={() => router.push('/album')}>Xem tất cả</a>
                 </div>
                 {
                     albumData
@@ -156,6 +162,22 @@ export default function HomePage() {
                         : <div className="text-text-primary text-base">Chưa có album nào</div>
                 }
 
+                {miniBanners.length > 0 && (
+                    <div className="mt-20 mb-10">
+                        <div
+                            className="relative overflow-hidden rounded-2xl cursor-pointer hover:opacity-95 transition-all group shadow-lg"
+                            onClick={() => miniBanners[1].redirectLink && router.push(miniBanners[0].redirectLink)}
+                        >
+                            <img
+                                src={miniBanners[1].imageUrl}
+                                alt={miniBanners[1].title || "promotion-banner"}
+                                className="w-full h-[150px] object-cover aspect-[21/9] md:aspect-[4/1]"
+                            />
+                            {/* Hiệu ứng lớp phủ khi di chuột vào */}
+                            <div className="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors" />
+                        </div>
+                    </div>
+                )}
 
                 <div className="mt-16 flex justify-between items-center">
                     <Title>Bảng xếp hạng bài hát được yêu thích</Title>
@@ -186,29 +208,48 @@ export default function HomePage() {
 
 
 
-                <div className="mt-16 flex justify-between items-center">
-                    <img src="https://yt3.googleusercontent.com/JQX_ukIzqNX53iRAnrs7EbDfrWqs5uhyxg_xpoIaERGvIdXz5nh-0c2k9ea_9EQijmmF-gy3Ew=w2276-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj" alt="" />
-                </div>
-
-                <div className="mt-16 flex justify-between items-center">
+                {/* <div className="mt-16 flex justify-between items-center">
                     <Title>Sự kiện âm nhạc sắp tới</Title>
                     <a className="text-base text-text-secondary">Xem tất cả</a>
                 </div>
-                <EventList />
+                <EventList /> */}
 
 
                 <div className="mt-16 flex justify-between items-center">
                     <Title>Tin tức mới nhất</Title>
-                    <a className="text-base text-text-secondary">Xem tất cả</a>
+                    <a className="text-base text-text-secondary" onClick={() => router.push('/news')}>
+                        Xem tất cả
+                    </a>
                 </div>
-                <NewsList />
+                {
+                    newsData
+                        ? (
+                            isNewsPending
+                                ? <SquareSkeleton />
+                                : <NewsList newsList={news} />
+                        )
+                        : <div className="text-text-primary text-base">Chưa có tin tức nào</div>
+                }
 
-
-
-                <div className="mt-16 flex justify-between items-center">
-                    <img src=" https://yt3.googleusercontent.com/SCRkFwhAbYkvTcSod-rMsK5hER4ljSYFxxPBeXPgpmER8MLxQQSh_dmfgNeVTuUxalHT8ynpEA=w2276-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj" alt="" />
-                </div>
+                {miniBanners.length > 0 && (
+                    <div className="mt-20 mb-10">
+                        <div
+                            className="relative overflow-hidden rounded-2xl cursor-pointer hover:opacity-95 transition-all group shadow-lg"
+                            onClick={() => miniBanners[0].redirectLink && router.push(miniBanners[0].redirectLink)}
+                        >
+                            <img
+                                src={miniBanners[0].imageUrl}
+                                alt={miniBanners[0].title || "promotion-banner"}
+                                className="w-full h-[150px] object-cover aspect-[21/9] md:aspect-[4/1]"
+                            />
+                            {/* Hiệu ứng lớp phủ khi di chuột vào */}
+                            <div className="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors" />
+                        </div>
+                    </div>
+                )}
             </div>
+
+
             <Footer />
 
         </>

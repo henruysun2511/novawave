@@ -3,7 +3,7 @@ import { useToast } from "@/libs/toast";
 import { useLogoutMutation } from "@/queries/useAuthQuery";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { Role } from "@/types/constant.type";
-import { AudioOutlined, BookOutlined, FormatPainterOutlined, HomeOutlined, PlayCircleOutlined, ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
+import { AudioOutlined, BookOutlined, FileTextOutlined, FormatPainterOutlined, HomeOutlined, PlayCircleOutlined, SettingOutlined, ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Menu, MenuProps } from "antd";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -54,6 +54,11 @@ export default function SideBar() {
                 { key: '/admin/playlist', label: <span className="text-lg font-semibold">Quản lý playlist</span> },
             ]
         },
+        news: {
+            key: '11', icon: <FileTextOutlined />, label: <span className="text-lg font-semibold">Tin tức</span>, children: [
+                { key: '/admin/news', label: <span className="text-lg font-semibold">Quản lý tin tức</span> }
+            ]
+        },
         ads: {
             key: '6', icon: <FormatPainterOutlined />, label: <span className="text-lg font-semibold">Quảng cáo</span>, children: [
                 { key: '/admin/advertisement', label: <span className="text-lg font-semibold">Quản lý quảng cáo</span> }
@@ -62,6 +67,11 @@ export default function SideBar() {
         commerce: {
             key: '7', icon: <ShoppingCartOutlined />, label: <span className="text-lg font-semibold">Mua bán</span>, children: [
                 { key: '/admin/product', label: <span className="text-lg font-semibold">Quản lý sản phẩm</span> },
+            ]
+        },
+        setting: {
+            key: '12', icon: <SettingOutlined />, label: <span className="text-lg font-semibold">Cấu hình</span>, children: [
+                { key: '/admin/setting', label: <span className="text-lg font-semibold">Cấu hình hệ thống</span> }
             ]
         },
     };
@@ -77,14 +87,16 @@ export default function SideBar() {
                 menuGroups.accounts,
                 menuGroups.plans,
                 menuGroups.music,
+                menuGroups.news,
                 menuGroups.ads,
-                menuGroups.commerce
+                menuGroups.commerce,
+                menuGroups.setting
             ];
         }
 
-        // ADMIN: Overview, Accounts, Plans, Ads, Commerce
+        // ADMIN: Overview, Accounts, Plans, News, Ads, Commerce
         if (roleName === Role.ADMIN) {
-            items.push(menuGroups.overview, menuGroups.accounts, menuGroups.plans, menuGroups.ads, menuGroups.commerce);
+            items.push(menuGroups.overview, menuGroups.accounts, menuGroups.plans, menuGroups.news, menuGroups.ads, menuGroups.commerce, menuGroups.setting);
         }
 
         // ARTIST: Chỉ menu dành cho nghệ sĩ

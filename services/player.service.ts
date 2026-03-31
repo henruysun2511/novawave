@@ -18,4 +18,8 @@ export const PlayerService = {
     previous() {
         return http.get<ApiResponse<NextTrack>>(`/${prefix}/previous`);
     },
+
+    playFromQueue(songId: string) {
+        return http.post<ApiResponse<Player>>(`/${prefix}/play-from-queue`, { songId });
+    },
 };

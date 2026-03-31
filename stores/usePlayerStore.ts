@@ -10,8 +10,11 @@ export const usePlayerStore = create<PlayerStore>()(
         (set, get) => ({
             // Trạng thái khởi tạo
             status: {
+                nowPlayingId: null,
                 nowPlaying: null,
+                queueIds: [],
                 queue: [],
+                history: [],
                 nowPlayingType: null,
             },
             isPlaying: false,
@@ -20,14 +23,7 @@ export const usePlayerStore = create<PlayerStore>()(
 
             // Actions
             setPlayerStatus: (newStatus) => set({ status: newStatus, isPlaying: true }),
-            setNowPlaying: (newTrackId, newType) => set(state => ({
-                status: {
-                    ...state.status,
-                    nowPlaying: newTrackId,
-                    nowPlayingType: newType,
-                },
-                isPlaying: true,
-            })),
+            setNowPlaying: (fullStatus: any) => set({ status: fullStatus, isPlaying: true }),
             play: () => set({ isPlaying: true }),
             pause: () => set({ isPlaying: false }),
 
@@ -41,6 +37,10 @@ export const usePlayerStore = create<PlayerStore>()(
                     audio.currentTime = time;
                     // Gọi action setCurrentTime của chính store
                     get().setCurrentTime(time);
+                    
+                    // Dispatch timeupdate event để ensure UI cập nhật
+                    const timeupdate = new Event('timeupdate');
+                    audio.dispatchEvent(timeupdate);
                 }
             },
 

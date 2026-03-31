@@ -1,4 +1,4 @@
-import Title from "@/components/ui/title";
+import Title from "@/components/common/title";
 import { useArtistProfile } from "@/queries/useArtistQuery";
 import { useSongListByArtist } from "@/queries/useSongQuery";
 import ArtistSongTable from "./artist-song-table";

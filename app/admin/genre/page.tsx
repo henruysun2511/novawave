@@ -1,5 +1,5 @@
 "use client";
-import Title from "@/components/ui/title";
+import Title from "@/components/common/title";
 import { useGenreList } from "@/queries/useGenreQuery";
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Space } from "antd";

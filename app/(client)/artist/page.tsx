@@ -1,8 +1,9 @@
 "use client";
 import ArtistCard from "@/components/client/ArtistList/artist-card";
-import SquareSkeleton from "@/components/ui/skeleton";
-import Title from "@/components/ui/title";
+import SquareSkeleton from "@/components/common/skeleton";
+import Title from "@/components/common/title";
 import { useArtistList } from "@/queries/useArtistQuery";
+import { useSettings } from "@/queries/useSettingQuery";
 import { Artist } from "@/types/object.type";
 import { Pagination } from "antd";
 import { useState } from "react";
@@ -15,15 +16,17 @@ export default function ArtistPage() {
 
 
     const { data: artistData, isPending: isArtistPending } = useArtistList(params)
+    const { data: settingsData } = useSettings();
     const artists = artistData?.data || [];
     const meta = artistData?.meta;
+    const bannerImage = settingsData?.data?.childrenBanner?.artistPage || "/images/jungkook.jpg";
 
     return (
         <>
             <div className="relative w-full h-[450px]">
                 <img
-                    src="/images/jungkook.jpg"
-                    alt="Logo"
+                    src={bannerImage || "/images/jungkook.jpg"}
+                    alt="Artist Banner"
                     className="w-full h-full object-cover rounded-2xl"
                 />
 

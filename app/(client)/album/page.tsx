@@ -1,9 +1,10 @@
 "use client";
 import AlbumCard from "@/components/client/AlbumList/album-card";
 import Footer from "@/components/client/footer/footer";
-import SquareSkeleton from "@/components/ui/skeleton";
-import Title from "@/components/ui/title";
+import SquareSkeleton from "@/components/common/skeleton";
+import Title from "@/components/common/title";
 import { useAlbumList } from "@/queries/useAlbumQuery";
+import { useSettings } from "@/queries/useSettingQuery";
 import { Album } from "@/types/object.type";
 import { Pagination } from "antd";
 import { useState } from "react";
@@ -13,16 +14,18 @@ export default function GenrePage() {
         page: 1,
     });
     const { data: albumData, isPending: isAlbumPending } = useAlbumList(params)
+    const { data: settingsData } = useSettings();
     const albums = albumData?.data || [];
 
     const meta = albumData?.meta;
+    const bannerImage = settingsData?.data?.childrenBanner?.albumPage || "https://i.pinimg.com/1200x/2f/97/f1/2f97f1f6ac89947f8ea1ac9e85b19623.jpg";
 
     return (
         <>
-            <div className="relative w-full h-[450px] mb-10">
+            <div className="relative w-full h-[450px]">
                 <img
-                    src="https://i.pinimg.com/1200x/2f/97/f1/2f97f1f6ac89947f8ea1ac9e85b19623.jpg"
-                    alt="Logo"
+                    src={bannerImage || "https://i.pinimg.com/1200x/2f/97/f1/2f97f1f6ac89947f8ea1ac9e85b19623.jpg"}
+                    alt="Album Banner"
                     className="w-full h-full object-cover rounded-2xl"
                 />
                 <div className="absolute inset-0 bg-black/10"></div>

@@ -1,5 +1,5 @@
 "use client";
-import Title from '@/components/ui/title';
+import Title from '@/components/common/title';
 import { usePermissionList } from '@/queries/usePermissionQuery';
 import { HttpMethod } from '@/types/constant.type';
 import { PermissionParam } from '@/types/param.type';

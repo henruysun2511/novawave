@@ -1,36 +1,43 @@
+import { useSettings } from "@/queries/useSettingQuery";
 import { MailOutlined, PhoneOutlined } from "@ant-design/icons";
-import Image from "next/image";
 
 export default function Footer() {
+    const { data: settingsData } = useSettings();
+    const settings = settingsData?.data;
+    const logoUrl = settings?.logo || "/images/logo.png";
+    const contactEmail = settings?.contactEmail || "contact@novawave.com";
+    const contactPhone = settings?.contactPhone || "0362832880";
+    const siteName = settings?.siteName || "Novawave";
+
     return (
         <div className="bg-[var(--background-tertiary)] mt-16 text-white px-6 py-5">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
 
                 {/* Cột 1: Logo + Thông tin */}
                 <div className="flex flex-col gap-4">
-                    <Image
-                        src="/images/logo.png"
+                    <img
+                        src={logoUrl}
                         alt="Logo"
                         width={120}
                         height={120}
                         className="rounded-lg"
                     />
                     <p className="text-sm text-gray-300">
-                        Nghe nhạc chất lượng cao miễn phí cùng Novawave
+                        Nghe nhạc chất lượng cao miễn phí cùng {siteName}
                     </p>
                     <div className="flex items-center gap-2 text-gray-300">
                         <MailOutlined className="text-green"/>
-                        <span className="text-sm">huysun2511@gmail.com</span>
+                        <span className="text-sm">{contactEmail}</span>
                     </div>
                     <div className="flex items-center gap-2 text-gray-300">
                         <PhoneOutlined className="text-green"/>
-                        <span className="text-sm">0362832880</span>
+                        <span className="text-sm">{contactPhone}</span>
                     </div>
                 </div>
 
                 {/* Cột 2: Về Novawave */}
                 <div className="flex flex-col gap-2">
-                    <h3 className="font-semibold text-lg mb-2">Về Novawave</h3>
+                    <h3 className="font-semibold text-lg mb-2">Về {siteName}</h3>
                     <ul className="flex flex-col gap-1 text-gray-300 text-sm">
                         <li className="hover:text-green cursor-pointer">Về chúng tôi</li>
                         <li className="hover:text-green cursor-pointer">Chính sách bảo mật</li>
@@ -41,11 +48,11 @@ export default function Footer() {
 
                 {/* Cột 3: Gói Novawave */}
                 <div className="flex flex-col gap-2">
-                    <h3 className="font-semibold text-lg mb-2">Các gói của Novawave</h3>
+                    <h3 className="font-semibold text-lg mb-2">Các gói của {siteName}</h3>
                     <ul className="flex flex-col gap-1 text-gray-300 text-sm">
-                        <li className="hover:text-green cursor-pointer">Novawave Student Premium</li>
-                        <li className="hover:text-green cursor-pointer">Novawave Individual Premium</li>
-                        <li className="hover:text-green cursor-pointer">Novawave Free</li>
+                        <li className="hover:text-green cursor-pointer">{siteName} Student Premium</li>
+                        <li className="hover:text-green cursor-pointer">{siteName} Individual Premium</li>
+                        <li className="hover:text-green cursor-pointer">{siteName} Free</li>
                     </ul>
                 </div>
 
@@ -67,7 +74,7 @@ export default function Footer() {
             </div>
 
             <div className="mt-10 border-t border-gray-700 pt-4 text-center text-gray-400 text-sm">
-                © Novawave, 2025. Created by Nhat Huy.
+                © {siteName}, 2025. Created by Nhat Huy.
             </div>
         </div>
 

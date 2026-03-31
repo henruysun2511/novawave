@@ -1,4 +1,4 @@
-import Title from "@/components/ui/title";
+import Title from "@/components/common/title";
 import useDebounce from "@/libs/debounce";
 import { useToast } from "@/libs/toast";
 import { useUploadFile } from "@/libs/upload";

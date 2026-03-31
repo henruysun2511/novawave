@@ -1,10 +1,10 @@
 "use client";
 import { useToast } from "@/libs/toast";
 import { useRegisterMutation } from "@/queries/useAuthQuery";
+import { useSettings } from "@/queries/useSettingQuery";
 import { Gender } from "@/types/constant.type";
 import { Button, DatePicker, Form, Input, Select } from "antd";
 import type { Dayjs } from "dayjs";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -20,6 +20,8 @@ export default function RegisterPage() {
     const router = useRouter();
     const { mutate, isPending } = useRegisterMutation();
     const toast = useToast();
+    const { data: settingsData } = useSettings();
+    const logoUrl = settingsData?.data?.logo || "/images/logo.png";
     const baseURL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001/api/v1";
 
     const handleRegister = (values: RegisterFormValues) => {
@@ -55,8 +57,8 @@ export default function RegisterPage() {
                 <div className="bg-black p-10 w-full max-w-md flex flex-col items-center gap-4 rounded-3xl shadow-2xl">
 
                     {/* Logo */}
-                    <Image
-                        src="/images/logo.png"
+                    <img
+                        src={logoUrl}
                         alt="Logo"
                         width={180}
                         height={180}

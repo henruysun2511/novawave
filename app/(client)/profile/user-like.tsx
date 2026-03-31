@@ -1,5 +1,5 @@
 import SongCard from "@/components/client/SongList/song-card";
-import SquareSkeleton from "@/components/ui/skeleton";
+import SquareSkeleton from "@/components/common/skeleton";
 import { useUserLike } from "@/queries/useLikeQuery";
 import { Pagination } from "antd";
 import { useState } from "react";

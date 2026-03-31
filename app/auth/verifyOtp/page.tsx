@@ -1,9 +1,9 @@
 "use client"
 import { useToast } from "@/libs/toast";
 import { useVerifyOtpMutaion } from "@/queries/useAuthQuery";
+import { useSettings } from "@/queries/useSettingQuery";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { Button, Form, Input, Modal, Statistic } from "antd";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import "./countdown.css";
 const { Countdown } = Statistic;
@@ -17,6 +17,8 @@ export default function VerifyOtpPage() {
     const router = useRouter();
     const [modal, contextHolder] = Modal.useModal();
     const { mutate, isPending } = useVerifyOtpMutaion();
+    const { data: settingsData } = useSettings();
+    const logoUrl = settingsData?.data?.logo || "/images/logo.png";
     const email = useAuthStore((state) => state.email);
 
 
@@ -67,8 +69,8 @@ export default function VerifyOtpPage() {
                 <div className="bg-black p-10 w-full max-w-md flex flex-col items-center gap-4 rounded-3xl shadow-2xl">
 
                     {/* Logo */}
-                    <Image
-                        src="/images/logo.png"
+                    <img
+                        src={logoUrl}
                         alt="Logo"
                         width={180}
                         height={180}

@@ -1,10 +1,11 @@
 .custom-audio-player {
-  background-color: transparent;
+  background: transparent;
   box-shadow: none;
 }
 
 .custom-audio-player .rhap_container {
   background-color: transparent;
+  padding: 0;
 }
 
 .custom-audio-player .rhap_progress-bar {
@@ -28,15 +29,17 @@
   background-color: var(--color-green);
 }
 
-.custom-audio-player {
-  background: transparent;
-  box-shadow: none;
-}
-
-.custom-audio-player .rhap_container {
-  padding: 0;
-}
-
 .custom-audio-player .rhap_progress-section {
   margin: 0 16px;
+}
+
+/* Advertisement Mode Styling */
+.custom-audio-player.ad-mode .rhap_progress-section {
+  pointer-events: none !important;
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.custom-audio-player.ad-mode .rhap_progress-indicator {
+  background-color: #888; /* Desaturate for ads */
 }

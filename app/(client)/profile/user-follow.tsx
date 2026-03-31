@@ -1,5 +1,5 @@
 import ArtistCard from "@/components/client/ArtistList/artist-card";
-import SquareSkeleton from "@/components/ui/skeleton";
+import SquareSkeleton from "@/components/common/skeleton";
 import { useUserFollow } from "@/queries/useFollowQuery";
 import { Pagination } from "antd";
 import { useState } from "react";
