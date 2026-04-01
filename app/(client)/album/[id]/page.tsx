@@ -9,6 +9,7 @@ import { useToast } from "@/libs/toast";
 import { useAlbumDetail, useSongsInAlbum } from "@/queries/useAlbumQuery";
 import { useArtistDetail } from "@/queries/useArtistQuery";
 import { useStartPlayer } from "@/queries/usePlayerQuery";
+import { useAuthStore } from "@/stores/useAuthStore";
 import { usePlayerStore } from "@/stores/usePlayerStore";
 import { PlaySongType, ReportTargetType } from "@/types/constant.type";
 import { CaretRightFilled, FlagOutlined } from "@ant-design/icons";
@@ -19,6 +20,7 @@ const { TextArea } = Input;
 
 export default function AlbumDetailPage() {
     const { id } = useParams<{ id: string }>();
+    const isAuthenticated = useAuthStore(state => state.isAuthenticated);
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
     const toast = useToast();
     const nowPlayingType = usePlayerStore(state => state.status.nowPlayingType);
@@ -38,6 +40,11 @@ export default function AlbumDetailPage() {
     const { mutate: startPlayerMutation } = useStartPlayer();
 
     const handlePlayAlbum = () => {
+        if (!isAuthenticated) {
+            toast.error("Vui lòng đăng nhập để thực hiện tính năng này");
+            return;
+        }
+
         if (!songs || songs.length === 0) {
             toast.warning("Album không có bài hát nào.");
             return;

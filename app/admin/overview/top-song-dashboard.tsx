@@ -1,10 +1,10 @@
 import TopSong1 from "@/components/client/SongList/top-song-1";
 import Title from "@/components/common/title";
-import { useTopSongs } from "@/queries/useSongQuery";
+import { useSongLeaderboard } from "@/queries/useSongQuery";
 import { Spin } from "antd";
 
 export default function TopSongDashboard() {
-    const { data, isLoading } = useTopSongs();
+    const { data, isLoading } = useSongLeaderboard("week");
     const songs = data?.data;
     console.log(songs)
 

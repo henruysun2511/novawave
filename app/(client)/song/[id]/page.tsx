@@ -13,47 +13,97 @@ import { useStartPlayer } from "@/queries/usePlayerQuery";
 import { useSongDetail } from "@/queries/useSongQuery";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { usePlayerStore } from "@/stores/usePlayerStore";
-import { PlayerDto } from "@/types/body.type";
 import { PlaySongType, ReportTargetType } from "@/types/constant.type";
 import { CaretRightFilled, FlagOutlined, HeartFilled, HeartOutlined, LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { Input } from 'antd';
 import { useParams } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import LyricsPreview from "../lyrics-preview";
 import SongAddPlaylistModal from "./song-add-playlist-modal";
 import SongComment from "./song-comment";
 const { TextArea } = Input;
 
 export default function SongDetailPage() {
+    const [isMounted, setIsMounted] = useState(false);
     const { id } = useParams<{ id: string }>();
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
     const [isPlaylistModalOpen, setIsPlaylistModalOpen] = useState(false);
+
     const currentTime = usePlayerStore((state) => state.currentTime);
     const { nowPlayingId, nowPlaying } = usePlayerStore(state => state.status);
-
-    const currentPlayingId = nowPlayingId || (nowPlaying && typeof nowPlaying !== 'string' ? nowPlaying._id : nowPlaying);
-
     const seekToTime = usePlayerStore((state) => state.seekToTime);
     const nowPlayingType = usePlayerStore(state => state.status.nowPlayingType);
-    const isCurrentAd = nowPlayingType === PlaySongType.ADVERTISEMENT;
-    const isAuthenticated = useAuthStore(state => state.isAuthenticated);
 
+    const isAuthenticated = useAuthStore(state => state.isAuthenticated);
+    const user = useAuthStore((state) => state.user);
     const toast = useToast();
 
+    // Các hook React Query - Giữ ở cấp cao nhất
     const { data: songRes, isLoading } = useSongDetail(id);
-    const user = useAuthStore((state) => state.user);
-
-    const { data: likeRes } = useUserLike({
-        page: 1,
-        size: 100,
-    });
-
+    const { data: likeRes } = useUserLike({ page: 1, size: 100 });
     const { mutate: likeSong } = useLikeSong();
     const { mutate: unlikeSong } = useUnlikeSong();
     const { mutate: startPlayerMutation, isPending: isStartingPlayer } = useStartPlayer();
 
-    if (isLoading) return <Loading />;
-    if (!songRes?.data)
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+    // LOGIC TÍNH TOÁN: Đặt sau các Hook
+    const song = songRes?.data;
+    const currentPlayingId = nowPlayingId || (nowPlaying && typeof nowPlaying !== 'string' ? nowPlaying._id : nowPlaying);
+    const isThisSongCurrentlyPlaying = song?._id === currentPlayingId;
+    const isLiked = likeRes?.data?.some((l: any) => l.songId?._id === song?._id);
+    const isCurrentAd = nowPlayingType === PlaySongType.ADVERTISEMENT;
+
+    const handleToggleLike = () => {
+        if (!user) {
+            toast.error("Vui lòng đăng nhập");
+            return;
+        }
+        if (!song) return; // Bảo vệ nếu song chưa load
+
+        if (isLiked) {
+            unlikeSong(song._id, {
+                onSuccess: (res: any) => toast.success(res?.data?.message || "Đã bỏ thích"),
+                onError: (err: any) => toast.error(err?.response?.data?.message || "Bỏ thích thất bại"),
+            });
+        } else {
+            likeSong(song._id, {
+                onSuccess: (res: any) => toast.success(res?.data?.message || "Đã thích bài hát"),
+                onError: (err: any) => toast.error(err?.response?.data?.message || "Thích bài hát thất bại"),
+            });
+        }
+    };
+
+    const handlePlaySong = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (!isAuthenticated) {
+            toast.error("Vui lòng đăng nhập để thực hiện tính năng này");
+            return;
+        }
+        if (isCurrentAd) {
+            toast.info("Nghe nhạc free thì chịu nghe quảng cáo đi");
+            return;
+        }
+        if (isStartingPlayer || !song) return;
+
+        startPlayerMutation({ songId: song._id });
+    };
+
+    const handleWaveSeek = useCallback((newTime: number) => {
+        // Dùng luôn currentPlayingId đã tính ở trên
+        if (song?._id !== currentPlayingId) {
+            toast.error("Vui lòng nhấn nút Play trước khi tua!");
+            return;
+        }
+        seekToTime(newTime);
+    }, [song?._id, currentPlayingId, seekToTime]);
+
+    // CHẶN RENDER: Chỉ khi đã Hydrate và có dữ liệu
+    if (!isMounted || isLoading) return <Loading />;
+
+    if (!song)
         return (
             <NotFoundUI
                 message="Không tìm thấy Bài hát"
@@ -62,79 +112,6 @@ export default function SongDetailPage() {
                 backText="Xem danh sách bài hát"
             />
         );
-    const song = songRes.data;
-
-
-    const isThisSongCurrentlyPlaying = song._id === currentPlayingId;
-    const isLiked = likeRes?.data?.some(
-        (l: any) => l.songId?._id === song._id
-    );
-
-    const handleToggleLike = () => {
-        if (!user) {
-            toast.error("Vui lòng đăng nhập");
-            return;
-        }
-
-        if (isLiked) {
-            unlikeSong(song._id, {
-                onSuccess: (res: any) =>
-                    toast.success(res?.data?.message || "Đã bỏ thích"),
-                onError: (err: any) =>
-                    toast.error(err?.response?.data?.message || "Bỏ thích thất bại"),
-            });
-        } else {
-            likeSong(song._id, {
-                onSuccess: (res: any) =>
-                    toast.success(res?.data?.message || "Đã thích bài hát"),
-                onError: (err: any) =>
-                    toast.error(err?.response?.data?.message || "Thích bài hát thất bại"),
-            });
-        }
-    };
-
-
-    const handlePlaySong = (e: React.MouseEvent) => {
-        e.stopPropagation();
-
-        if (!isAuthenticated) {
-            toast.error("Vui lòng đăng nhập để thực hiện tính năng này");
-            return;
-        }
-
-        if (isCurrentAd) {
-            toast.info("Nghe nhạc free thì chịu nghe quảng cáo đi");
-            return;
-        }
-
-        if (isStartingPlayer) return;
-
-        const payload: PlayerDto = {
-            songId: song._id,
-        };
-
-        startPlayerMutation(payload, {
-            onSuccess: () => {
-            },
-            onError: (err: any) => {
-                toast.error(err?.response?.data?.message || "Không thể phát nhạc");
-            },
-        });
-    };
-
-    const handleWaveSeek = useCallback((newTime: number) => {
-        const currentState = usePlayerStore.getState();
-        const currentPlayingId = currentState.status.nowPlayingId || (currentState.status.nowPlaying && typeof currentState.status.nowPlaying !== 'string' ? currentState.status.nowPlaying._id : currentState.status.nowPlaying);
-
-        if (song._id !== currentPlayingId) {
-            toast.error("Vui lòng nhấn nút Play trước khi tua!");
-            return;
-        }
-
-        seekToTime(newTime);
-    }, [song._id, seekToTime]);
-
-
 
     return (
         <>
@@ -273,7 +250,7 @@ export default function SongDetailPage() {
 
                             <td className="py-3">
                                 {song?.createdAt
-                                    ? new Date(song.createdAt).toLocaleDateString("vi-VN")
+                                    ? new Date(song.createdAt).toISOString().split('T')[0]
                                     : "Đang cập nhật"}
                             </td>
                         </tr>
