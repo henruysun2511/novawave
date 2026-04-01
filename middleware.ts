@@ -43,7 +43,11 @@ export function middleware(request: NextRequest) {
       const role = (decoded as any).roleName || (decoded as any).role || roleCookie;
 
       // Admin routes protection
-      if (pathname.startsWith('/admin') && role !== 'ADMIN' && role !== 'SUPPER ADMIN') {
+      const isArtistRoute = pathname.startsWith('/admin/artist');
+      if (pathname.startsWith('/admin') && isArtistRoute && role !== 'ARTIST' && role !== 'ADMIN' && role !== 'SUPPER ADMIN') {
+        return NextResponse.redirect(new URL('/403', request.url));
+      }
+      if (pathname.startsWith('/admin') && !isArtistRoute && role !== 'ADMIN' && role !== 'SUPPER ADMIN') {
         return NextResponse.redirect(new URL('/403', request.url));
       }
 
