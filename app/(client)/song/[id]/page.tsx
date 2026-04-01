@@ -82,10 +82,10 @@ export default function SongDetailPage() {
             toast.error("Vui lòng đăng nhập để thực hiện tính năng này");
             return;
         }
-        if (isCurrentAd) {
-            toast.info("Nghe nhạc free thì chịu nghe quảng cáo đi");
-            return;
-        }
+        // if (isCurrentAd) {
+        //     toast.info("Nghe nhạc free thì chịu nghe quảng cáo đi");
+        //     return;
+        // }
         if (isStartingPlayer || !song) return;
 
         startPlayerMutation({ songId: song._id });

@@ -4,7 +4,7 @@ import { useFollow, useUnfollow, useUserFollow } from "@/queries/useFollowQuery"
 import { useAuthStore } from "@/stores/useAuthStore";
 import { usePlayerStore } from "@/stores/usePlayerStore";
 import { useSidebarStore } from "@/stores/useSidebarStore";
-import { LoadingOutlined, MenuFoldOutlined } from "@ant-design/icons";
+import { LoadingOutlined, MenuFoldOutlined, PlayCircleOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import Vinyl from "./vinyl";
 
@@ -85,11 +85,44 @@ export default function SongInfo() {
 
     if (!nowPlayingId || (!currentSong && !currentAd)) {
         return (
-            <div className="flex flex-col items-center justify-center w-full h-full p-5 bg-[var(--background-secondary)] rounded-2xl text-text-primary">
-                <h1 className="text-xl">Không có bài hát nào đang phát.</h1>
+            <div className="flex flex-col items-center justify-center w-full h-full p-8 bg-gradient-to-br from-[var(--background-secondary)] to-[var(--background-tertiary)] rounded-2xl text-text-primary relative overflow-hidden">
+                {/* Background decoration */}
+                <div className="absolute inset-0 opacity-10">
+                    <div className="absolute top-10 right-10 w-40 h-40 bg-green rounded-full blur-3xl"></div>
+                    <div className="absolute bottom-10 left-10 w-40 h-40 bg-green rounded-full blur-3xl"></div>
+                </div>
+
+                {/* Content */}
+                <div className="relative z-10 text-center">
+                    <div className="mb-6">
+                        <PlayCircleOutlined className="text-7xl text-green/60 animate-bounce" />
+                    </div>
+                    
+                    <h1 className="text-2xl font-extrabold mb-2 text-white">Không có bài hát</h1>
+                    <p className="text-text-secondary text-base mb-6 max-w-sm">
+                        Chọn một bài hát từ thư viện hoặc danh sách phát để bắt đầu nghe nhạc
+                    </p>
+
+                    <div className="flex flex-col gap-2 text-sm text-text-secondary">
+                        <div className="flex items-center gap-2 justify-center">
+                            <span className="w-1.5 h-1.5 bg-green rounded-full"></span>
+                            <span>Chọn từ trang chủ</span>
+                        </div>
+                        <div className="flex items-center gap-2 justify-center">
+                            <span className="w-1.5 h-1.5 bg-green rounded-full"></span>
+                            <span>Tìm kiếm bài hát yêu thích</span>
+                        </div>
+                        <div className="flex items-center gap-2 justify-center">
+                            <span className="w-1.5 h-1.5 bg-green rounded-full"></span>
+                            <span>Phát danh sách phát của bạn</span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Nút Ẩn */}
                 <Tooltip title="Ẩn chế độ xem Đang phát" placement="right">
                     <MenuFoldOutlined
-                        className="absolute top-5 left-5 z-20 text-text-primary cursor-pointer"
+                        className="absolute top-5 left-5 z-20 text-text-primary cursor-pointer hover:text-green transition"
                         onClick={hidePanel}
                     />
                 </Tooltip>

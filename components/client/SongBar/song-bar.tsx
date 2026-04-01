@@ -100,7 +100,7 @@ export default function SongBar() {
   useEffect(() => {
     const playerInstance = playerRef.current as any;
 
-    if (playerInstance && playerInstance.audio && playerInstance.audio.current) {
+    if (playerInstance && playerInstance.audio && playerInstance.audio.current && audioSource) {
       const audioElement = playerInstance.audio.current;
       setAudioRef(audioElement);
 
@@ -176,8 +176,8 @@ useEffect(() => {
       </div>
 
       {/* Audio player */}
-      {audioSource && (
-        <div className="w-[50%]">
+      <div className="w-[50%]">
+        {audioSource ? (
           <AudioPlayer
             ref={playerRef}
             src={audioSource}
@@ -191,8 +191,12 @@ useEffect(() => {
             onListen={handleListen}
             className={`custom-audio-player ${isCurrentAd ? 'ad-mode' : ''}`}
           />
-        </div>
-      )}
+        ) : (
+          <div className="text-center text-text-secondary text-sm py-2">
+            Chọn bài hát để phát
+          </div>
+        )}
+      </div>
 
       {/* Right controls */}
       <div className="flex items-center gap-4 ml-4 w-[25%] justify-end">
