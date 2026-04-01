@@ -125,7 +125,7 @@ useEffect(() => {
     const currentTime = e.target.currentTime;
 
     if (!isCurrentAd && currentTime >= 30 && viewCounted !== nowPlayingId) {
-        incrementView(nowPlayingId);
+        incrementView(nowPlayingId ?? "");
         setViewCounted(nowPlayingId); // Đánh dấu ID bài hát đã được tính
     }
   };

@@ -32,7 +32,7 @@ export default function ArtistSongDetailModal({
                     />
 
                     <p><b>Tên:</b> {song.name}</p>
-                    <p><b>Nghệ sĩ:</b> {song.artist?.name}</p>
+                    <p><b>Nghệ sĩ:</b> {song.artistId?.name}</p>
                     <p><b>Thời lượng:</b> {Math.floor(song.duration / 60)} phút</p>
                     <p><b>Trạng thái:</b> {song.releseStatus} </p>
 
