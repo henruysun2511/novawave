@@ -1,3 +1,4 @@
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { useToast } from "@/libs/toast";
 import { useNextSong, usePreviousSong } from "@/queries/usePlayerQuery";
 import { useIncrementSongView } from "@/queries/useSongQuery";
@@ -15,6 +16,7 @@ export default function SongBar() {
   const showInfo = useSidebarStore((s) => s.showInfo);
   const showQueue = useSidebarStore((s) => s.showQueue);
   const hidePanel = useSidebarStore((s) => s.hideRightPanel);
+  const { isMobile } = useIsMobile();
   const toast = useToast();
 
   const { isPlaying, play, pause, status, setCurrentTime, setAudioRef, audioRef } = usePlayerStore();
@@ -100,7 +102,7 @@ export default function SongBar() {
   useEffect(() => {
     const playerInstance = playerRef.current as any;
 
-    if (playerInstance && playerInstance.audio && playerInstance.audio.current && audioSource) {
+    if (playerInstance && playerInstance.audio && playerInstance.audio.current) {
       const audioElement = playerInstance.audio.current;
       setAudioRef(audioElement);
 
@@ -155,29 +157,28 @@ useEffect(() => {
           console.warn("Autoplay was prevented or interrupted:", err);
         });
       }
-    } else if (!audioSource && audioRef) {
-      // Nếu không có source, tạm dừng
-      audioRef.pause();
     }
   }, [audioSource, isPlaying, audioRef]);
 
-  return (
-    <div className="bg-black fixed bottom-0 right-0 w-full z-10 h-[64px] flex items-center px-4 text-white">
-      <div className="w-[25%] flex gap-3.5 items-center">
-        <img
-          className="w-[50px] h-[50px] rounded-sm object-cover"
-          src={displayImageUrl}
-          alt={displayName}
-        />
-        <div>
-          <h1 className="text-text-primary text-base font-bold">{displayName}</h1>
-          <p className="text-text-secondary text-sm">{displaySubText}</p>
+  // Mobile layout
+  if (isMobile) {
+    return (
+      <div className="bg-black fixed bottom-0 left-0 w-full z-10 h-20 md:h-24 flex flex-col items-center justify-center px-2 md:px-4 text-white gap-1 md:gap-2">
+        {/* Song Info */}
+        <div className="flex gap-2 md:gap-3 items-center w-full overflow-hidden">
+          <img
+            className="w-12 h-12 md:w-14 md:h-14 rounded-sm object-cover flex-shrink-0"
+            src={displayImageUrl}
+            alt={displayName}
+          />
+          <div className="flex-1 min-w-0">
+            <h1 className="text-text-primary text-xs md:text-sm font-bold truncate">{displayName}</h1>
+            <p className="text-text-secondary text-xs truncate">{displaySubText}</p>
+          </div>
         </div>
-      </div>
 
-      {/* Audio player */}
-      <div className="w-[50%]">
-        {audioSource ? (
+        {/* Simple Controls for Mobile */}
+        <div className="flex items-center justify-between w-full gap-2">
           <AudioPlayer
             ref={playerRef}
             src={audioSource}
@@ -189,34 +190,80 @@ useEffect(() => {
             onClickPrevious={handlePrev}
             onEnded={handleEnded}
             onListen={handleListen}
-            className={`custom-audio-player ${isCurrentAd ? 'ad-mode' : ''}`}
+            className={`custom-audio-player-mobile ${isCurrentAd ? 'ad-mode' : ''}`}
+            layout="stacked-reverse"
           />
-        ) : (
-          <div className="text-center text-text-secondary text-sm py-2">
-            Chọn bài hát để phát
+          
+          <div className="flex items-center gap-1 md:gap-2 flex-shrink-0">
+            <Tooltip title="Danh sách">
+              <UpSquareOutlined
+                className="cursor-pointer text-sm md:text-base text-green hover:text-green/80"
+                onClick={showQueue}
+              />
+            </Tooltip>
+            <Tooltip title="Ẩn">
+              <CloseOutlined
+                className="cursor-pointer text-sm md:text-base text-text-secondary hover:text-text-primary"
+                onClick={hidePanel}
+              />
+            </Tooltip>
           </div>
-        )}
+        </div>
+      </div>
+    );
+  }
+
+  // Desktop layout
+  return (
+    <div className="bg-black fixed bottom-0 right-0 w-full z-10 h-16 lg:h-[64px] flex items-center px-4 text-white">
+      <div className="w-1/4 lg:w-[25%] flex gap-2 lg:gap-3.5 items-center min-w-0">
+        <img
+          className="w-12 lg:w-[50px] h-12 lg:h-[50px] rounded-sm object-cover flex-shrink-0"
+          src={displayImageUrl}
+          alt={displayName}
+        />
+        <div className="min-w-0 flex-1">
+          <h1 className="text-text-primary text-sm lg:text-base font-bold truncate">{displayName}</h1>
+          <p className="text-text-secondary text-xs lg:text-sm truncate">{displaySubText}</p>
+        </div>
+      </div>
+
+      {/* Audio player */}
+      <div className="w-1/2 lg:w-[50%] px-4">
+        <AudioPlayer
+          ref={playerRef}
+          src={audioSource}
+          autoPlay={isPlaying}
+          onPlay={play}
+          onPause={pause}
+          showSkipControls
+          onClickNext={handleNext}
+          onClickPrevious={handlePrev}
+          onEnded={handleEnded}
+          onListen={handleListen}
+          className={`custom-audio-player ${isCurrentAd ? 'ad-mode' : ''}`}
+        />
       </div>
 
       {/* Right controls */}
-      <div className="flex items-center gap-4 ml-4 w-[25%] justify-end">
+      <div className="flex items-center gap-2 lg:gap-4 ml-2 lg:ml-4 w-1/4 lg:w-[25%] justify-end">
         <Tooltip title="Chế độ xem Đang phát">
           <MenuFoldOutlined
-            className="cursor-pointer text-lg"
+            className="cursor-pointer text-sm lg:text-lg hover:text-green"
             onClick={showInfo}
           />
         </Tooltip>
 
         <Tooltip title="Hàng đợi">
           <UpSquareOutlined
-            className="cursor-pointer text-lg"
+            className="cursor-pointer text-sm lg:text-lg hover:text-green"
             onClick={showQueue}
           />
         </Tooltip>
 
         <Tooltip title="Ẩn">
           <CloseOutlined
-            className="cursor-pointer text-lg"
+            className="cursor-pointer text-sm lg:text-lg hover:text-red-500"
             onClick={hidePanel}
           />
         </Tooltip>
