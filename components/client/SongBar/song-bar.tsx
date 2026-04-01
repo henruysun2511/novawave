@@ -155,6 +155,9 @@ useEffect(() => {
           console.warn("Autoplay was prevented or interrupted:", err);
         });
       }
+    } else if (!audioSource && audioRef) {
+      // Nếu không có source, tạm dừng
+      audioRef.pause();
     }
   }, [audioSource, isPlaying, audioRef]);
 
@@ -173,21 +176,23 @@ useEffect(() => {
       </div>
 
       {/* Audio player */}
-      <div className="w-[50%]">
-        <AudioPlayer
-          ref={playerRef}
-          src={audioSource}
-          autoPlay={isPlaying}
-          onPlay={play}
-          onPause={pause}
-          showSkipControls
-          onClickNext={handleNext}
-          onClickPrevious={handlePrev}
-          onEnded={handleEnded}
-          onListen={handleListen}
-          className={`custom-audio-player ${isCurrentAd ? 'ad-mode' : ''}`}
-        />
-      </div>
+      {audioSource && (
+        <div className="w-[50%]">
+          <AudioPlayer
+            ref={playerRef}
+            src={audioSource}
+            autoPlay={isPlaying}
+            onPlay={play}
+            onPause={pause}
+            showSkipControls
+            onClickNext={handleNext}
+            onClickPrevious={handlePrev}
+            onEnded={handleEnded}
+            onListen={handleListen}
+            className={`custom-audio-player ${isCurrentAd ? 'ad-mode' : ''}`}
+          />
+        </div>
+      )}
 
       {/* Right controls */}
       <div className="flex items-center gap-4 ml-4 w-[25%] justify-end">
