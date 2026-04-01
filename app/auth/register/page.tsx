@@ -132,6 +132,7 @@ export default function RegisterPage() {
 
                         <Form.Item
                             name="birthday"
+                            rules={[{ required: true, message: 'Vui lòng chọn ngày sinh!' }]}
                         >
                             <DatePicker placeholder="Chọn ngày sinh" className="w-full rounded-xl h-11" />
                         </Form.Item>
@@ -157,6 +158,8 @@ export default function RegisterPage() {
                             size="large"
                             type="primary"
                             htmlType="submit"
+                            loading={isPending}
+                            disabled={isPending}
                         >
                             Đăng ký
                         </Button>
