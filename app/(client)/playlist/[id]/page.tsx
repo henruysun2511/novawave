@@ -5,9 +5,10 @@ import ReportModal from "@/components/client/Report/report-modal";
 import Loading from "@/components/common/loading";
 import NotFoundUI from "@/components/common/not-found-ui";
 import Title from "@/components/common/title";
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { useStartPlayer } from "@/queries/usePlayerQuery";
 import { usePlaylistDetail, usePlaylistsSong, useRemoveSongFromPlaylist, useUserPlaylists } from "@/queries/usePlaylistQuery";
+import { useAuthStore } from "@/stores/useAuthStore";
 import { usePlayerStore } from "@/stores/usePlayerStore";
 import { PlayerDto } from "@/types/body.type";
 import { ReportTargetType } from "@/types/constant.type";
@@ -19,6 +20,7 @@ import { useState } from "react";
 
 export default function PlaylistDetailPage() {
     const { id } = useParams<{ id: string }>();
+    const isAuthenticated = useAuthStore(state => state.isAuthenticated);
     const [openAddSong, setOpenAddSong] = useState(false);
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
     const toast = useToast();
@@ -125,6 +127,10 @@ export default function PlaylistDetailPage() {
     };
 
     const handlePlayPlaylist = () => {
+        if (!isAuthenticated) {
+            toast.error("Vui lòng đăng nhập để thực hiện tính năng này");
+            return;
+        }
         if (isCurrentAd) {
             toast.info("Nghe nhạc free thì chịu nghe quảng cáo đi");
             return;

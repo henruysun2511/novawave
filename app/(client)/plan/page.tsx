@@ -1,7 +1,7 @@
 "use client";
 import Footer from "@/components/client/footer/footer";
 import Title from "@/components/common/title";
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { usePaymentPlan } from "@/queries/usePaymentQuery";
 import { usePlans } from "@/queries/usePlanQuery";
 import { PaymentPlanDto } from "@/types/body.type";

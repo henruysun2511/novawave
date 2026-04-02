@@ -5,7 +5,7 @@ import { useProductList } from "@/queries/useProductQuery";
 import { useSettings } from "@/queries/useSettingQuery";
 import { Product } from "@/types/object.type";
 import { Input, Pagination } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 const { Search } = Input;
 
 
@@ -17,12 +17,20 @@ export default function ProductPage() {
         start: 0,
         end: 1000000000
     });
+    const [bannerImage, setBannerImage] = useState("https://i.pinimg.com/1200x/ea/70/ec/ea70ec7e95451cc072affd66366d06d8.jpg");
 
     const { data, isPending } = useProductList(params);
     const { data: settingsData } = useSettings();
+    
+    // Cập nhật banner khi API load xong
+    useEffect(() => {
+        if (settingsData?.data?.childrenBanner?.productPage) {
+            setBannerImage(settingsData.data.childrenBanner.productPage);
+        }
+    }, [settingsData]);
+
     const products = data?.data ?? [];
     const meta = data?.meta;
-    const bannerImage = settingsData?.data?.childrenBanner?.productPage || "https://i.pinimg.com/1200x/ea/70/ec/ea70ec7e95451cc072affd66366d06d8.jpg";
 
     const handleAddToCart = (product: Product) => {
         console.log("Add to cart:", product);
@@ -30,24 +38,23 @@ export default function ProductPage() {
 
     return (
         <>
-            <div className="relative w-full h-[450px]">
+            <div className="relative w-full h-[300px] md:h-[450px]">
                 <img
                     src={bannerImage}
                     alt="Product Banner"
                     className="w-full h-full object-cover rounded-2xl"
                 />
                 <div className="absolute inset-0 bg-black/10"></div>
-                <div className="absolute bottom-0 left-0 z-20 p-4 w-full">
-                    <div className="text-base text-white mb-1">
+                <div className="absolute bottom-0 left-0 z-20 p-4 md:p-6 w-full\">\n                    <div className=\"text-xs md:text-base text-white mb-1\">
                         Sắm ngay tai nghe hiện đại nhất 2025
                     </div>
-                    <h3 className="uppercase text-7xl font-extrabold text-white mb-1 hover:text-green transition">
+                    <h3 className=\"uppercase text-3xl md:text-5xl lg:text-7xl font-extrabold text-white mb-1 hover:text-green transition line-clamp-2\">
                         MUSIC PRODUCT
                     </h3>
                 </div>
             </div>
 
-            <div className="p-6 ">
+            <div className=\"p-4 md:p-6 \">
                 <div className="flex gap-5">
                     <Search
                         className="custom-search"

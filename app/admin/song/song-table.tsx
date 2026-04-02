@@ -1,5 +1,5 @@
 "use client";
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { useDeleteSongByAdmin } from "@/queries/useSongQuery"; // Giả định hook này đã được tạo
 import { Song } from "@/types/object.type"; // Giả định type Song
 import { DeleteOutlined } from "@ant-design/icons";

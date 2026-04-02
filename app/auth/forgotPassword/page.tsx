@@ -1,5 +1,5 @@
 "use client"
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { useSendEmailMutation } from "@/queries/useAuthQuery";
 import { useSettings } from "@/queries/useSettingQuery";
 import { useAuthStore } from "@/stores/useAuthStore";

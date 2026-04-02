@@ -1,4 +1,4 @@
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { useUpdateGenre } from "@/queries/useGenreQuery";
 import { Genre } from "@/types/object.type";
 import { Button, Form, Input, Modal } from "antd";

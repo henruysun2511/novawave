@@ -1,6 +1,6 @@
 "use client";
 import Title from '@/components/common/title';
-import { useToast } from '@/libs/toast';
+import { useToast } from '@/hooks/useToast';
 import { usePaymentProduct } from '@/queries/usePaymentQuery';
 import { PaymentProductDto } from '@/types/body.type';
 import { ArrowLeftOutlined } from '@ant-design/icons';

@@ -1,4 +1,4 @@
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { useUpdateVerification } from "@/queries/useArtistQuery";
 import { VerificationStatus } from "@/types/constant.type";
 import { Verification } from "@/types/object.type";

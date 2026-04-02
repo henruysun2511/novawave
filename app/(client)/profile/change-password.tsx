@@ -1,4 +1,4 @@
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { useChangePasswordMutation } from "@/queries/useAuthQuery";
 import { ChangePasswordDto } from "@/types/body.type";
 import { Button, Card, Form, Input } from "antd";

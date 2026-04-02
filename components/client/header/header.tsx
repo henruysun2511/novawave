@@ -1,6 +1,6 @@
 "use client";
 import { useIsMobile } from '@/hooks/useIsMobile';
-import { useToast } from '@/libs/toast';
+import { useToast } from '@/hooks/useToast';
 import { useGetUserInfoQuery, useLogoutMutation } from '@/queries/useAuthQuery';
 import { useSettings } from '@/queries/useSettingQuery';
 import { useAuthStore } from '@/stores/useAuthStore';
@@ -9,7 +9,7 @@ import { MenuOutlined, SearchOutlined, ShoppingCartOutlined } from '@ant-design/
 import { Avatar, Drawer, Dropdown, Input, MenuProps, Tooltip } from 'antd';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Notification from '../Notification/notification-dropdown';
 import "./header.css";
 const { Search } = Input;
@@ -19,7 +19,16 @@ export default function Header() {
     const toast = useToast();
     const { isMobile } = useIsMobile();
     const [searchOpen, setSearchOpen] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
+    const [logoUrl, setLogoUrl] = useState("/images/logo.png");
     const { data: settingsData } = useSettings();
+
+    // Cập nhật logo khi API load xong
+    useEffect(() => {
+        if (settingsData?.data?.logo) {
+            setLogoUrl(settingsData.data.logo);
+        }
+    }, [settingsData]);
 
     //Lấy avatar
     const { data } = useGetUserInfoQuery();
@@ -28,7 +37,6 @@ export default function Header() {
     //Lấy thông tin người dùng
     const { isAuthenticated, user, roleName } = useAuthStore();
     const isPrenium = user?.isPremium;
-    const logoUrl = settingsData?.data?.logo || "/images/logo.png";
 
     const logoutMutation = useLogoutMutation();
 
@@ -151,9 +159,7 @@ export default function Header() {
                     <Tooltip title="Menu">
                         <MenuOutlined
                             className="text-text-primary text-xl cursor-pointer"
-                            onClick={() => {
-                                // Toggle menu drawer if needed
-                            }}
+                            onClick={() => setMenuOpen(true)}
                         />
                     </Tooltip>
                 </div>
@@ -174,6 +180,57 @@ export default function Header() {
                         autoFocus
                     />
                 </Drawer>
+
+                {/* Menu Drawer */}
+                <Drawer
+                    title="Menu"
+                    placement="right"
+                    onClose={() => setMenuOpen(false)}
+                    open={menuOpen}
+                >
+                    <div className="flex flex-col gap-4">
+                        {isAuthenticated ? (
+                            <>
+                                <Notification />
+                                <div className="border-t pt-4">
+                                    {items.map((item: any) => (
+                                        <div
+                                            key={item.key}
+                                            className="py-2 hover:text-green cursor-pointer"
+                                            onClick={() => {
+                                                if (item.key === "logout") {
+                                                    handleLogout();
+                                                } else if (item.key !== "logout") {
+                                                    // Navigate using the href from the link child
+                                                    const href = item.label?.props?.href || item.label?.props?.children?.props?.href;
+                                                    if (href) {
+                                                        router.push(href);
+                                                    }
+                                                }
+                                                setMenuOpen(false);
+                                            }}
+                                        >
+                                            {item.key === "logout" ? (
+                                                <span className="text-red-500">{item.label}</span>
+                                            ) : (
+                                                item.label
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <Link href="/auth/register" className="text-text-primary">
+                                    Đăng ký
+                                </Link>
+                                <Link href="/auth/login" className="text-black bg-white rounded-2xl py-1.5 px-3 font-bold text-center">
+                                    Đăng nhập
+                                </Link>
+                            </>
+                        )}
+                    </div>
+                </Drawer>
             </>
         );
     }
@@ -192,7 +249,7 @@ export default function Header() {
                 />
 
                 {/* Search Bar - Hidden on tablet, shown on desktop */}
-                <div className="hidden lg:block flex-1 mx-8">
+                <div className="hidden lg:block flex-1 ml-25 ">
                     <Search
                         className="custom-search"
                         size="large"

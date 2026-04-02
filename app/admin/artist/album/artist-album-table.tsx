@@ -1,4 +1,4 @@
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { useDeleteAlbum } from "@/queries/useAlbumQuery"; // Giả định hook
 import { Album } from "@/types/object.type"; // Giả định type Album
 import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";

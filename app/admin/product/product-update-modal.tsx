@@ -1,5 +1,5 @@
-import { useToast } from "@/libs/toast";
-import { useUploadFile } from "@/libs/upload";
+import { useToast } from "@/hooks/useToast";
+import { useUploadFile } from "@/hooks/useUploadFIle";
 import { useUpdateProduct } from "@/queries/useProductQuery";
 import { Product } from "@/types/object.type";
 import { Button, Form, Input, Modal, Upload } from "antd";

@@ -1,6 +1,6 @@
 "use client"
-import { useToast } from "@/libs/toast";
-import { useUploadFile } from "@/libs/upload";
+import { useToast } from "@/hooks/useToast";
+import { useUploadFile } from "@/hooks/useUploadFIle";
 import { useUpdateAdvertisement } from "@/queries/useAdvertisementQuery";
 import { Advertisement } from "@/types/object.type";
 import { UploadOutlined } from "@ant-design/icons";

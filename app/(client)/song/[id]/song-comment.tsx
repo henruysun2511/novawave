@@ -1,5 +1,5 @@
 import Title from "@/components/common/title";
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { useCommentList, useCreateComment, useDeleteComment, useUpdateComment } from "@/queries/useCommentQuery";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { Button, Pagination, Popconfirm } from "antd";

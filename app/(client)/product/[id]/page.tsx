@@ -1,6 +1,6 @@
 "use client"
 import Title from '@/components/common/title';
-import { useToast } from '@/libs/toast';
+import { useToast } from '@/hooks/useToast';
 import { useAddToCart } from '@/queries/useCartQuery';
 import { CreditCardOutlined, MinusOutlined, PlusOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Image, InputNumber, Row, Space, Typography } from 'antd';

@@ -1,5 +1,5 @@
-import { useToast } from "@/libs/toast";
-import { useUploadFile } from "@/libs/upload";
+import { useToast } from "@/hooks/useToast";
+import { useUploadFile } from "@/hooks/useUploadFIle";
 import { useAlbumDetail, useUpdateAlbum } from "@/queries/useAlbumQuery"; // Giả định hook
 import { Album } from "@/types/object.type";
 import { PlusOutlined } from "@ant-design/icons";

@@ -1,6 +1,6 @@
-import useDebounce from "@/libs/debounce";
-import { useToast } from "@/libs/toast";
-import { useUploadFile } from "@/libs/upload";
+import useDebounce from "@/hooks/debounce";
+import { useToast } from "@/hooks/useToast";
+import { useUploadFile } from "@/hooks/useUploadFIle";
 import { useAlbumListByArtist } from "@/queries/useAlbumQuery";
 import { useArtistListAdmin, useArtistProfile } from "@/queries/useArtistQuery";
 import { useGenreList } from "@/queries/useGenreQuery";

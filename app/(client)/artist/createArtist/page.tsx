@@ -1,7 +1,7 @@
 "use client";
 
-import { useToast } from "@/libs/toast";
-import { useUploadFile } from "@/libs/upload";
+import { useToast } from "@/hooks/useToast";
+import { useUploadFile } from "@/hooks/useUploadFIle";
 import { useSubmitVerification } from "@/queries/useArtistQuery";
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Card, Col, Form, Input, Row, Upload } from "antd";

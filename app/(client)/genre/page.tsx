@@ -27,10 +27,18 @@ export const getRandomColor = () => {
 };
 
 export default function GenrePage() {
+    const [bannerImage, setBannerImage] = useState("https://i.pinimg.com/1200x/0c/44/a9/0c44a9d36d243a3929cafc07a33a24c9.jpg");
     const { data: genreData, isPending: isGenrePending } = useGenreList();
     const { data: settingsData } = useSettings();
+    
+    // Cập nhật banner khi API load xong
+    useEffect(() => {
+        if (settingsData?.data?.childrenBanner?.genrePage) {
+            setBannerImage(settingsData.data.childrenBanner.genrePage);
+        }
+    }, [settingsData]);
+
     const genres = genreData?.data;
-    const bannerImage = settingsData?.data?.childrenBanner?.genrePage || "https://i.pinimg.com/1200x/0c/44/a9/0c44a9d36d243a3929cafc07a33a24c9.jpg";
 
     const [genreName, setGenreName] = useState<string>("");
 
@@ -64,24 +72,24 @@ export default function GenrePage() {
 
     return (
         <>
-            <div className="relative w-full h-[450px] mb-10">
+            <div className="relative w-full h-[300px] md:h-[450px] mb-10">
                 <img
                     src={bannerImage}
                     alt="Genre Banner"
                     className="w-full h-full object-cover rounded-2xl"
                 />
                 <div className="absolute inset-0 bg-black/10"></div>
-                <div className="absolute bottom-0 left-0 z-20 p-4 w-full">
-                    <div className="text-base text-white mb-1">
+                <div className="absolute bottom-0 left-0 z-20 p-4 md:p-6 w-full">
+                    <div className="text-xs md:text-base text-white mb-1">
                         Khám phá đa dạng thể loại âm nhạc, đâu là gu của bạn?
                     </div>
-                    <h3 className="uppercase text-7xl font-extrabold text-white mb-1 hover:text-green transition">
+                    <h3 className="uppercase text-3xl md:text-5xl lg:text-7xl font-extrabold text-white mb-1 hover:text-green transition line-clamp-2">
                         GENRES
                     </h3>
                 </div>
             </div>
 
-            <div className="p-6">
+            <div className="p-4 md:p-6">
                 {
                     isGenrePending ? (<SquareSkeleton />) : (
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">

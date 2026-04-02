@@ -1,4 +1,4 @@
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { useDeleteSong } from "@/queries/useSongQuery";
 import { Song } from "@/types/object.type";
 import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";

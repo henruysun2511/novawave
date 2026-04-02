@@ -1,12 +1,18 @@
 "use client";
 import { useSettings } from '@/queries/useSettingQuery';
-import { Input } from 'antd';
 import Link from 'next/link';
-const { Search } = Input;
+import { useEffect, useState } from 'react';
 
 export default function Header() {
     const { data: settingsData } = useSettings();
-    const logoUrl = settingsData?.data?.logo || "/images/logo.png";
+    const [logoUrl, setLogoUrl] = useState("/images/logo.png");
+
+    // Cập nhật logo khi API load xong
+    useEffect(() => {
+        if (settingsData?.data?.logo) {
+            setLogoUrl(settingsData.data.logo);
+        }
+    }, [settingsData]);
 
     return (
         <>

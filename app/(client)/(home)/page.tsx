@@ -1,6 +1,7 @@
 "use client";
 import AlbumList from "@/components/client/AlbumList/album-list";
 import ArtistList from "@/components/client/ArtistList/artist-list";
+import CommentSwiper from "@/components/client/CommentSwiper/comment-swiper";
 import Footer from "@/components/client/footer/footer";
 import MainBanner from "@/components/client/MainBanner/main-banner";
 import NewsList from "@/components/client/NewsList/news-list";
@@ -186,6 +187,13 @@ export default function HomePage() {
                     </div>
                 )}
 
+
+                <div className="mt-16 flex justify-between items-center">
+                    <Title>Bình luận từ cộng đồng</Title>
+                </div>
+                <div className="">
+                    <CommentSwiper />
+                </div>
 
                 <div className="py-10">
                     <TopSong3 />

@@ -1,6 +1,6 @@
 "use client";
 
-import { useNotificationSocket } from "@/libs/notifcation";
+import { useNotificationSocket } from "@/hooks/useNotifcationSocket";
 import { connectSocket, disconnectSocket } from "@/libs/socket";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useEffect } from "react";

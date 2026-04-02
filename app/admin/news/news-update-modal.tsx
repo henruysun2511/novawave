@@ -1,7 +1,7 @@
 "use client";
 import TextEditor from "@/components/common/text-editor";
-import { useToast } from "@/libs/toast";
-import { useUploadFile } from "@/libs/upload";
+import { useToast } from "@/hooks/useToast";
+import { useUploadFile } from "@/hooks/useUploadFIle";
 import { useUpdateNews } from "@/queries/useNewsQuery";
 import { NewsStatus } from "@/types/constant.type";
 import { Button, Col, Form, Input, Modal, Row, Select } from "antd";

@@ -1,6 +1,6 @@
 import Title from "@/components/common/title";
-import { useToast } from "@/libs/toast";
-import { useUploadFile } from "@/libs/upload";
+import { useToast } from "@/hooks/useToast";
+import { useUploadFile } from "@/hooks/useUploadFIle";
 import { useUpdateArtistProfile } from "@/queries/useArtistQuery";
 import { Artist } from "@/types/object.type";
 import { PlusOutlined } from "@ant-design/icons";

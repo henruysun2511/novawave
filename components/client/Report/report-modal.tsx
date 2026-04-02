@@ -1,4 +1,4 @@
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { useCreateReport } from "@/queries/useReportQuery";
 import { ReportTargetType } from "@/types/constant.type";
 import { Report } from "@/types/object.type";

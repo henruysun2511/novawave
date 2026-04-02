@@ -1,7 +1,7 @@
 import PlaylistCard from "@/components/client/Playlist/playlist-card";
 import PlaylistCreateModal from "@/components/client/Playlist/playlist-create-modal";
 import PlaylistUpdateModal from "@/components/client/Playlist/playlist-update-modal";
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { useDeletePlaylist, useUserPlaylists } from "@/queries/usePlaylistQuery";
 import { Playlist } from "@/types/object.type";
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";

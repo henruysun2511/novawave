@@ -1,5 +1,5 @@
-import { useToast } from "@/libs/toast";
-import { useUploadFile } from "@/libs/upload";
+import { useToast } from "@/hooks/useToast";
+import { useUploadFile } from "@/hooks/useUploadFIle";
 import { useUpdateUserInfoMutation } from "@/queries/useAuthQuery";
 import { Button, DatePicker, Form, Modal, Radio, Upload } from "antd";
 import dayjs from "dayjs";

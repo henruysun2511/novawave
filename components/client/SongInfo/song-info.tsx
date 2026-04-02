@@ -1,5 +1,5 @@
 "use client";
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { useFollow, useUnfollow, useUserFollow } from "@/queries/useFollowQuery";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { usePlayerStore } from "@/stores/usePlayerStore";

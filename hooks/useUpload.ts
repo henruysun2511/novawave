@@ -1,4 +1,4 @@
-import { useUploadFile } from "@/libs/upload";
+import { useUploadFile } from "@/hooks/useUploadFIle";
 
 export const useUpload = () => {
     const { uploadFile, isUploading } = useUploadFile();

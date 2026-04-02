@@ -1,4 +1,4 @@
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { useAdminDeleteProduct, useDeleteProduct } from "@/queries/useProductQuery";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { Role } from "@/types/constant.type";

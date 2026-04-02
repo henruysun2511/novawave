@@ -1,6 +1,6 @@
 "use client"
-import { useToast } from "@/libs/toast";
-import { useUploadFile } from "@/libs/upload";
+import { useToast } from "@/hooks/useToast";
+import { useUploadFile } from "@/hooks/useUploadFIle";
 import { useCreateProduct } from "@/queries/useProductQuery";
 import { Button, Form, Input, Modal, Upload } from "antd";
 

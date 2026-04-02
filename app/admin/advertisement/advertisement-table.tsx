@@ -1,5 +1,5 @@
 "use client";
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { useDeleteAdvertisement, useToggleAdvertisement } from "@/queries/useAdvertisementQuery";
 import { Advertisement } from "@/types/object.type";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";

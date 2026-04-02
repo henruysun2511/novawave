@@ -1,4 +1,4 @@
-import { useToast } from '@/libs/toast';
+import { useToast } from '@/hooks/useToast';
 import { useCreateRole } from '@/queries/useRoleQuery';
 import { Button, Form, Input, Modal } from 'antd';
 

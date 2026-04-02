@@ -1,5 +1,5 @@
 "use client"
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { useResetPasswordMutation } from "@/queries/useAuthQuery";
 import { useSettings } from "@/queries/useSettingQuery";
 import { ResetPasswordDto } from "@/types/body.type";

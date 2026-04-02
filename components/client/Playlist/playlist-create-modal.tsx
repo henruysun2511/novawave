@@ -1,4 +1,4 @@
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { useCreatePlaylist } from "@/queries/usePlaylistQuery";
 import { PlaylistStatus } from "@/types/constant.type";
 import { Button, Form, Input, Modal, Switch } from "antd";

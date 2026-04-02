@@ -2,8 +2,8 @@
 
 import Loading from "@/components/common/loading";
 import Title from "@/components/common/title";
-import { useToast } from "@/libs/toast";
-import { useUploadFile } from "@/libs/upload";
+import { useToast } from "@/hooks/useToast";
+import { useUploadFile } from "@/hooks/useUploadFIle";
 import { useSettings, useUpdateSettings } from "@/queries/useSettingQuery";
 import {
     DeleteOutlined,

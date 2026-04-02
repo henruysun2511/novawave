@@ -1,4 +1,4 @@
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { usePlaylistsSong, useRemoveSongFromPlaylist } from "@/queries/usePlaylistQuery";
 import { Button, Popconfirm } from "antd";
 

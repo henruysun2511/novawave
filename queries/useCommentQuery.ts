@@ -16,6 +16,13 @@ export const useCommentList = (
         enabled: !!songId,
     });
 
+export const useLatestComments = (params?: PaginationParam) =>
+    useQuery({
+        queryKey: [...COMMENT_QUERY_KEY, "latest", params],
+        queryFn: async () =>
+            (await CommentService.getLatestComments(params)).data,
+    });
+
 
 export const useCreateComment = () => {
     const qc = useQueryClient();

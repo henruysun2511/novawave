@@ -2,7 +2,7 @@
 
 // components/admin/Report/ReportTable.tsx
 
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { useUpdateReport } from "@/queries/useReportQuery"; // Hook cập nhật Report
 import { ReportStatus } from "@/types/constant.type";
 import { Report } from "@/types/object.type";

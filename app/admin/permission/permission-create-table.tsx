@@ -1,4 +1,4 @@
-import { useToast } from '@/libs/toast';
+import { useToast } from '@/hooks/useToast';
 import { useCreatePermission } from '@/queries/usePermissionQuery';
 import { HttpMethod } from '@/types/constant.type';
 import { Button, Form, Input, Modal, Select } from 'antd';

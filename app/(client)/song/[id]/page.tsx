@@ -7,7 +7,7 @@ import WavePlayer from "@/components/client/WavePlayer/wave-player";
 import Loading from "@/components/common/loading";
 import NotFoundUI from "@/components/common/not-found-ui";
 import Title from "@/components/common/title";
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { useLikeSong, useUnlikeSong, useUserLike } from "@/queries/useLikeQuery";
 import { useStartPlayer } from "@/queries/usePlayerQuery";
 import { useSongDetail } from "@/queries/useSongQuery";
@@ -115,33 +115,34 @@ export default function SongDetailPage() {
 
     return (
         <>
-            <div className="relative w-full h-[350px]">
+            {/* Header Hero Section */}
+            <div className="relative w-full h-auto md:h-[350px]">
                 <div className="absolute inset-0 bg-black/10"></div>
 
-                <div className="absolute inset-0 z-10 gap-5 flex items-center p-6">
+                <div className="absolute inset-0 z-10 gap-3 md:gap-5 flex flex-col md:flex-row items-center justify-center md:items-center p-4 md:p-6">
                     {/* COVER */}
                     <img
-                        className="w-[300px] h-[300px] rounded-xl flex-shrink-0"
+                        className="w-[150px] h-[150px] md:w-[200px] md:h-[200px] lg:w-[300px] lg:h-[300px] rounded-xl flex-shrink-0 object-cover"
                         src={song?.imageUrl || "/images/default-cover.png"}
                         alt=""
                     />
 
                     {/* INFO + WAVE */}
-                    <div className="relative z-20 flex-1 min-w-0">
-                        <div className="text-base text-white mt-5 mb-3">
+                    <div className="relative z-20 flex-1 min-w-0 text-center md:text-left">
+                        <div className="text-xs md:text-base text-white mt-3 md:mt-5 mb-2 md:mb-3">
                             Đĩa đơn
                         </div>
 
-                        <h3 className="uppercase text-6xl font-extrabold text-white mb-1">
+                        <h3 className="uppercase text-2xl md:text-4xl lg:text-6xl font-extrabold text-white mb-1 line-clamp-3">
                             {song?.name || "Đang cập nhật"}
                         </h3>
 
-                        <div className="text-base text-white mb-4 font-bold">
+                        <div className="text-xs md:text-base text-white mb-3 md:mb-4 font-bold line-clamp-2">
                             {song?.artistId?.name || "Đang cập nhật"}
                         </div>
 
                         {/* WAVE */}
-                        <div className="w-full">
+                        <div className="w-full max-w-sm md:max-w-none">
                             <WavePlayer
                                 songId={song._id}
                                 url={song?.mp3Link}
@@ -154,114 +155,160 @@ export default function SongDetailPage() {
 
             </div>
 
-            <div className="p-8">
-                <div className="flex justify-between">
-                    <div className="flex items-center gap-4 mb-10">
-                        <div className="cursor-pointer w-15 h-15 rounded-full bg-green flex items-center justify-center shadow-lg"
+            <div className="p-4 md:p-6 lg:p-8">
+                <div className="flex flex-col md:flex-row justify-between gap-4 md:gap-0">
+                    {/* Action Buttons */}
+                    <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 mb-6 md:mb-10 flex-wrap">
+                        <div className="cursor-pointer w-12 h-12 md:w-15 md:h-15 rounded-full bg-green flex items-center justify-center shadow-lg flex-shrink-0"
                             onClick={handlePlaySong}>
                             {isStartingPlayer ? (
-                                <LoadingOutlined className="text-xl text-white animate-spin" />
+                                <LoadingOutlined className="text-lg md:text-xl text-white animate-spin" />
                             ) : (
-                                <CaretRightFilled className="text-3xl text-black" />
+                                <CaretRightFilled className="text-2xl md:text-3xl text-black" />
                             )}
                         </div>
                         <div
                             onClick={handleToggleLike}
-                            className="border border-green rounded-full text-text-primary text-base px-5 py-1 cursor-pointer
-             transition duration-200 hover:bg-green hover:text-white flex items-center"
+                            className="border border-green rounded-full text-text-primary text-xs md:text-base px-3 md:px-5 py-1 md:py-1 cursor-pointer
+             transition duration-200 hover:bg-green hover:text-white flex items-center flex-shrink-0"
                         >
                             {isLiked ? (
                                 <HeartFilled className="mr-2 text-red-500" />
                             ) : (
                                 <HeartOutlined className="mr-2" />
                             )}
-                            Yêu thích
+                            <span className="hidden sm:inline">Yêu thích</span>
                         </div>
                         <div
-                            className="border border-green rounded-full text-text-primary text-base px-5 py-1 cursor-pointer
+                            className="border border-green rounded-full text-text-primary text-xs md:text-base px-3 md:px-5 py-1 md:py-1 cursor-pointer
                                   transition duration-200
-                                 hover:bg-green hover:text-white"
+                                 hover:bg-green hover:text-white flex-shrink-0"
                             onClick={() => setIsPlaylistModalOpen(true)}
                         >
-                            <PlusOutlined className="mr-2" />Thêm vào playlist
+                            <PlusOutlined className="mr-2" /><span className="hidden sm:inline">Thêm vào playlist</span>
                         </div>
                         <div
-                            className="border border-green rounded-full text-text-primary text-base px-5 py-1 cursor-pointer
+                            className="border border-green rounded-full text-text-primary text-xs md:text-base px-3 md:px-5 py-1 md:py-1 cursor-pointer
                                   transition duration-200
-                                 hover:bg-green hover:text-white"
+                                 hover:bg-green hover:text-white flex-shrink-0"
                             onClick={() => setIsReportModalOpen(true)}
                         >
-                            <FlagOutlined className="mr-2" />Report
+                            <FlagOutlined className="mr-2" /><span className="hidden sm:inline">Report</span>
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-5 mb-10 text-text-secondary text-base">
-                        <div>
+                    {/* Stats */}
+                    <div className="flex items-center gap-3 md:gap-5 mb-6 md:mb-10 text-text-secondary text-xs md:text-base justify-center md:justify-end flex-wrap">
+                        <div className="flex items-center">
                             <CaretRightFilled className="mr-2" />
-                            {song?.playCount ?? "Đang cập nhật"}
+                            <span className="truncate">{song?.playCount ?? "Đang cập nhật"}</span>
                         </div>
 
-                        <div>
+                        <div className="flex items-center">
                             <HeartFilled className="mr-2" />
-                            {song?.likesCount ?? "Đang cập nhật"}
+                            <span className="truncate">{song?.likesCount ?? "Đang cập nhật"}</span>
                         </div>
                     </div>
                 </div>
 
                 <Title>Thông tin bài hát</Title>
-                <table className="w-full text-left border-collapse text-base">
-                    <thead>
-                        <tr className="text-gray-400">
-                            <th className="py-3">STT</th>
-                            <th className="py-3">Tên bài hát</th>
-                            <th className="py-3">Album</th>
-                            <th className="py-3">Nghệ sĩ</th>
-                            <th className="py-3">Thời lượng</th>
-                            <th className="py-3">Ngày phát hành</th>
-                        </tr>
-                    </thead>
+                {/* Desktop Table */}
+                <div className="hidden md:block overflow-x-auto">
+                    <table className="w-full text-left border-collapse text-base">
+                        <thead>
+                            <tr className="text-gray-400">
+                                <th className="py-3">STT</th>
+                                <th className="py-3">Tên bài hát</th>
+                                <th className="py-3">Album</th>
+                                <th className="py-3">Nghệ sĩ</th>
+                                <th className="py-3">Thời lượng</th>
+                                <th className="py-3">Ngày phát hành</th>
+                            </tr>
+                        </thead>
 
-                    <tbody>
-                        <tr className="hover:bg-[var(--background-tertiary)] transition text-text-primary">
-                            <td className="py-3">1</td>
+                        <tbody>
+                            <tr className="hover:bg-[var(--background-tertiary)] transition text-text-primary">
+                                <td className="py-3">1</td>
 
-                            <td className="py-3 flex items-center gap-4">
-                                <img
-                                    className="w-[50px] h-[50px] object-cover"
-                                    src={song?.imageUrl || "/images/default-cover.png"}
-                                    alt=""
-                                />
-                                <p>{song?.name || "Đang cập nhật"}</p>
-                            </td>
+                                <td className="py-3 flex items-center gap-4">
+                                    <img
+                                        className="w-[50px] h-[50px] object-cover rounded"
+                                        src={song?.imageUrl || "/images/default-cover.png"}
+                                        alt=""
+                                    />
+                                    <p>{song?.name || "Đang cập nhật"}</p>
+                                </td>
 
-                            <td className="py-3">
-                                {song?.album?.name || "Đang cập nhật"}
-                            </td>
+                                <td className="py-3">
+                                    {song?.album?.name || "Đang cập nhật"}
+                                </td>
 
-                            <td className="py-3">
-                                {song?.artistId?.name || "Đang cập nhật"}
-                            </td>
+                                <td className="py-3">
+                                    {song?.artistId?.name || "Đang cập nhật"}
+                                </td>
 
-                            <td className="py-3">
+                                <td className="py-3">
+                                    {song?.duration
+                                        ? `${Math.floor(song.duration / 60)}:${String(Math.floor(song.duration % 60)).padStart(2, "0")}`
+                                        : "Đang cập nhật"}
+                                </td>
+
+                                <td className="py-3">
+                                    {song?.createdAt
+                                        ? new Date(song.createdAt).toISOString().split('T')[0]
+                                        : "Đang cập nhật"}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                {/* Mobile Card */}
+                <div className="md:hidden bg-[var(--background-tertiary)] rounded-lg p-4 space-y-3">
+                    <div className="flex gap-4">
+                        <img
+                            className="w-[80px] h-[80px] object-cover rounded flex-shrink-0"
+                            src={song?.imageUrl || "/images/default-cover.png"}
+                            alt=""
+                        />
+                        <div className="flex-1 min-w-0">
+                            <p className="text-text-secondary text-xs mb-1">Tên bài hát</p>
+                            <p className="text-text-primary font-bold line-clamp-2">{song?.name || "Đang cập nhật"}</p>
+                        </div>
+                    </div>
+                    <div>
+                        <p className="text-text-secondary text-xs mb-1">Album</p>
+                        <p className="text-text-primary">{song?.album?.name || "Đang cập nhật"}</p>
+                    </div>
+                    <div>
+                        <p className="text-text-secondary text-xs mb-1">Nghệ sĩ</p>
+                        <p className="text-text-primary">{song?.artistId?.name || "Đang cập nhật"}</p>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <p className="text-text-secondary text-xs mb-1">Thời lượng</p>
+                            <p className="text-text-primary">
                                 {song?.duration
                                     ? `${Math.floor(song.duration / 60)}:${String(Math.floor(song.duration % 60)).padStart(2, "0")}`
                                     : "Đang cập nhật"}
-                            </td>
-
-                            <td className="py-3">
+                            </p>
+                        </div>
+                        <div>
+                            <p className="text-text-secondary text-xs mb-1">Ngày phát hành</p>
+                            <p className="text-text-primary">
                                 {song?.createdAt
                                     ? new Date(song.createdAt).toISOString().split('T')[0]
                                     : "Đang cập nhật"}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                            </p>
+                        </div>
+                    </div>
+                </div>
 
-                <div className="my-10"></div>
+                <div className="my-6 md:my-10"></div>
                 <Title>Nghệ sĩ</Title>
                 <ArtistCard artist={song.artistId} />
 
-                <div className="my-10"></div>
+                <div className="my-6 md:my-10"></div>
                 <Title>Nghệ sĩ cùng tham gia</Title>
                 {song?.featArtists && song.featArtists.length > 0 ? (
                     <div className="flex flex-wrap gap-4">
@@ -275,7 +322,7 @@ export default function SongDetailPage() {
                     </div>
                 )}
 
-                <div className="my-10"></div>
+                <div className="my-6 md:my-10"></div>
                 <Title>Album</Title>
                 {song?.album ? (
                     <AlbumCard album={song.album} />
@@ -283,13 +330,10 @@ export default function SongDetailPage() {
                     Không có album
                 </div>)}
 
-
-
-                <div className="my-10"></div>
+                <div className="my-6 md:my-10"></div>
                 <Title>Lời bài hát</Title>
                 <LyricsPreview lyrics={song?.lyrics || "Đang cập nhật"} />
-
-
+                <div className="my-6 md:my-10"></div>
 
                 <SongComment songId={song._id} />
             </div>

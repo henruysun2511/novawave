@@ -1,6 +1,6 @@
 
-import useDebounce from "@/libs/debounce";
-import { useToast } from "@/libs/toast";
+import useDebounce from "@/hooks/debounce";
+import { useToast } from "@/hooks/useToast";
 import { useAddSongToPlaylist } from "@/queries/usePlaylistQuery";
 import { useSongListByAdmin } from "@/queries/useSongQuery";
 import { Button, Form, Modal, Select } from "antd";

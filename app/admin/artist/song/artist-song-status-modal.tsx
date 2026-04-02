@@ -1,4 +1,4 @@
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { useSongDetail, useUpdateSongStatus } from "@/queries/useSongQuery";
 import { SongStatus } from "@/types/constant.type";
 import { Modal, Space, Switch } from "antd";

@@ -1,4 +1,4 @@
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { useDeleteUser, useToggleStatus, useUpdateUserRole } from "@/queries/useUserQuery";
 import { Role } from "@/types/constant.type";
 import { User } from "@/types/object.type";

@@ -1,5 +1,5 @@
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { useNextSong, usePreviousSong } from "@/queries/usePlayerQuery";
 import { useIncrementSongView } from "@/queries/useSongQuery";
 import { usePlayerStore } from "@/stores/usePlayerStore";
@@ -43,7 +43,7 @@ export default function SongBar() {
       toast.info("Nghe nhạc free thì chịu nghe quảng cáo đi");
       return;
     }
-    if (nowPlayingId && !isSkipLoading && !isCurrentAd) { // Không next khi là QC
+    if (nowPlayingId && !isSkipLoading && !isCurrentAd) { 
       nextMutation.mutate({ currentSongId: nowPlayingId });
     }
   };
@@ -190,7 +190,7 @@ useEffect(() => {
             onClickPrevious={handlePrev}
             onEnded={handleEnded}
             onListen={handleListen}
-            className={`custom-audio-player-mobile ${isCurrentAd ? 'ad-mode' : ''}`}
+            className={`custom-audio-player ${isCurrentAd ? 'ad-mode' : ''}`}
             layout="stacked-reverse"
           />
           

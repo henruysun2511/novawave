@@ -1,4 +1,4 @@
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { useAddSongToPlaylist, useUserPlaylists } from "@/queries/usePlaylistQuery";
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, List, Modal, Spin } from "antd";

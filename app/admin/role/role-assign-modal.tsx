@@ -1,4 +1,4 @@
-import { useToast } from '@/libs/toast';
+import { useToast } from '@/hooks/useToast';
 import { usePermissionList } from '@/queries/usePermissionQuery';
 import { useAssignPermissions } from '@/queries/useRoleQuery';
 import { HttpMethod, METHOD_TEXT_COLORS } from '@/types/constant.type';

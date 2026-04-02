@@ -11,6 +11,11 @@ export const CommentService = {
             params,
         });
     },
+    getLatestComments(params?: PaginationParam) {
+        return http.get<ApiResponse<Comment[]>>(`/${prefix}/latest/list`, {
+            params,
+        });
+    },
     create(payload: Partial<Comment>) {
         return http.post<ApiResponse<Comment>>(`/${prefix}`, payload);
     },

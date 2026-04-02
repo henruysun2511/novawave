@@ -1,5 +1,5 @@
 
-import { useToast } from '@/libs/toast';
+import { useToast } from '@/hooks/useToast';
 import { useCreatePlan } from '@/queries/usePlanQuery';
 import { Plan } from '@/types/object.type';
 import { Button, Form, Input, InputNumber, Modal, Typography } from 'antd';

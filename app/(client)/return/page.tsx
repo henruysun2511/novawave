@@ -1,6 +1,6 @@
 "use client";
 
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { Spin } from "antd";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";

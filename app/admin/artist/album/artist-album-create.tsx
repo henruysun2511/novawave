@@ -1,7 +1,7 @@
 import Title from "@/components/common/title";
-import useDebounce from "@/libs/debounce";
-import { useToast } from "@/libs/toast";
-import { useUploadFile } from "@/libs/upload";
+import useDebounce from "@/hooks/debounce";
+import { useToast } from "@/hooks/useToast";
+import { useUploadFile } from "@/hooks/useUploadFIle";
 import { useCreateAlbum } from "@/queries/useAlbumQuery";
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Col, DatePicker, Form, Input, Row, Switch, Upload } from "antd";

@@ -6,43 +6,50 @@ import { useArtistList } from "@/queries/useArtistQuery";
 import { useSettings } from "@/queries/useSettingQuery";
 import { Artist } from "@/types/object.type";
 import { Pagination } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function ArtistPage() {
     const [params, setParams] = useState({
         page: 1,
         size: 10
     });
-
+    const [bannerImage, setBannerImage] = useState("/images/jungkook.jpg");
 
     const { data: artistData, isPending: isArtistPending } = useArtistList(params)
     const { data: settingsData } = useSettings();
+    
+    // Cập nhật banner khi API load xong
+    useEffect(() => {
+        if (settingsData?.data?.childrenBanner?.artistPage) {
+            setBannerImage(settingsData.data.childrenBanner.artistPage);
+        }
+    }, [settingsData]);
+
     const artists = artistData?.data || [];
     const meta = artistData?.meta;
-    const bannerImage = settingsData?.data?.childrenBanner?.artistPage || "/images/jungkook.jpg";
 
     return (
         <>
-            <div className="relative w-full h-[450px]">
+            <div className="relative w-full h-[300px] md:h-[450px]">
                 <img
-                    src={bannerImage || "/images/jungkook.jpg"}
+                    src={bannerImage}
                     alt="Artist Banner"
                     className="w-full h-full object-cover rounded-2xl"
                 />
 
                 <div className="absolute inset-0 bg-black/10"></div>
 
-                <div className="absolute bottom-0 left-0 z-20 p-4 w-full">
-                    <div className="text-base text-white mt-5">
+                <div className="absolute bottom-0 left-0 z-20 p-4 md:p-6 w-full">
+                    <div className="text-xs md:text-base text-white">
                         Khám phá tài năng âm nhạc
                     </div>
-                    <h3 className="uppercase text-7xl font-extrabold text-white mb-1 hover:text-green transition">
+                    <h3 className="uppercase text-3xl md:text-5xl lg:text-7xl font-extrabold text-white mb-1 hover:text-green transition line-clamp-2">
                         Nghệ sĩ
                     </h3>
                 </div>
             </div>
 
-            <div className="p-6">
+            <div className="p-4 md:p-6">
                 <Title>Danh sách nghệ sĩ</Title>
                 {isArtistPending ? (
                     <SquareSkeleton />

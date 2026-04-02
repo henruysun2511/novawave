@@ -1,6 +1,6 @@
 "use client";
 
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { UserJwtPayload } from "@/types/body.type";
 import { jwtDecode } from "jwt-decode";

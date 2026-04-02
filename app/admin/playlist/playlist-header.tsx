@@ -1,5 +1,5 @@
 import PlaylistUpdateModal from "@/components/client/Playlist/playlist-update-modal";
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { useDeletePlaylist } from "@/queries/usePlaylistQuery";
 import { Playlist } from "@/types/object.type";
 import { DeleteOutlined, EditOutlined, GlobalOutlined, LockOutlined, PlusOutlined } from "@ant-design/icons";

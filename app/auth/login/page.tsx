@@ -1,6 +1,6 @@
 "use client";
 
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { useLoginMutation } from "@/queries/useAuthQuery";
 import { useSettings } from "@/queries/useSettingQuery";
 import { LoginDto } from "@/types/body.type";

@@ -5,7 +5,7 @@ import ReportModal from "@/components/client/Report/report-modal";
 import Loading from "@/components/common/loading";
 import NotFoundUI from "@/components/common/not-found-ui";
 import Title from "@/components/common/title";
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { useAlbumDetail, useSongsInAlbum } from "@/queries/useAlbumQuery";
 import { useArtistDetail } from "@/queries/useArtistQuery";
 import { useStartPlayer } from "@/queries/usePlayerQuery";

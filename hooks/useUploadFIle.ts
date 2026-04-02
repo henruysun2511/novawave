@@ -1,6 +1,6 @@
 import { useUploadMedia } from "@/queries/useUploadQuery";
 import { Upload } from "@/types/object.type";
-import { useToast } from "./toast";
+import { useToast } from "./useToast";
 
 export const useUploadFile = () => {
     const toast = useToast();

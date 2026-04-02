@@ -1,16 +1,34 @@
 "use client";
 import { useSettings } from "@/queries/useSettingQuery";
+import { Skeleton } from "antd";
+import { useEffect, useState } from "react";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Autoplay, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 export default function MainBanner() {
-    const { data: settingsData } = useSettings();
-    const banners = settingsData?.data?.mainBanner || [];
+    const { data: settingsData, isLoading } = useSettings();
+    const [banners, setBanners] = useState<any[]>([]);
 
-    if (!banners || banners.length === 0) {
-        return null;
+    // Cập nhật banners khi API load xong
+    useEffect(() => {
+        if (settingsData?.data?.mainBanner) {
+            setBanners(settingsData.data.mainBanner);
+        }
+    }, [settingsData]);
+
+    // Hiển thị skeleton khi loading
+    if (isLoading || banners.length === 0) {
+        return (
+            <div className="relative w-full h-100 md:h-100 rounded-2xl overflow-hidden shadow-lg">
+                <Skeleton 
+                    active 
+                    paragraph={{ rows: 4 }}
+                    style={{ height: "100%" }}
+                />
+            </div>
+        );
     }
 
     return (

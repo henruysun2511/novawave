@@ -1,13 +1,23 @@
 import { useSettings } from "@/queries/useSettingQuery";
 import { MailOutlined, PhoneOutlined } from "@ant-design/icons";
+import { useEffect, useState } from "react";
 
 export default function Footer() {
     const { data: settingsData } = useSettings();
-    const settings = settingsData?.data;
-    const logoUrl = settings?.logo || "/images/logo.png";
-    const contactEmail = settings?.contactEmail || "contact@novawave.com";
-    const contactPhone = settings?.contactPhone || "0362832880";
-    const siteName = settings?.siteName || "Novawave";
+    const [logoUrl, setLogoUrl] = useState("/images/logo.png");
+    const [contactEmail, setContactEmail] = useState("contact@novawave.com");
+    const [contactPhone, setContactPhone] = useState("0362832880");
+    const [siteName, setSiteName] = useState("Novawave");
+
+    // Cập nhật settings khi API load xong
+    useEffect(() => {
+        if (settingsData?.data) {
+            if (settingsData.data.logo) setLogoUrl(settingsData.data.logo);
+            if (settingsData.data.contactEmail) setContactEmail(settingsData.data.contactEmail);
+            if (settingsData.data.contactPhone) setContactPhone(settingsData.data.contactPhone);
+            if (settingsData.data.siteName) setSiteName(settingsData.data.siteName);
+        }
+    }, [settingsData]);
 
     return (
         <div className="bg-[var(--background-tertiary)] mt-16 text-white px-6 py-5">

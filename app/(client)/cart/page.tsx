@@ -1,6 +1,6 @@
 "use client";
 import Loading from "@/components/common/loading";
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { useRemoveFromCart, useUserCart } from "@/queries/useCartQuery";
 import { Product } from "@/types/object.type";
 import { DeleteOutlined } from "@ant-design/icons";

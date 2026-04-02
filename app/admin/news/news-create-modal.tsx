@@ -1,7 +1,7 @@
 "use client";
 import TextEditor from "@/components/common/text-editor";
-import { useToast } from "@/libs/toast";
-import { useUploadFile } from "@/libs/upload";
+import { useToast } from "@/hooks/useToast";
+import { useUploadFile } from "@/hooks/useUploadFIle";
 import { useCreateNews } from "@/queries/useNewsQuery";
 import { NewsStatus } from "@/types/constant.type";
 import { PlusOutlined } from "@ant-design/icons";

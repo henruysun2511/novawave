@@ -1,5 +1,5 @@
 "use client";
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { useDeleteNews, useUpdateNewsStatus } from "@/queries/useNewsQuery";
 import { NewsStatus } from "@/types/constant.type";
 import { News } from "@/types/object.type";

@@ -1,5 +1,5 @@
-import { useToast } from "@/libs/toast";
-import { useUploadFile } from "@/libs/upload";
+import { useToast } from "@/hooks/useToast";
+import { useUploadFile } from "@/hooks/useUploadFIle";
 import { useCreateAdvertisement } from "@/queries/useAdvertisementQuery";
 import { UploadOutlined } from "@ant-design/icons";
 import { Button, Col, Form, Input, Modal, Upload } from "antd";

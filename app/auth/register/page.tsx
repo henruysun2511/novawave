@@ -1,5 +1,5 @@
 "use client";
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { useRegisterMutation } from "@/queries/useAuthQuery";
 import { useSettings } from "@/queries/useSettingQuery";
 import { Gender } from "@/types/constant.type";

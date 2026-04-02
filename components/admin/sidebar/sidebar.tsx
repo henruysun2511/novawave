@@ -1,5 +1,5 @@
 "use client";
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { useLogoutMutation } from "@/queries/useAuthQuery";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { Role } from "@/types/constant.type";

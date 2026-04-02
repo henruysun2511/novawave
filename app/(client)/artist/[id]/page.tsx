@@ -6,7 +6,7 @@ import SongList from "@/components/client/SongList/song-list";
 import Loading from "@/components/common/loading";
 import NotFoundUI from "@/components/common/not-found-ui";
 import Title from "@/components/common/title";
-import { useToast } from "@/libs/toast";
+import { useToast } from "@/hooks/useToast";
 import { useAlbumListByArtist } from "@/queries/useAlbumQuery";
 import { useArtistDetail } from "@/queries/useArtistQuery";
 import { useFollow, useUnfollow, useUserFollow } from "@/queries/useFollowQuery";
