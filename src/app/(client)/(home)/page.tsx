@@ -10,7 +10,7 @@ import SongList from "@/components/client/SongList/song-list";
 import SongList2 from "@/components/client/SongList/song-list-2";
 import TopSong2 from "@/components/client/SongList/top-song-2";
 import TopSong3 from "@/components/client/SongList/top-song-3";
-import SquareSkeleton from "@/components/common/skeleton";
+import SquareSkeleton from "@/components/common/skeleton/square-skeleton";
 import Title from "@/components/common/title";
 import { useAlbumList } from "@/queries/useAlbumQuery";
 import { useArtistList } from "@/queries/useArtistQuery";
@@ -136,10 +136,6 @@ export default function HomePage() {
                     <Title>Bảng xếp hạng bài hát được nghe nhiều nhất</Title>
                 </div>
                 <TopSong2 />
-
-
-
-
 
 
                 <div className="mt-16 flex justify-between items-center">

@@ -1,42 +1,37 @@
 "use client";
-
-import NewsList from "@/components/client/NewsList/news-list";
-import SquareSkeleton from "@/components/common/skeleton";
+import Footer from "@/components/client/footer/footer";
+import PlaylistCard from "@/components/client/Playlist/playlist-card";
+import SquareSkeleton from "@/components/common/skeleton/square-skeleton";
 import Title from "@/components/common/title";
-import { useNewsList } from "@/queries/useNewsQuery";
+import { usePlaylistList } from "@/queries/usePlaylistQuery";
 import { useSettings } from "@/queries/useSettingQuery";
-import { NewsStatus } from "@/types/constant.type";
+import { Playlist } from "@/types/object.type";
 import { Pagination } from "antd";
 import { useEffect, useState } from "react";
 
-export default function NewsPage() {
+export default function PlaylistPage() {
     const [params, setParams] = useState({
         page: 1,
-        size: 10,
-        status: NewsStatus.PUBLISHED, 
     });
-    const [bannerImage, setBannerImage] = useState("https://i.pinimg.com/1200x/80/73/eb/8073eb44c4d2f41837bbeaedc976d4b6.jpg");
-
-    const { data: newsData, isPending } = useNewsList(params);
+    const [bannerImage, setBannerImage] = useState("https://i.pinimg.com/1200x/84/5b/c7/845bc74d9403f7bf2a77ead71d01a9a7.jpg");
+    const { data: playlistData, isPending } = usePlaylistList(params)
     const { data: settingsData } = useSettings();
-    
+
     // Cập nhật banner khi API load xong
     useEffect(() => {
-        if (settingsData?.data?.childrenBanner?.newsPage) {
-            setBannerImage(settingsData.data.childrenBanner.newsPage);
+        if (settingsData?.data?.childrenBanner?.playlistPage) {
+            setBannerImage(settingsData.data.childrenBanner.playlistPage);
         }
     }, [settingsData]);
 
-    const news = newsData?.data || [];
-    const meta = newsData?.meta;
-
+    const playlists = playlistData?.data || [];
+    const meta = playlistData?.meta;
     return (
         <>
-            {/* Banner Section */}
             <div className="relative w-full h-[300px] md:h-[450px]">
                 <img
                     src={bannerImage}
-                    alt="Music News Banner"
+                    alt="Playlist Banner"
                     className="w-full h-full object-cover rounded-2xl"
                 />
 
@@ -44,27 +39,28 @@ export default function NewsPage() {
 
                 <div className="absolute bottom-0 left-0 z-20 p-4 md:p-6 w-full">
                     <div className="text-xs md:text-base text-white mb-1">
-                        Tin tức âm nhạc mới nhất trong ngày
+                        Dành cho bạn
                     </div>
                     <h3 className="uppercase text-3xl md:text-5xl lg:text-7xl font-extrabold text-white mb-1 hover:text-green transition line-clamp-2">
-                        MUSIC NEWS
+                        PLAYLIST THỊNH HÀNH
                     </h3>
                 </div>
             </div>
 
-            {/* Content Section */}
             <div className="p-4 md:p-6">
-                <Title>Tin tức mới nhất</Title>
-                
+                <Title>Danh sách playlist</Title>
+
                 {isPending ? (
                     <SquareSkeleton />
-                ) : news && news.length > 0 ? (
+                ) : playlists && playlists.length > 0 ? (
                     <>
-                        {/* Render danh sách qua component NewsList đã sửa ở bước trước */}
-                        <NewsList newsList={news} />
+                        <div className="flex flex-wrap gap-5">
+                            {playlists.map((playlist: Playlist) => (
+                                <PlaylistCard key={playlist._id} playlist={playlist} />
+                            ))}
+                        </div>
 
-                        {/* Pagination */}
-                        <div className="mt-10 flex justify-center">
+                        <div className="mt-6 flex justify-center">
                             <Pagination
                                 current={meta?.page ?? 1}
                                 pageSize={meta?.size ?? 10}
@@ -80,11 +76,13 @@ export default function NewsPage() {
                         </div>
                     </>
                 ) : (
-                    <div className="text-text-primary text-base py-10">
-                        Chưa có tin tức nào được cập nhật
+                    <div className="text-text-primary text-base">
+                        Chưa có playlist nào
                     </div>
                 )}
             </div>
+
+            <Footer />
         </>
     );
 }

@@ -1,62 +1,61 @@
 "use client";
+import AlbumCard from "@/components/client/AlbumList/album-card";
 import Footer from "@/components/client/footer/footer";
-import PlaylistCard from "@/components/client/Playlist/playlist-card";
-import SquareSkeleton from "@/components/common/skeleton";
+import SquareSkeleton from "@/components/common/skeleton/square-skeleton";
 import Title from "@/components/common/title";
-import { usePlaylistList } from "@/queries/usePlaylistQuery";
+import { useAlbumList } from "@/queries/useAlbumQuery";
 import { useSettings } from "@/queries/useSettingQuery";
-import { Playlist } from "@/types/object.type";
+import { Album } from "@/types/object.type";
 import { Pagination } from "antd";
 import { useEffect, useState } from "react";
 
-export default function PlaylistPage() {
+export default function GenrePage() {
     const [params, setParams] = useState({
         page: 1,
     });
-    const [bannerImage, setBannerImage] = useState("https://i.pinimg.com/1200x/84/5b/c7/845bc74d9403f7bf2a77ead71d01a9a7.jpg");
-    const { data: playlistData, isPending } = usePlaylistList(params)
+    const [bannerImage, setBannerImage] = useState("https://i.pinimg.com/1200x/2f/97/f1/2f97f1f6ac89947f8ea1ac9e85b19623.jpg");
+    const { data: albumData, isPending: isAlbumPending } = useAlbumList(params)
     const { data: settingsData } = useSettings();
-    
+
     // Cập nhật banner khi API load xong
     useEffect(() => {
-        if (settingsData?.data?.childrenBanner?.playlistPage) {
-            setBannerImage(settingsData.data.childrenBanner.playlistPage);
+        if (settingsData?.data?.childrenBanner?.albumPage) {
+            setBannerImage(settingsData.data.childrenBanner.albumPage);
         }
     }, [settingsData]);
 
-    const playlists = playlistData?.data || [];
-    const meta = playlistData?.meta;
+    const albums = albumData?.data || [];
+    const meta = albumData?.meta;
+
     return (
         <>
             <div className="relative w-full h-[300px] md:h-[450px]">
                 <img
                     src={bannerImage}
-                    alt="Playlist Banner"
+                    alt="Album Banner"
                     className="w-full h-full object-cover rounded-2xl"
                 />
-
                 <div className="absolute inset-0 bg-black/10"></div>
-
                 <div className="absolute bottom-0 left-0 z-20 p-4 md:p-6 w-full">
                     <div className="text-xs md:text-base text-white mb-1">
-                        Dành cho bạn
+                        Khám phá album mới nhất
                     </div>
                     <h3 className="uppercase text-3xl md:text-5xl lg:text-7xl font-extrabold text-white mb-1 hover:text-green transition line-clamp-2">
-                        PLAYLIST THỊNH HÀNH
+                        Album
                     </h3>
                 </div>
             </div>
 
             <div className="p-4 md:p-6">
-                <Title>Danh sách playlist</Title>
+                <Title>Danh sách album</Title>
 
-                {isPending ? (
+                {isAlbumPending ? (
                     <SquareSkeleton />
-                ) : playlists && playlists.length > 0 ? (
+                ) : albums && albums.length > 0 ? (
                     <>
-                        <div className="flex flex-wrap gap-5">
-                            {playlists.map((playlist: Playlist) => (
-                                <PlaylistCard key={playlist._id} playlist={playlist} />
+                        <div className="flex flex-wrap gap-3">
+                            {albums.map((album: Album) => (
+                                <AlbumCard key={album._id} album={album} />
                             ))}
                         </div>
 
@@ -77,7 +76,7 @@ export default function PlaylistPage() {
                     </>
                 ) : (
                     <div className="text-text-primary text-base">
-                        Chưa có playlist nào
+                        Chưa có album nào
                     </div>
                 )}
             </div>

@@ -22,10 +22,11 @@ export default function MainBanner() {
     if (isLoading || banners.length === 0) {
         return (
             <div className="relative w-full h-100 md:h-100 rounded-2xl overflow-hidden shadow-lg">
-                <Skeleton 
-                    active 
+                <Skeleton
+                    active
                     paragraph={{ rows: 4 }}
                     style={{ height: "100%" }}
+                    className="bg-zinc-900/50"
                 />
             </div>
         );

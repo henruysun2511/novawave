@@ -1,6 +1,6 @@
 "use client";
 import ArtistCard from "@/components/client/ArtistList/artist-card";
-import SquareSkeleton from "@/components/common/skeleton";
+import CircleSkeleton from "@/components/common/skeleton/circle-skeleton";
 import Title from "@/components/common/title";
 import { useArtistList } from "@/queries/useArtistQuery";
 import { useSettings } from "@/queries/useSettingQuery";
@@ -17,7 +17,7 @@ export default function ArtistPage() {
 
     const { data: artistData, isPending: isArtistPending } = useArtistList(params)
     const { data: settingsData } = useSettings();
-    
+
     // Cập nhật banner khi API load xong
     useEffect(() => {
         if (settingsData?.data?.childrenBanner?.artistPage) {
@@ -52,7 +52,7 @@ export default function ArtistPage() {
             <div className="p-4 md:p-6">
                 <Title>Danh sách nghệ sĩ</Title>
                 {isArtistPending ? (
-                    <SquareSkeleton />
+                    <CircleSkeleton />
                 ) : artists && artists.length > 0 ? (
                     <>
                         <div className="flex flex-wrap gap-3">

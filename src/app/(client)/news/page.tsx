@@ -1,65 +1,68 @@
 "use client";
-import AlbumCard from "@/components/client/AlbumList/album-card";
-import Footer from "@/components/client/footer/footer";
-import SquareSkeleton from "@/components/common/skeleton";
+
+import NewsList from "@/components/client/NewsList/news-list";
+import HorizontalRectangleSkeleton from "@/components/common/skeleton/horizontal-rectangle-skeleton";
 import Title from "@/components/common/title";
-import { useAlbumList } from "@/queries/useAlbumQuery";
+import { useNewsList } from "@/queries/useNewsQuery";
 import { useSettings } from "@/queries/useSettingQuery";
-import { Album } from "@/types/object.type";
+import { NewsStatus } from "@/types/constant.type";
 import { Pagination } from "antd";
 import { useEffect, useState } from "react";
 
-export default function GenrePage() {
+export default function NewsPage() {
     const [params, setParams] = useState({
         page: 1,
+        size: 10,
+        status: NewsStatus.PUBLISHED,
     });
-    const [bannerImage, setBannerImage] = useState("https://i.pinimg.com/1200x/2f/97/f1/2f97f1f6ac89947f8ea1ac9e85b19623.jpg");
-    const { data: albumData, isPending: isAlbumPending } = useAlbumList(params)
+    const [bannerImage, setBannerImage] = useState("https://i.pinimg.com/1200x/80/73/eb/8073eb44c4d2f41837bbeaedc976d4b6.jpg");
+
+    const { data: newsData, isPending } = useNewsList(params);
     const { data: settingsData } = useSettings();
-    
+
     // Cập nhật banner khi API load xong
     useEffect(() => {
-        if (settingsData?.data?.childrenBanner?.albumPage) {
-            setBannerImage(settingsData.data.childrenBanner.albumPage);
+        if (settingsData?.data?.childrenBanner?.newsPage) {
+            setBannerImage(settingsData.data.childrenBanner.newsPage);
         }
     }, [settingsData]);
 
-    const albums = albumData?.data || [];
-    const meta = albumData?.meta;
+    const news = newsData?.data || [];
+    const meta = newsData?.meta;
 
     return (
         <>
+            {/* Banner Section */}
             <div className="relative w-full h-[300px] md:h-[450px]">
                 <img
                     src={bannerImage}
-                    alt="Album Banner"
+                    alt="Music News Banner"
                     className="w-full h-full object-cover rounded-2xl"
                 />
+
                 <div className="absolute inset-0 bg-black/10"></div>
+
                 <div className="absolute bottom-0 left-0 z-20 p-4 md:p-6 w-full">
                     <div className="text-xs md:text-base text-white mb-1">
-                        Khám phá album mới nhất
+                        Tin tức âm nhạc mới nhất trong ngày
                     </div>
                     <h3 className="uppercase text-3xl md:text-5xl lg:text-7xl font-extrabold text-white mb-1 hover:text-green transition line-clamp-2">
-                        Album
+                        MUSIC NEWS
                     </h3>
                 </div>
             </div>
 
+            {/* Content Section */}
             <div className="p-4 md:p-6">
-                <Title>Danh sách album</Title>
+                <Title>Tin tức mới nhất</Title>
 
-                {isAlbumPending ? (
-                    <SquareSkeleton />
-                ) : albums && albums.length > 0 ? (
+                {isPending ? (
+                    <HorizontalRectangleSkeleton />
+                ) : news && news.length > 0 ? (
                     <>
-                        <div className="flex flex-wrap gap-3">
-                            {albums.map((album: Album) => (
-                                <AlbumCard key={album._id} album={album} />
-                            ))}
-                        </div>
+                        <NewsList newsList={news} />
 
-                        <div className="mt-6 flex justify-center">
+                        <div className="mt-10 flex justify-center">
                             <Pagination
                                 current={meta?.page ?? 1}
                                 pageSize={meta?.size ?? 10}
@@ -75,13 +78,11 @@ export default function GenrePage() {
                         </div>
                     </>
                 ) : (
-                    <div className="text-text-primary text-base">
-                        Chưa có album nào
+                    <div className="text-text-primary text-base py-10">
+                        Chưa có tin tức nào được cập nhật
                     </div>
                 )}
             </div>
-
-            <Footer />
         </>
     );
 }

@@ -1,7 +1,7 @@
 "use client";
 import Footer from "@/components/client/footer/footer";
 import SongCard from "@/components/client/SongList/song-card";
-import { default as SquareSkeleton } from "@/components/common/skeleton";
+import { default as SquareSkeleton } from "@/components/common/skeleton/square-skeleton";
 import Title from "@/components/common/title";
 import { useGenreList } from "@/queries/useGenreQuery";
 import { useSettings } from "@/queries/useSettingQuery";
@@ -30,7 +30,7 @@ export default function GenrePage() {
     const [bannerImage, setBannerImage] = useState("https://i.pinimg.com/1200x/0c/44/a9/0c44a9d36d243a3929cafc07a33a24c9.jpg");
     const { data: genreData, isPending: isGenrePending } = useGenreList();
     const { data: settingsData } = useSettings();
-    
+
     // Cập nhật banner khi API load xong
     useEffect(() => {
         if (settingsData?.data?.childrenBanner?.genrePage) {
