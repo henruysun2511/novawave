@@ -1,5 +1,4 @@
-
-import useDebounce from "@/hooks/debounce";
+import useDebounce from "@/hooks/useDebounce";
 import { useToast } from "@/hooks/useToast";
 import { useAddSongToPlaylist } from "@/queries/usePlaylistQuery";
 import { useSongListByAdmin } from "@/queries/useSongQuery";
