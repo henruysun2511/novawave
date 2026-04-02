@@ -1,5 +1,5 @@
 import Title from "@/components/common/title";
-import useDebounce from "@/hooks/debounce";
+import useDebounce from "@/hooks/useDebounce";
 import { useToast } from "@/hooks/useToast";
 import { useUploadFile } from "@/hooks/useUploadFIle";
 import { useAlbumListByArtist } from "@/queries/useAlbumQuery";
@@ -14,7 +14,7 @@ import { useState } from "react";
 export default function ArtistSongUpload() {
     const [form] = Form.useForm();
     const toast = useToast();
-    const { uploadFile , isUploading } = useUploadFile();
+    const { uploadFile, isUploading } = useUploadFile();
     const [explicit, setExplicit] = useState(false);
     const [releaseNow, setReleaseNow] = useState(true);
     const [searchText, setSearchText] = useState("");
@@ -51,7 +51,7 @@ export default function ArtistSongUpload() {
             }
             const { url: imageUrl } = await uploadFile(imageFile);
 
-  
+
             const audioFile: File | undefined =
                 values.mp3Link?.[0]?.originFileObj;
             if (!audioFile) {
@@ -75,7 +75,7 @@ export default function ArtistSongUpload() {
                     : null,
                 imageUrl,
                 mp3Link: mp3Url,
-                duration, 
+                duration,
             };
 
             mutate(payload, {

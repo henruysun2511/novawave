@@ -1,5 +1,4 @@
 import Title from "@/components/common/title";
-import useDebounce from "@/hooks/debounce";
 import { useToast } from "@/hooks/useToast";
 import { useUploadFile } from "@/hooks/useUploadFIle";
 import { useCreateAlbum } from "@/queries/useAlbumQuery";
@@ -12,8 +11,6 @@ export default function ArtistAlbumCreate() {
     const toast = useToast();
     const { uploadFile, isUploading } = useUploadFile();
     const [releaseNow, setReleaseNow] = useState(true);
-    const [searchText, setSearchText] = useState("");
-    const debouncedSearch = useDebounce(searchText, 400);
 
     const { mutate, isPending } = useCreateAlbum();
 

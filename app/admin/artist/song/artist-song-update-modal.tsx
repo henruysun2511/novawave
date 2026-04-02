@@ -1,4 +1,4 @@
-import useDebounce from "@/hooks/debounce";
+import useDebounce from "@/hooks/useDebounce";
 import { useToast } from "@/hooks/useToast";
 import { useUploadFile } from "@/hooks/useUploadFIle";
 import { useAlbumListByArtist } from "@/queries/useAlbumQuery";
@@ -117,7 +117,7 @@ export default function ArtistSongUpdateModal({
         });
     }, [songData, open]);
 
-    const { uploadFile , isUploading } = useUploadFile();
+    const { uploadFile, isUploading } = useUploadFile();
 
     const handleUpdateSong = async (values: any) => {
         try {

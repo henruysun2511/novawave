@@ -21,7 +21,7 @@ export default function ProductPage() {
 
     const { data, isPending } = useProductList(params);
     const { data: settingsData } = useSettings();
-    
+
     // Cập nhật banner khi API load xong
     useEffect(() => {
         if (settingsData?.data?.childrenBanner?.productPage) {
@@ -45,16 +45,17 @@ export default function ProductPage() {
                     className="w-full h-full object-cover rounded-2xl"
                 />
                 <div className="absolute inset-0 bg-black/10"></div>
-                <div className="absolute bottom-0 left-0 z-20 p-4 md:p-6 w-full\">\n                    <div className=\"text-xs md:text-base text-white mb-1\">
+                <div className="absolute bottom-0 left-0 z-20 p-4 md:p-6 w-full">
+                    <div className="text-xs md:text-base text-white mb-1">
                         Sắm ngay tai nghe hiện đại nhất 2025
                     </div>
-                    <h3 className=\"uppercase text-3xl md:text-5xl lg:text-7xl font-extrabold text-white mb-1 hover:text-green transition line-clamp-2\">
+                    <h3 className="uppercase text-3xl md:text-5xl lg:text-7xl font-extrabold text-white mb-1 hover:text-green transition line-clamp-2\">
                         MUSIC PRODUCT
                     </h3>
                 </div>
             </div>
 
-            <div className=\"p-4 md:p-6 \">
+            <div className="p-4 md:p-6 ">
                 <div className="flex gap-5">
                     <Search
                         className="custom-search"
@@ -87,7 +88,7 @@ export default function ProductPage() {
                                     end: Number(e.target.value),
                                     page: 1,
                                 }))
-                            }/>
+                            } />
                         </div>
                     </div>
                 </div>
@@ -126,7 +127,7 @@ export default function ProductPage() {
                         </div>
                     </>
                 )}
-            </div>
+            </div >
 
             <Footer />
         </>
