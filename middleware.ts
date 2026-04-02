@@ -19,7 +19,7 @@ export function middleware(request: NextRequest) {
 
   // 3. If no token and not a public route, redirect to login
   if (!token && !isPublicRoute) {
-    const url = new URL('/auth/login', request.url);
+    const url = new URL('/', request.url);
     // Optional: save the intended destination to redirect back after login
     // url.searchParams.set('callbackUrl', encodeURIComponent(pathname));
     return NextResponse.redirect(url);
