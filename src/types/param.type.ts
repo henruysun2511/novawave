@@ -1,4 +1,4 @@
-import { NewsStatus, ReportTargetType, UserStatus } from "./constant.type";
+import { NewsStatus, ReportTargetType, RoomStatus, UserStatus } from "./constant.type";
 
 export interface PaginationParam {
     page?: number;
@@ -56,4 +56,9 @@ export interface NewsParam extends PaginationParam {
 
 export interface DashboardParam {
     year: number;
+}
+
+export interface RoomParam extends PaginationParam {
+    search?: string;
+    status?: RoomStatus;
 }

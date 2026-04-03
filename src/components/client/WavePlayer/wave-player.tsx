@@ -1,12 +1,22 @@
 import { usePlayerStore } from "@/stores/usePlayerStore";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import WaveSurfer from "wavesurfer.js";
+
+export interface WaveCommentMarker {
+  id?: string;
+  timeSec: number;
+  avatarUrl?: string;
+}
 
 interface WavePlayerProps {
   url: string;
   currentTime: number;
   onSeek?: (time: number) => void;
   songId: string;
+  /** Hiện sóng ngay cả khi chưa phát bài (trang chi tiết bài hát) */
+  alwaysShowWave?: boolean;
+  /** Marker avatar comment theo thời gian (giây) */
+  commentMarkers?: WaveCommentMarker[];
 }
 
 const WavePlayer: React.FC<WavePlayerProps> = ({
@@ -14,38 +24,41 @@ const WavePlayer: React.FC<WavePlayerProps> = ({
   currentTime,
   onSeek,
   songId,
+  alwaysShowWave = false,
+  commentMarkers = [],
 }) => {
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
   const waveformRef = useRef<HTMLDivElement | null>(null);
   const wavesurferRef = useRef<WaveSurfer | null>(null);
   const audioRef = usePlayerStore((state) => state.audioRef);
   const isPlaying = usePlayerStore((state) => state.isPlaying);
   const status = usePlayerStore((state) => state.status);
-  const nowPlayingSongId = status.nowPlayingId || (status.nowPlaying && typeof status.nowPlaying !== 'string' ? status.nowPlaying._id : status.nowPlaying);
+  const nowPlayingSongId =
+    status.nowPlayingId ||
+    (status.nowPlaying && typeof status.nowPlaying !== "string" ? status.nowPlaying._id : status.nowPlaying);
   const onSeekRef = useRef<((time: number) => void) | null>(null);
+  const [waveDuration, setWaveDuration] = useState(0);
 
-  // Chỉ hiển thị wave nếu đúng bài hát này đang phát
   const isThisSongPlaying = songId === nowPlayingSongId;
+  const shouldInitWave = (alwaysShowWave || isThisSongPlaying) && !!url;
 
   useEffect(() => {
     onSeekRef.current = onSeek || null;
   }, [onSeek]);
 
-  // INIT WAVESURFER - chỉ khởi tạo khi bài hát này đang phát
   useEffect(() => {
-    if (!isThisSongPlaying || !waveformRef.current) return;
+    if (!shouldInitWave || !waveformRef.current) return;
 
     const ws = WaveSurfer.create({
       container: waveformRef.current,
-
+      url,
       waveColor: "rgba(255,255,255,0.45)",
-      progressColor: "#1DB954",   
-      cursorColor: "#1DB954",     
+      progressColor: "#1DB954",
+      cursorColor: "#1DB954",
       cursorWidth: 2,
-
       barWidth: 2,
       barGap: 1.5,
       barRadius: 2,
-
       height: 90,
       normalize: true,
       interact: true,
@@ -53,64 +66,98 @@ const WavePlayer: React.FC<WavePlayerProps> = ({
     });
 
     wavesurferRef.current = ws;
-    ws.load(url);
 
-    (ws as any).on("seek", (progress: number) => {
-      if (!ws.getDuration()) return;
-      const time = progress * ws.getDuration();
+    const unsubReady = ws.on("ready", () => {
+      setWaveDuration(ws.getDuration() || 0);
+    });
+
+    // WaveSurfer v7: click / kéo tua phát sự kiện interaction (thời gian = giây)
+    const unsubInteraction = ws.on("interaction", (time: number) => {
       onSeekRef.current?.(time);
     });
 
     return () => {
+      unsubReady();
+      unsubInteraction();
       ws.destroy();
       wavesurferRef.current = null;
+      setWaveDuration(0);
     };
-  }, [url, isThisSongPlaying]);
+  }, [url, shouldInitWave]);
 
-  // Sync wave progress với audio player liên tục khi playing
   useEffect(() => {
     if (!audioRef || !isPlaying || !isThisSongPlaying) return;
 
     const handleTimeUpdate = () => {
       const ws = wavesurferRef.current;
       if (!ws || !ws.getDuration() || !audioRef) return;
-
-      // Update wave progress based on audio currentTime
       const progress = audioRef.currentTime / (audioRef.duration || 1);
       ws.seekTo(progress);
     };
 
-    audioRef.addEventListener('timeupdate', handleTimeUpdate);
+    audioRef.addEventListener("timeupdate", handleTimeUpdate);
     return () => {
-      audioRef.removeEventListener('timeupdate', handleTimeUpdate);
+      audioRef.removeEventListener("timeupdate", handleTimeUpdate);
     };
   }, [audioRef, isPlaying, isThisSongPlaying]);
 
-  // Sync wave position khi currentTime thay đổi (từ external seek)
   useEffect(() => {
     const ws = wavesurferRef.current;
     if (!ws || !ws.getDuration() || !isThisSongPlaying) return;
 
-    // Kiểm tra xem user đang drag hay không
-    // Nếu diff > 0.5s thì coi như external seek, không phải user drag
     const diff = Math.abs(ws.getCurrentTime() - currentTime);
     if (diff > 0.5) {
       ws.seekTo(currentTime / ws.getDuration());
     }
   }, [currentTime, isThisSongPlaying]);
 
+  const showWaveUi = shouldInitWave;
+
   return (
-    <>
-      {isThisSongPlaying ? (
-        <div className="wave-wrapper">
-          <div ref={waveformRef} id="waveform" />
-        </div>
+    <div ref={wrapperRef} className="relative w-full">
+      {showWaveUi ? (
+        <>
+          <div className="wave-wrapper relative">
+            <div ref={waveformRef} id="waveform" />
+            {waveDuration > 0 &&
+              commentMarkers.map((m) => {
+                const t = Math.min(Math.max(0, m.timeSec), waveDuration - 0.01);
+                const leftPct = (t / waveDuration) * 100;
+                return (
+                  <button
+                    key={m.id ?? `${m.timeSec}-${m.avatarUrl ?? ""}`}
+                    type="button"
+                    title={`${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, "0")}`}
+                    className="absolute bottom-0 z-10 -translate-x-1/2 transform rounded-full border-2 border-[#1DB954] bg-black/40 shadow-[0_0_8px_rgba(29,185,84,0.6)] transition hover:scale-110"
+                    style={{
+                      left: `${leftPct}%`,
+                      width: 28,
+                      height: 28,
+                      marginLeft: 0,
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onSeekRef.current?.(m.timeSec);
+                    }}
+                  >
+                    {m.avatarUrl ? (
+                      <img src={m.avatarUrl} alt="" className="h-full w-full rounded-full object-cover" />
+                    ) : (
+                      <span className="flex h-full w-full items-center justify-center text-[10px] font-bold text-white">
+                        ·
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+          </div>
+        </>
       ) : (
-        <div className="wave-wrapper h-[90px] bg-[rgba(255,255,255,0.1)] rounded flex items-center justify-center">
-          <p className="text-text-secondary text-sm">Phát bài hát này để xem sóng âm thanh</p>
+        <div className="wave-wrapper flex h-[90px] items-center justify-center rounded bg-[rgba(255,255,255,0.1)]">
+          <p className="text-sm text-text-secondary">Phát bài hát này để xem sóng âm thanh</p>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

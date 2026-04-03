@@ -10,7 +10,6 @@ import { Tooltip } from "antd";
 import { useEffect, useRef, useState } from "react";
 import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
-import './song-bar.css';
 
 export default function SongBar() {
   const showInfo = useSidebarStore((s) => s.showInfo);

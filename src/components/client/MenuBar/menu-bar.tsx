@@ -1,4 +1,4 @@
-import { AudioOutlined, BookOutlined, CoffeeOutlined, HomeOutlined, PlayCircleOutlined, ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
+import { AudioOutlined, BookOutlined, CoffeeOutlined, HomeOutlined, PlayCircleOutlined, ShoppingCartOutlined, TeamOutlined, UserOutlined } from "@ant-design/icons";
 import { Menu, MenuProps } from "antd";
 import { useRouter } from "next/navigation";
 
@@ -11,6 +11,7 @@ export default function MenuBar() {
         { key: '/genre', icon: <AudioOutlined />, label: <span className="text-lg font-semibold">Khám phá thể loại</span> },
         { key: '/artist', icon: <UserOutlined />, label: <span className="text-lg font-semibold">Nghệ sĩ</span> },
         { key: '/album', icon: <CoffeeOutlined />, label: <span className="text-lg font-semibold">Album thịnh hành</span> },
+        { key: '/room', icon: <TeamOutlined />, label: <span className="text-lg font-semibold">Phòng nghe nhạc chung</span> },
         { key: '/news', icon: <BookOutlined />, label: <span className="text-lg font-semibold">Tin tức</span> },
         { key: '/product', icon: <ShoppingCartOutlined />, label: <span className="text-lg font-semibold">Mua bán</span> },
     ];

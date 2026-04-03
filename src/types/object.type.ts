@@ -1,4 +1,18 @@
-import { Gender, NotificationType, PlaylistStatus, ReportTargetType, SongReleseStatus, SongStatus, UserStatus, VerificationStatus } from "./constant.type";
+import {
+  Gender,
+  NotificationType,
+  PlaylistStatus,
+  ReportTargetType,
+  RoomParticipantRole,
+  RoomParticipantStatus,
+  RoomQueueItemStatus,
+  RoomSourceType,
+  RoomStatus,
+  SongReleseStatus,
+  SongStatus,
+  UserStatus,
+  VerificationStatus
+} from "./constant.type";
 
 export interface Role {
   _id: string,
@@ -136,8 +150,16 @@ export interface Product {
 }
 
 export interface Comment {
-  content: string,
-  songId: string
+  _id?: string;
+  content: string;
+  songId: string;
+  userId?: {
+    _id: string;
+    username: string;
+    avatar?: string;
+  };
+  createdAt?: string;
+  playbackPositionSec?: number;
 }
 
 export interface Playlist {
@@ -294,3 +316,91 @@ export interface SongLeaderboard extends Song {
 }
 
 export type LeaderboardType = 'all' | 'week' | 'month';
+
+export interface RoomHostUser {
+  _id: string;
+  username: string;
+  avatar?: string;
+}
+
+export interface RoomParticipant {
+  _id: string;
+  roomId: string;
+  userId: RoomHostUser | string;
+  role: RoomParticipantRole;
+  status: RoomParticipantStatus;
+  joinedAt?: string;
+  leftAt?: string | null;
+  lastSeenAt?: string;
+  moderatedBy?: string | RoomHostUser;
+  moderationReason?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface RoomQueueItem {
+  _id: string;
+  roomId: string;
+  songId: Song;
+  requestedBy: RoomHostUser | string;
+  approvedBy?: RoomHostUser | string;
+  order?: number;
+  status: RoomQueueItemStatus;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface RoomMessage {
+  _id: string;
+  roomId: string;
+  userId: RoomHostUser | string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Room {
+  _id: string;
+  name: string;
+  description?: string;
+  imageUrl: string;
+  hostId: RoomHostUser | string;
+  scheduledAt?: string;
+  startedAt?: string;
+  endedAt?: string;
+  status: RoomStatus;
+  sourceType: RoomSourceType;
+  sourceId: string;
+  currentSongId?: string | Song | null;
+  currentQueueItemId?: string | null;
+  isPlaying: boolean;
+  playbackPositionMs: number;
+  playbackStartedAt?: string;
+  participantCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface RoomDetail extends Room {
+  currentSong: Song | null;
+  participants: RoomParticipant[];
+  queue: RoomQueueItem[];
+}
+
+export interface RoomRealtimeNotification {
+  id: string;
+  type:
+    | "join"
+    | "leave"
+    | "message"
+    | "request"
+    | "requestResolved"
+    | "moderation"
+    | "roomUpdated"
+    | "roomEnded"
+    | "playerSync";
+  message: string;
+  createdAt: string;
+  imageUrl?: string;
+  queueItem?: RoomQueueItem;
+}

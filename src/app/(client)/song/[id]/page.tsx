@@ -8,16 +8,18 @@ import Loading from "@/components/common/loading";
 import NotFoundUI from "@/components/common/not-found-ui";
 import Title from "@/components/common/title";
 import { useToast } from "@/hooks/useToast";
+import { useCommentList } from "@/queries/useCommentQuery";
 import { useLikeSong, useUnlikeSong, useUserLike } from "@/queries/useLikeQuery";
 import { useStartPlayer } from "@/queries/usePlayerQuery";
 import { useSongDetail } from "@/queries/useSongQuery";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { usePlayerStore } from "@/stores/usePlayerStore";
 import { PlaySongType, ReportTargetType } from "@/types/constant.type";
+import type { Comment } from "@/types/object.type";
 import { CaretRightFilled, FlagOutlined, HeartFilled, HeartOutlined, LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { Input } from 'antd';
 import { useParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import LyricsPreview from "../lyrics-preview";
 import SongAddPlaylistModal from "./song-add-playlist-modal";
 import SongComment from "./song-comment";
@@ -32,6 +34,7 @@ export default function SongDetailPage() {
     const currentTime = usePlayerStore((state) => state.currentTime);
     const { nowPlayingId, nowPlaying } = usePlayerStore(state => state.status);
     const seekToTime = usePlayerStore((state) => state.seekToTime);
+    const getAudioRef = useCallback(() => usePlayerStore.getState().audioRef, []);
     const nowPlayingType = usePlayerStore(state => state.status.nowPlayingType);
 
     const isAuthenticated = useAuthStore(state => state.isAuthenticated);
@@ -40,6 +43,7 @@ export default function SongDetailPage() {
 
     // Các hook React Query - Giữ ở cấp cao nhất
     const { data: songRes, isLoading } = useSongDetail(id);
+    const { data: commentsForWave } = useCommentList(String(id), { page: 1 });
     const { data: likeRes } = useUserLike({ page: 1, size: 100 });
     const { mutate: likeSong } = useLikeSong();
     const { mutate: unlikeSong } = useUnlikeSong();
@@ -91,14 +95,77 @@ export default function SongDetailPage() {
         startPlayerMutation({ songId: song._id });
     };
 
-    const handleWaveSeek = useCallback((newTime: number) => {
-        // Dùng luôn currentPlayingId đã tính ở trên
-        if (song?._id !== currentPlayingId) {
-            toast.error("Vui lòng nhấn nút Play trước khi tua!");
-            return;
-        }
-        seekToTime(newTime);
-    }, [song?._id, currentPlayingId, seekToTime]);
+    const commentMarkers = useMemo(() => {
+        const rows = (commentsForWave?.data ?? []) as Comment[];
+        return rows
+            .filter((c): c is Comment & { playbackPositionSec: number } =>
+                typeof c.playbackPositionSec === "number" && c.playbackPositionSec >= 0
+            )
+            .map((c) => ({
+                id: c._id,
+                timeSec: c.playbackPositionSec,
+                avatarUrl: c.userId?.avatar,
+            }));
+    }, [commentsForWave]);
+
+    const scheduleSeekAfterPlay = useCallback(
+        (targetSec: number) => {
+            let attempts = 0;
+            const tick = () => {
+                const audio = getAudioRef();
+                if (audio && audio.readyState >= 1) {
+                    seekToTime(targetSec);
+                    return;
+                }
+                attempts += 1;
+                if (attempts < 40) {
+                    window.setTimeout(tick, 50);
+                } else {
+                    seekToTime(targetSec);
+                }
+            };
+            window.setTimeout(tick, 0);
+        },
+        [getAudioRef, seekToTime]
+    );
+
+    const handleWaveSeek = useCallback(
+        (newTime: number) => {
+            if (!song) return;
+            if (song._id === currentPlayingId) {
+                seekToTime(newTime);
+                return;
+            }
+            if (!isAuthenticated) {
+                toast.error("Vui lòng đăng nhập để tua bài hát");
+                return;
+            }
+            if (isCurrentAd) {
+                toast.info("Nghe nhạc free thì chịu nghe quảng cáo đi");
+                return;
+            }
+            if (isStartingPlayer) return;
+            startPlayerMutation(
+                { songId: song._id },
+                {
+                    onSuccess: () => {
+                        scheduleSeekAfterPlay(newTime);
+                    },
+                }
+            );
+        },
+        [
+            song,
+            currentPlayingId,
+            seekToTime,
+            isAuthenticated,
+            toast,
+            isCurrentAd,
+            isStartingPlayer,
+            startPlayerMutation,
+            scheduleSeekAfterPlay,
+        ]
+    );
 
     // CHẶN RENDER: Chỉ khi đã Hydrate và có dữ liệu
     if (!isMounted || isLoading) return <Loading />;
@@ -147,7 +214,9 @@ export default function SongDetailPage() {
                                 songId={song._id}
                                 url={song?.mp3Link}
                                 currentTime={isThisSongCurrentlyPlaying ? currentTime : 0}
-                                onSeek={isThisSongCurrentlyPlaying ? handleWaveSeek : undefined}
+                                onSeek={handleWaveSeek}
+                                alwaysShowWave
+                                commentMarkers={commentMarkers}
                             />
                         </div>
                     </div>

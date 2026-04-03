@@ -1,9 +1,15 @@
 import { io, Socket } from "socket.io-client";
+import { getCookieValue } from "./getCookieValue";
 
 let socket: Socket | null = null;
 
+
+
 export const connectSocket = () => {
-    const token = sessionStorage.getItem("accessToken") || localStorage.getItem("accessToken");
+    const token =
+        getCookieValue("accessToken") ||
+        sessionStorage.getItem("accessToken") ||
+        localStorage.getItem("accessToken");
     if (!token) return;
 
     if (socket) {
@@ -13,7 +19,7 @@ export const connectSocket = () => {
 
     console.log("🟢 Connecting socket...");
 
-    socket = io("https://novawave-backend.onrender.com", {
+    socket = io(process.env.NEXT_PUBLIC_SOCKET_URL, {
         transports: ["websocket"],
         auth: {
             token:token,

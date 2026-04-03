@@ -1,4 +1,13 @@
-import { Gender, ReportTargetType, VerificationStatus } from './constant.type';
+import {
+  Gender,
+  ReportTargetType,
+  RoomControlAction,
+  RoomModerationAction,
+  RoomParticipantStatus,
+  RoomQueueItemStatus,
+  RoomStatus,
+  VerificationStatus
+} from './constant.type';
 
 export interface Pagination {
   page: number;
@@ -172,6 +181,83 @@ export interface CreateReportDto {
   targetType: ReportTargetType,
   reason: string,
   description: string,
+}
+
+export interface CreateRoomDto {
+  name: string;
+  description?: string;
+  imageUrl: string;
+  scheduledAt?: string;
+  initialSongId?: string;
+  playlistId?: string;
+  albumId?: string;
+}
+
+export interface UpdateRoomDto {
+  name?: string;
+  description?: string;
+  imageUrl?: string;
+  scheduledAt?: string;
+  status?: RoomStatus;
+}
+
+export interface AddRoomQueueItemDto {
+  songId: string;
+}
+
+export interface UpdateRoomQueueItemDto {
+  status: RoomQueueItemStatus.APPROVED | RoomQueueItemStatus.REJECTED;
+}
+
+export interface SyncRoomPlaybackDto {
+  currentSongId?: string;
+  currentQueueItemId?: string;
+  currentTime?: number;
+  isPlaying?: boolean;
+  startedAt?: string;
+}
+
+export interface ModerateRoomParticipantDto {
+  action: RoomModerationAction;
+  reason?: string;
+}
+
+export interface CreateRoomMessageDto {
+  content: string;
+}
+
+export interface RoomControlDto {
+  roomId: string;
+  action: RoomControlAction;
+  currentSongId?: string;
+  currentQueueItemId?: string;
+  currentTime?: number;
+}
+
+export interface RoomModerationResult {
+  success: boolean;
+  userId?: string;
+  action?: RoomModerationAction;
+  reason?: string;
+  roomId?: string;
+}
+
+export interface RoomLeaveResult {
+  success: boolean;
+}
+
+export interface RoomParticipantJoinResult<T = unknown> {
+  room: T;
+  participant: T;
+}
+
+export interface RoomStatusPatch {
+  status: RoomStatus;
+  isPlaying: boolean;
+}
+
+export interface RoomParticipantFilterDto {
+  status?: RoomParticipantStatus;
 }
 
 

@@ -1,7 +1,9 @@
 import Title from "@/components/common/title";
+import { formatDuration } from "@/libs/fomat";
 import { useToast } from "@/hooks/useToast";
 import { useCommentList, useCreateComment, useDeleteComment, useUpdateComment } from "@/queries/useCommentQuery";
 import { useAuthStore } from "@/stores/useAuthStore";
+import { usePlayerStore } from "@/stores/usePlayerStore";
 import { Button, Pagination, Popconfirm } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { useState } from "react";
@@ -13,6 +15,8 @@ interface Prop {
 export default function SongComment({ songId }: Prop) {
     const toast = useToast();
     const user = useAuthStore((state) => state.user);
+    const currentTime = usePlayerStore((state) => state.currentTime);
+    const seekToTime = usePlayerStore((state) => state.seekToTime);
 
 
     const [page, setPage] = useState(1);
@@ -27,7 +31,6 @@ export default function SongComment({ songId }: Prop) {
 
     const [content, setContent] = useState("");
     const [editingComment, setEditingComment] = useState<any>(null);
-    const [replyingTo, setReplyingTo] = useState<any>(null);
 
     const handleSubmit = () => {
         if (!content.trim()) {
@@ -59,7 +62,7 @@ export default function SongComment({ songId }: Prop) {
         }
 
         createComment(
-            { songId, content },
+            { songId, content, playbackPositionSec: Math.floor(currentTime || 0) },
             {
                 onSuccess: (res: any) => {
                     toast.success(res?.data?.message || "Bình luận thành công");
@@ -140,6 +143,16 @@ export default function SongComment({ songId }: Prop) {
                                     <div className="text-text-secondary text-base">
                                         {new Date(c.createdAt).toLocaleString("vi-VN")}
                                     </div>
+
+                                    {typeof c.playbackPositionSec === "number" && c.playbackPositionSec >= 0 && (
+                                        <button
+                                            type="button"
+                                            className="ml-1 rounded-full border border-green px-2 py-0.5 text-xs text-green transition hover:bg-green hover:text-black"
+                                            onClick={() => seekToTime(c.playbackPositionSec)}
+                                        >
+                                            {formatDuration(c.playbackPositionSec)}
+                                        </button>
+                                    )}
 
                                     {/* ACTIONS */}
 

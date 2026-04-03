@@ -132,3 +132,131 @@ body {
     color: var(--color-text-secondary) !important;
 }
 
+/*song-bar*/
+.custom-audio-player {
+  background: transparent;
+  box-shadow: none;
+}
+
+.custom-audio-player.rhap_container {
+  background-color: transparent !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+.custom-audio-player .rhap_progress-bar {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.custom-audio-player .rhap_progress-indicator {
+  background-color: var(--color-green) !important; 
+}
+
+.custom-audio-player .rhap_time,
+.custom-audio-player .rhap_button-clear {
+  color: white;
+}
+
+.custom-audio-player .rhap_volume-bar {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.custom-audio-player .rhap_volume-indicator {
+  background-color: var(--color-green) !important;
+}
+
+.custom-audio-player .rhap_progress-section {
+  margin: 0 16px;
+}
+
+.custom-audio-player.ad-mode .rhap_progress-section {
+  pointer-events: none !important;
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.custom-audio-player.ad-mode .rhap_progress-indicator {
+  background-color: #888; 
+}
+
+
+
+.custom-room-tabs {
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+/* Thanh header chứa các tab */
+.custom-room-tabs .ant-tabs-nav::before {
+  display: none !important;
+  border-bottom: none !important;
+}
+
+/* 2. Cập nhật lại phần header để sạch sẽ hơn */
+.custom-room-tabs .ant-tabs-nav {
+  margin-bottom: 24px !important;
+  /* Nếu bạn muốn giữ một đường kẻ mờ do mình tự định nghĩa thì dùng dòng dưới, 
+     còn muốn mất hẳn thì đổi thành border-bottom: none !important; */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 8px 16px 0;
+}
+
+/* 3. Đảm bảo thanh ink-bar (thanh màu xanh khi active) vẫn hiển thị đẹp */
+.custom-room-tabs .ant-tabs-ink-bar {
+  background: #25a26a !important;
+  height: 3px !important;
+  border-radius: 3px 3px 0 0;
+  box-shadow: 0 -2px 10px rgba(37, 162, 106, 0.8);
+  bottom: 0 !important; /* Đảm bảo nó nằm sát mép dưới */
+}
+
+/* Các tab riêng lẻ */
+.custom-room-tabs .ant-tabs-tab {
+  padding: 12px 16px !important;
+  margin: 0 4px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  border-radius: 12px 12px 0 0;
+}
+
+/* Icon và Text trong tab */
+.custom-room-tabs .ant-tabs-tab .ant-tabs-tab-btn {
+  color: rgba(255, 255, 255, 0.4) !important;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+}
+
+/* Khi Hover vào tab */
+.custom-room-tabs .ant-tabs-tab:hover .ant-tabs-tab-btn {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Tab đang Active */
+.custom-room-tabs .ant-tabs-tab-active {
+  background: rgba(37, 162, 106, 0.05) !important; /* Màu xanh emerald nhạt */
+}
+
+.custom-room-tabs .ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #25a26a !important; /* var(--color-green) */
+  text-shadow: 0 0 15px rgba(37, 162, 106, 0.4);
+}
+
+/* Thanh gạch chân (Ink bar) */
+.custom-room-tabs .ant-tabs-ink-bar {
+  background: #25a26a !important;
+  height: 3px !important;
+  border-radius: 3px 3px 0 0;
+  box-shadow: 0 -2px 10px rgba(37, 162, 106, 0.8);
+}
+
+/* Nội dung bên trong tab */
+.custom-room-tabs .ant-tabs-content-holder {
+  border: none !important;
+  padding: 0 4px;
+}
+
+/* Tùy chỉnh thanh cuộn bên trong tab nếu cần */
+.custom-room-tabs .ant-tabs-tabpane {
+  outline: none;
+}

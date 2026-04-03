@@ -1,4 +1,11 @@
-import { CheckCircleFilled, GiftFilled, HeartFilled, InfoCircleFilled, UserAddOutlined } from "@ant-design/icons";
+
+export enum HttpMethod {
+    GET = 'GET',
+    POST = 'POST',
+    PUT = 'PUT',
+    PATCH = 'PATCH',
+    DELETE = 'DELETE',
+}
 
 export enum Gender {
     MALE = "male",
@@ -56,13 +63,6 @@ export enum PlaylistStatus {
   PUBLIC = 'public'
 }
 
-export enum HttpMethod {
-    GET = 'GET',
-    POST = 'POST',
-    PUT = 'PUT',
-    PATCH = 'PATCH',
-    DELETE = 'DELETE',
-}
 
 export enum NotificationType {
   SONG_FEAT_REQUEST = 'SONG_FEAT_REQUEST',
@@ -84,37 +84,52 @@ export enum NewsStatus {
     ARCHIVED = 'archived'
 }
 
-export const NOTIFICATION_CONFIG = {
-    [NotificationType.SONG_FEAT_REQUEST]: { 
-        icon: UserAddOutlined, 
-        color: 'text-orange-400' 
-    },
-    [NotificationType.SONG_PUBLISHED]: { 
-        icon: CheckCircleFilled, 
-        color: 'text-green-500' 
-    },
-    [NotificationType.GENERAL]: { 
-        icon: InfoCircleFilled, 
-        color: 'text-blue-400' 
-    },
-    [NotificationType.NEW_FOLLOW]: { 
-        icon: UserAddOutlined, 
-        color: 'text-purple-400' 
-    },
-    [NotificationType.NEW_LIKE]: { 
-        icon: HeartFilled, 
-        color: 'text-red-500' 
-    },
-    [NotificationType.NEW_SONG_RELEASE]: { 
-        icon: GiftFilled, 
-        color: 'text-pink-500' 
-    },
-};
+export enum RoomStatus {
+    WAITING = "WAITING",
+    STREAMING = "STREAMING",
+    PAUSED = "PAUSED",
+    ENDED = "ENDED",
+}
 
-export const METHOD_TEXT_COLORS: Record<HttpMethod, string> = {
-    [HttpMethod.GET]: 'text-green-600',
-    [HttpMethod.POST]: 'text-blue-600',
-    [HttpMethod.PUT]: 'text-yellow-600',
-    [HttpMethod.PATCH]: 'text-indigo-600',
-    [HttpMethod.DELETE]: 'text-red-600',
-};
+export enum RoomSourceType {
+    SONG = "SONG",
+    ALBUM = "ALBUM",
+    PLAYLIST = "PLAYLIST",
+}
+
+export enum RoomQueueItemStatus {
+    PENDING = "PENDING",
+    APPROVED = "APPROVED",
+    REJECTED = "REJECTED",
+    PLAYING = "PLAYING",
+    PLAYED = "PLAYED",
+    REMOVED = "REMOVED",
+}
+
+export enum RoomParticipantStatus {
+    ACTIVE = "ACTIVE",
+    LEFT = "LEFT",
+    KICKED = "KICKED",
+    BANNED = "BANNED",
+}
+
+export enum RoomParticipantRole {
+    HOST = "HOST",
+    LISTENER = "LISTENER",
+}
+
+export enum RoomModerationAction {
+    KICK = "KICK",
+    BAN = "BAN",
+}
+
+export enum RoomControlAction {
+    PLAY = "PLAY",
+    PAUSE = "PAUSE",
+    SEEK = "SEEK",
+    NEXT = "NEXT",
+    END = "END",
+    SYNC = "SYNC",
+}
+
+

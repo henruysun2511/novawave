@@ -1,5 +1,5 @@
+import { NOTIFICATION_CONFIG } from "@/libs/mapping";
 import { useMarkRead } from "@/queries/useNofiticationQuery";
-import { NOTIFICATION_CONFIG } from "@/types/constant.type";
 import { Notification } from "@/types/object.type";
 import { BellOutlined } from "@ant-design/icons";
 import { Typography } from "antd";
