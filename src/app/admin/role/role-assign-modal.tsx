@@ -1,7 +1,8 @@
 import { useToast } from '@/hooks/useToast';
+import { METHOD_TEXT_COLORS } from '@/libs/mapping';
 import { usePermissionList } from '@/queries/usePermissionQuery';
 import { useAssignPermissions } from '@/queries/useRoleQuery';
-import { HttpMethod, METHOD_TEXT_COLORS } from '@/types/constant.type';
+import { HttpMethod } from '@/types/constant.type';
 import { Permission, Role } from '@/types/object.type';
 import { Button, Collapse, Modal, Space, Switch, Typography } from 'antd';
 import { useEffect, useState } from 'react';

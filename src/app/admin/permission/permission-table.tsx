@@ -1,4 +1,5 @@
-import { HttpMethod, METHOD_TEXT_COLORS } from '@/types/constant.type';
+import { METHOD_TEXT_COLORS } from '@/libs/mapping';
+import { HttpMethod } from '@/types/constant.type';
 import { Permission } from '@/types/object.type';
 import { PaginationProps, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
