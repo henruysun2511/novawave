@@ -1,6 +1,6 @@
 import SongCard from "@/components/client/Song/song-card";
 import { EmptyState } from "@/components/common/empty";
-import SquareSkeleton from "@/components/common/Skeleton/square-skeleton";
+import SquareSkeleton from "@/components/common/skeleton/square-skeleton";
 import { useUserLike } from "@/queries/useLikeQuery";
 import { Pagination } from "antd";
 import { useState } from "react";

@@ -2,7 +2,7 @@
 import Footer from "@/components/client/Layout/footer";
 import SongCard from "@/components/client/Song/song-card";
 import { EmptyState } from "@/components/common/empty";
-import { default as SquareSkeleton } from "@/components/common/Skeleton/square-skeleton";
+import { default as SquareSkeleton } from "@/components/common/skeleton/square-skeleton";
 import Title from "@/components/common/title";
 import { useGenreList } from "@/queries/useGenreQuery";
 import { useSettings } from "@/queries/useSettingQuery";

@@ -1,6 +1,6 @@
 import ArtistCard from "@/components/client/Artist/artist-card";
 import { EmptyState } from "@/components/common/empty";
-import CircleSkeleton from "@/components/common/Skeleton/circle-skeleton";
+import CircleSkeleton from "@/components/common/skeleton/circle-skeleton";
 import { useUserFollow } from "@/queries/useFollowQuery";
 import { Pagination } from "antd";
 import { useState } from "react";

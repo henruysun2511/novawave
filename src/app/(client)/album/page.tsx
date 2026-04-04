@@ -2,7 +2,7 @@
 import AlbumCard from "@/components/client/Album/album-card";
 import Footer from "@/components/client/Layout/footer";
 import { EmptyState } from "@/components/common/empty";
-import SquareSkeleton from "@/components/common/Skeleton/square-skeleton";
+import SquareSkeleton from "@/components/common/skeleton/square-skeleton";
 import Title from "@/components/common/title";
 import { useAlbumList } from "@/queries/useAlbumQuery";
 import { useSettings } from "@/queries/useSettingQuery";

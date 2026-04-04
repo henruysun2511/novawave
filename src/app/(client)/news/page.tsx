@@ -2,7 +2,7 @@
 
 import NewsList from "@/components/client/News/news-list";
 import { EmptyState } from "@/components/common/empty";
-import HorizontalRectangleSkeleton from "@/components/common/Skeleton/horizontal-rectangle-skeleton";
+import HorizontalRectangleSkeleton from "@/components/common/skeleton/horizontal-rectangle-skeleton";
 import Title from "@/components/common/title";
 import { useNewsList } from "@/queries/useNewsQuery";
 import { useSettings } from "@/queries/useSettingQuery";

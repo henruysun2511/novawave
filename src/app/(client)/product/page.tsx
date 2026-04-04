@@ -1,7 +1,7 @@
 "use client";
 import Footer from "@/components/client/Layout/footer";
 import ProductCard from "@/components/client/Product/product-card";
-import SquareSkeleton from "@/components/common/Skeleton/square-skeleton";
+import SquareSkeleton from "@/components/common/skeleton/square-skeleton";
 import { useProductList } from "@/queries/useProductQuery";
 import { useSettings } from "@/queries/useSettingQuery";
 import { Product } from "@/types/object.type";

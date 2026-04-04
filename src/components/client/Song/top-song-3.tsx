@@ -1,7 +1,7 @@
 "use client";
 
 import { EmptyState } from "@/components/common/empty";
-import ListSkeleton from "@/components/common/Skeleton/list-skeleton";
+import ListSkeleton from "@/components/common/skeleton/list-skeleton";
 import { useToast } from "@/hooks/useToast";
 import { useStartPlayer } from "@/queries/usePlayerQuery";
 import { useSongLeaderboard, useSongList } from "@/queries/useSongQuery";
@@ -10,10 +10,10 @@ import { usePlayerStore } from "@/stores/usePlayerStore";
 import { PlaySongType } from "@/types/constant.type";
 import { Song } from "@/types/object.type";
 import {
-  CaretDownOutlined,
-  CaretUpOutlined,
-  CustomerServiceOutlined,
-  PlayCircleFilled
+    CaretDownOutlined,
+    CaretUpOutlined,
+    CustomerServiceOutlined,
+    PlayCircleFilled
 } from "@ant-design/icons";
 
 export default function TopSong3() {

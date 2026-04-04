@@ -12,7 +12,7 @@ import SongList2 from "@/components/client/Song/song-list-2";
 import TopSong2 from "@/components/client/Song/top-song-2";
 import TopSong3 from "@/components/client/Song/top-song-3";
 import { EmptyState } from "@/components/common/empty";
-import SquareSkeleton from "@/components/common/Skeleton/square-skeleton";
+import SquareSkeleton from "@/components/common/skeleton/square-skeleton";
 import Title from "@/components/common/title";
 import { useAlbumList } from "@/queries/useAlbumQuery";
 import { useArtistList } from "@/queries/useArtistQuery";

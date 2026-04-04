@@ -1,4 +1,4 @@
-import VerticalRectangleSkeleton from "@/components/common/Skeleton/vertical-rectangle-skeleton";
+import VerticalRectangleSkeleton from "@/components/common/skeleton/vertical-rectangle-skeleton";
 import { useToast } from "@/hooks/useToast";
 import { useStartPlayer } from "@/queries/usePlayerQuery";
 import { useSongLeaderboard } from "@/queries/useSongQuery";

@@ -1,5 +1,5 @@
 import { EmptyState } from "@/components/common/empty";
-import HorizontalRectangleSkeleton from "@/components/common/Skeleton/horizontal-rectangle-skeleton";
+import HorizontalRectangleSkeleton from "@/components/common/skeleton/horizontal-rectangle-skeleton";
 import { usePurchaseHistory } from "@/queries/usePurchaseHistoryQuery";
 import { Card, Col, Divider, Row, Typography } from "antd";
 const { Title, Text } = Typography;
