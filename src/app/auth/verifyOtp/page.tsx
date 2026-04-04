@@ -5,7 +5,6 @@ import { useSettings } from "@/queries/useSettingQuery";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { Button, Form, Input, Modal, Statistic } from "antd";
 import { useRouter } from "next/navigation";
-import "./countdown.css";
 const { Countdown } = Statistic;
 
 interface OtpFormValues {
@@ -113,6 +112,8 @@ export default function VerifyOtpPage() {
                             size="large"
                             type="primary"
                             htmlType="submit"
+                            loading={isPending}
+                            disabled={isPending}
                         >
                             {isPending ? "Đang xác thực OTP" : "Xác nhận"}
                         </Button>

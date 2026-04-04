@@ -10,16 +10,15 @@ import {
   SettingOutlined
 } from "@ant-design/icons";
 import { Tabs } from "antd";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
-import { RoomSongBar } from "./room-song-bar";
 import { RoomInfoPanel } from "./room-info-panel";
 import { RoomLyricsPanel } from "./room-lyrics-panel";
 import { QueueSlider } from "./room-queue-panel";
-import RoomVisualizerPanel from "./room-visualizer-panel";
-import RoomVisualizerDJ from "./room-visualizer-panel";
-
+import { RoomSongBar } from "./room-song-bar";
+import { RoomUpdatePanel } from "./room-update-panel"; // Đảm bảo bạn đã tạo file này
+import RoomVisualizer from "./room-visualizer-panel";
 
 interface RoomDetailLeftPanelProps {
   room: RoomDetail;
@@ -93,88 +92,112 @@ export function RoomDetailLeftPanel({
     };
   }, [onPlayerDurationChange, room.currentSong?.mp3Link, setAudioElement]);
 
-  return (
-    <section className="flex h-full min-h-0 flex-col border-b">
+  // Khởi tạo danh sách Tabs dựa trên quyền Host
+  const tabItems = useMemo(() => {
+    const baseItems = [
+      {
+        key: "info",
+        label: (
+          <span className="flex items-center gap-2 px-2 py-1">
+            <InfoCircleOutlined /> Thông tin phòng
+          </span>
+        ),
+        children: (
+          <div className="flex-1 min-h-0 overflow-y-auto">
+            <RoomInfoPanel
+              room={room}
+              isHost={isHost}
+              playbackSeconds={playbackSeconds}
+              durationSeconds={durationSeconds}
+              visibleQueue={visibleQueue}
+              requestQueue={requestQueue}
+              selectedQueueItemId={selectedQueueItemId}
+              selectedQueueItem={selectedQueueItem}
+              audioRef={audioRef}
+              emitHostControl={emitHostControl}
+              setSelectedQueueItemId={setSelectedQueueItemId}
+              handleResolveRequest={handleResolveRequest}
+            />
+          </div>
+        )
+      },
+      {
+        key: "queue",
+        label: (
+          <span className="flex items-center gap-2 px-2 py-1">
+            <PlaySquareOutlined /> Danh sách bài hát
+          </span>
+        ),
+        children: (
+          <QueueSlider
+            visibleQueue={visibleQueue}
+            selectedQueueItemId={selectedQueueItemId}
+            selectedQueueItem={selectedQueueItem}
+            isHost={isHost}
+            setSelectedQueueItemId={setSelectedQueueItemId}
+            handleResolveRequest={handleResolveRequest}
+          />
+        )
+      },
+      {
+        key: "lyrics",
+        label: (
+          <span className="flex items-center gap-2 px-2 py-1">
+            <FileTextOutlined /> Lyrics
+          </span>
+        ),
+        children: (
+          <RoomLyricsPanel
+            room={room}
+            playbackSeconds={playbackSeconds}
+            durationSeconds={durationSeconds}
+          />
+        )
+      },
+      {
+        key: "visualizer",
+        label: (
+          <span className="flex items-center gap-2 px-2 py-1">
+            <CustomerServiceOutlined /> Sound Effects
+          </span>
+        ),
+        children: (
+          <div className="flex-1 min-h-0 h-[550px] p-4">
+            <RoomVisualizer
+              audioRef={audioRef}
+              songName={room.currentSong?.name || "Đang phát..."}
+            />
+          </div>
+        )
+      }
+    ];
 
+    if (isHost) {
+      baseItems.push({
+        key: "settings",
+        label: (
+          <span className="flex items-center gap-2 px-2 py-1  font-medium">
+            <SettingOutlined /> Cài đặt phòng
+          </span>
+        ),
+        children: (
+          <div className="flex-1 min-h-0 overflow-y-auto">
+            <RoomUpdatePanel room={room} />
+          </div>
+        )
+      });
+    }
+
+    return baseItems;
+  }, [room, isHost, playbackSeconds, durationSeconds, visibleQueue, requestQueue, selectedQueueItemId, selectedQueueItem, audioRef]);
+
+  return (
+    <section className="flex h-full min-h-0 flex-col border-b bg-[#0a0a0a]">
       <div className="flex-1 min-h-0">
         <Tabs
           defaultActiveKey="info"
           className="custom-room-tabs flex-1 flex flex-col min-h-0"
-          items={[
-            {
-              key: "info",
-              label: (
-                <span className="flex items-center gap-2 px-2 py-1">
-                  <InfoCircleOutlined /> Thông tin phòng
-                </span>
-              ),
-              children: (
-                <div className="flex-1 min-h-0 overflow-y-auto">
-                  <RoomInfoPanel
-                    room={room}
-                    isHost={isHost}
-                    playbackSeconds={playbackSeconds}
-                    durationSeconds={durationSeconds}
-                    visibleQueue={visibleQueue}
-                    requestQueue={requestQueue}
-                    selectedQueueItemId={selectedQueueItemId}
-                    selectedQueueItem={selectedQueueItem}
-                    audioRef={audioRef}
-                    emitHostControl={emitHostControl}
-                    setSelectedQueueItemId={setSelectedQueueItemId}
-                    handleResolveRequest={handleResolveRequest}
-                  />
-                </div>
-
-              )
-            },
-            {
-              key: "queue",
-              label: (
-                <span className="flex items-center gap-2 px-2 py-1">
-                  <PlaySquareOutlined /> Danh sách bài hát
-                </span>
-              ),
-              children: (
-                <QueueSlider
-                  visibleQueue={visibleQueue}
-                  selectedQueueItemId={selectedQueueItemId}
-                  selectedQueueItem={selectedQueueItem}
-                  isHost={isHost}
-                  setSelectedQueueItemId={setSelectedQueueItemId}
-                  handleResolveRequest={handleResolveRequest}
-                />
-              )
-            },
-            {
-              key: "lyrics",
-              label: (
-                <span className="flex items-center gap-2 px-2 py-1">
-                  <FileTextOutlined /> Lyrics
-                </span>
-              ),
-              children: (
-                <RoomLyricsPanel
-                  room={room}
-                  playbackSeconds={playbackSeconds}
-                  durationSeconds={durationSeconds}
-                />
-              )
-            },
-            {
-              key: "visualizer",
-              label: (
-                <span className="flex items-center gap-2 px-2 py-1">
-                  <CustomerServiceOutlined /> DJ Remix
-                </span>
-              ),
-              children: (
-                <div className="flex-1 min-h-0 h-[400px]">
-                  <RoomVisualizerDJ audioRef={audioRef} />
-                </div>
-              )
-            },
-          ]}
+          items={tabItems}
         />
       </div>
       <div className="flex-shrink-0">
@@ -193,7 +216,6 @@ export function RoomDetailLeftPanel({
           onPlayerEnded={onPlayerEnded}
         />
       </div>
-
     </section>
   );
 }

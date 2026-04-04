@@ -1,4 +1,4 @@
-import { HttpMethod, NotificationType, RoomQueueItemStatus, RoomStatus } from "@/types/constant.type";
+import { HttpMethod, NotificationType, RoomQueueItemStatus, RoomSourceType, RoomStatus } from "@/types/constant.type";
 import { CheckCircleFilled, GiftFilled, HeartFilled, InfoCircleFilled, UserAddOutlined } from "@ant-design/icons";
 
 export const roomStatusMap: Record<RoomStatus, { label: string; className: string }> = {
@@ -51,3 +51,9 @@ export const METHOD_TEXT_COLORS: Record<HttpMethod, string> = {
     [HttpMethod.PATCH]: 'text-indigo-600',
     [HttpMethod.DELETE]: 'text-red-600',
 };
+
+export const sourceOptions = [
+  { label: "Bài hát", value: RoomSourceType.SONG },
+  { label: "Album", value: RoomSourceType.ALBUM },
+  { label: "Playlist", value: RoomSourceType.PLAYLIST },
+];

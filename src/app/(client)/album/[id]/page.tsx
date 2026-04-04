@@ -2,6 +2,7 @@
 
 import ArtistCard from "@/components/client/Artist/artist-card";
 import ReportModal from "@/components/client/Report/report-modal";
+import { EmptyState } from "@/components/common/empty";
 import Loading from "@/components/common/loading";
 import NotFoundUI from "@/components/common/not-found-ui";
 import Title from "@/components/common/title";
@@ -131,7 +132,7 @@ export default function AlbumDetailPage() {
                     </thead>
 
                     <tbody>
-                        {songs && songs.length > 0 && (
+                        {songs && songs.length > 0 ? (
                             songs.map((song, index) => (
                                 <tr
                                     key={song._id}
@@ -148,6 +149,12 @@ export default function AlbumDetailPage() {
                                     </td>
                                 </tr>
                             ))
+                        ) : (
+                            <tr>
+                                <td colSpan={3} className="py-5 text-center text-gray-400 italic">
+                                    Không có bài hát nào trong album này.
+                                </td>
+                            </tr>
                         )}
                     </tbody>
                 </table>
@@ -162,9 +169,7 @@ export default function AlbumDetailPage() {
                     ) : artist ? (
                         <ArtistCard artist={artist} />
                     ) : (
-                        <div className="text-gray-400 italic">
-                            Không có thông tin nghệ sĩ
-                        </div>
+                        <EmptyState title="Không tìm thấy thông tin nghệ sĩ" />
                     )}
                 </div>
 

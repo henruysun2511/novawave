@@ -6,9 +6,13 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
 import { useToast } from "@/hooks/useToast";
+import { getErrorMessage } from "@/libs/getErrorMessage";
+import { sourceOptions } from "@/libs/mapping";
 import { useCreateRoom } from "@/queries/useRoomQuery";
 import { useSearch } from "@/queries/useSearchQuery";
+import { CreateRoomDto } from "@/types/body.type";
 import { RoomSourceType } from "@/types/constant.type";
+import { Album, Playlist, Song } from "@/types/object.type";
 
 interface SearchSourceItem {
   _id: string;
@@ -39,27 +43,13 @@ interface SearchPlaylistItem {
   description?: string;
 }
 
-interface CreateRoomFormValues {
-  name: string;
-  description?: string;
-  scheduledAt?: string;
-}
 
-function getErrorMessage(error: unknown, fallback: string) {
-  const normalized = error as { response?: { data?: { message?: string } } };
-  return normalized?.response?.data?.message || fallback;
-}
 
-const sourceOptions = [
-  { label: "Bai hat", value: RoomSourceType.SONG },
-  { label: "Album", value: RoomSourceType.ALBUM },
-  { label: "Playlist", value: RoomSourceType.PLAYLIST },
-];
 
 export default function CreateRoomPage() {
   const router = useRouter();
   const toast = useToast();
-  const [form] = Form.useForm<CreateRoomFormValues>();
+  const [form] = Form.useForm<CreateRoomDto>();
   const [keyword, setKeyword] = useState("");
   const [sourceType, setSourceType] = useState<RoomSourceType>(RoomSourceType.SONG);
   const [selectedSource, setSelectedSource] = useState<SearchSourceItem | null>(null);
@@ -70,7 +60,7 @@ export default function CreateRoomPage() {
     if (!searchData) return [];
 
     if (sourceType === RoomSourceType.SONG) {
-      return ((searchData.songs ?? []) as SearchSongItem[]).map((item) => ({
+      return ((searchData.songs ?? []) as Song[]).map((item) => ({
         _id: item._id,
         name: item.name,
         imageUrl: item.imageUrl,
@@ -80,7 +70,7 @@ export default function CreateRoomPage() {
     }
 
     if (sourceType === RoomSourceType.ALBUM) {
-      return ((searchData.albums ?? []) as SearchAlbumItem[]).map((item) => ({
+      return ((searchData.albums ?? []) as Album[]).map((item) => ({
         _id: item._id,
         name: item.name,
         imageUrl: item.img,
@@ -89,10 +79,10 @@ export default function CreateRoomPage() {
       }));
     }
 
-    return ((searchData.playlists ?? []) as SearchPlaylistItem[]).map((item) => ({
+    return ((searchData.playlists ?? []) as Playlist[]).map((item) => ({
       _id: item._id,
       name: item.name,
-      imageUrl: item.img,
+      imageUrl: item.songImages?.[0] || "https://i.pinimg.com/1200x/e9/31/de/e931dec7b4baa83a239b554b6408eb73.jpg",
       subtitle: item.description,
       sourceType,
     }));
@@ -106,7 +96,7 @@ export default function CreateRoomPage() {
     } as never);
   };
 
-  const handleSubmit = (values: CreateRoomFormValues) => {
+  const handleSubmit = (values: CreateRoomDto) => {
     if (!selectedSource) {
       toast.error("Vui long chon mot nguon phat truoc khi tao phong");
       return;
@@ -177,7 +167,7 @@ export default function CreateRoomPage() {
               <p className="mt-2 text-sm font-medium text-white/50">Thiết lập không gian âm nhạc của riêng bạn trong vài bước.</p>
             </div>
 
-            <Form<CreateRoomFormValues>
+            <Form<CreateRoomDto>
               layout="vertical"
               form={form}
               onFinish={handleSubmit}
@@ -227,7 +217,7 @@ export default function CreateRoomPage() {
                     prefix={<SearchOutlined className="text-emerald-400" />}
                     placeholder={`Tìm ${sourceType === RoomSourceType.SONG ? "bài hát" : sourceType === RoomSourceType.ALBUM ? "album" : "playlist"}...`}
                     onChange={(event) => setKeyword(event.target.value)}
-                    className="h-12 rounded-xl border-white/10 bg-white/5 text-white focus:bg-white/10"
+                    className="h-12 rounded-xl border-white/10 bg-white/5 text-black focus:bg-white/10"
                   />
 
                   {/* List kết quả tìm kiếm được cải tiến */}
@@ -246,8 +236,8 @@ export default function CreateRoomPage() {
                             key={item._id}
                             onClick={() => handleSelectSource(item)}
                             className={`flex w-full items-center gap-4 rounded-xl p-3 text-left transition-all duration-300 ${isActive
-                                ? "bg-emerald-500/20 border-emerald-500/50 shadow-lg shadow-emerald-500/10"
-                                : "hover:bg-white/5 border border-transparent"
+                              ? "bg-emerald-500/20 border-emerald-500/50 shadow-lg shadow-emerald-500/10"
+                              : "hover:bg-white/5 border border-transparent"
                               }`}
                           >
                             <div className="relative h-14 w-14 shrink-0">

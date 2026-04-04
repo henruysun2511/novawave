@@ -55,7 +55,7 @@ export function RoomInfoPanel({
         return (
           <div className="rounded-3xl border border-[rgba(37,162,106,0.18)] bg-[linear-gradient(135deg,rgba(37,162,106,0.18),rgba(18,18,18,0.75))] p-5 shadow-inner">
             <div className="text-sm uppercase tracking-[0.3em] text-amber-200">Waiting room</div>
-            <div className="mt-3 text-2xl font-bold">Đang chờ admin bắt đầu</div>
+            <div className="mt-3 text-2xl font-bold text-white">Đang chờ admin bắt đầu</div>
             <div className="mt-2 text-sm text-white/70">Lịch phát: {formatTime(room.scheduledAt || room.startedAt)}</div>
             <div className="mt-2 text-sm text-white/70">Nguồn phát: {room.sourceType}</div>
           </div>
@@ -70,7 +70,7 @@ export function RoomInfoPanel({
       case RoomStatus.ENDED:
         return (
           <div className="rounded-3xl border border-rose-400/20 bg-[rgba(58,20,20,0.45)] p-5">
-            <div className="text-2xl font-bold">Phòng đã kết thúc</div>
+            <div className="text-2xl font-bold text-rose-400">Phòng đã kết thúc</div>
             <div className="mt-2 text-sm text-white/70">Phiên nghe nhạc này đã đóng.</div>
           </div>
         );

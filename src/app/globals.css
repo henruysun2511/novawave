@@ -462,3 +462,44 @@ background: #1a1a1a !important;
   background: #e11d48 !important;
   color: white !important;
 }
+
+/*countdown*/
+.countdown-white .ant-statistic-title {
+  color: #ccc;
+}
+
+.countdown-white .ant-statistic-content {
+  color: #fff;
+  font-weight: 600;
+}
+
+
+/* Tùy chỉnh container chứa thông báo */
+.ant-message-notice-content {
+  background: rgba(18, 18, 18, 0.8) !important; /* Nền tối trong suốt */
+  backdrop-filter: blur(12px) !important;       /* Hiệu ứng kính */
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 16px !important;              /* Bo góc mạnh */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+  padding: 12px 20px !important;
+}
+
+/* Tùy chỉnh màu chữ chung */
+.ant-message-custom-content {
+  display: flex;
+  align-items: center;
+  color: #ffffff !important;
+}
+
+/* Tùy chỉnh màu sắc riêng cho từng loại icon */
+.ant-message-success .anticon {
+  color: #10b981 !important; /* Màu xanh emerald-500 */
+}
+
+.ant-message-error .anticon {
+  color: #ef4444 !important; /* Màu đỏ */
+}
+
+.ant-message-warning .anticon {
+  color: #f59e0b !important; /* Màu vàng */
+}

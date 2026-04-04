@@ -89,6 +89,8 @@ export default function ResetPassword() {
                             size="large"
                             type="primary"
                             htmlType="submit"
+                            loading={isPending}
+                            disabled={isPending}
                         >
                             {isPending ? "Đang cập nhật mật khẩu" : "Cập nhật"}
                         </Button>
