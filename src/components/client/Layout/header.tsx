@@ -1,5 +1,4 @@
 "use client";
-import SideBar from '@/components/admin/Layout/sidebar';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { useToast } from '@/hooks/useToast';
 import { useGetUserInfoQuery, useLogoutMutation } from '@/queries/useAuthQuery';
@@ -12,6 +11,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Notification from '../Notification/notification-dropdown';
+import SideBar from './sidebar';
 const { Search } = Input;
 
 export default function Header() {
