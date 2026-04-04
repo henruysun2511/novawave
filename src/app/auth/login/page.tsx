@@ -94,6 +94,9 @@ export default function LoginPage() {
                             size="large"
                             type="primary"
                             htmlType="submit"
+                            disabled={isPending}
+                            loading={isPending}
+
                         >
                             {isPending ? "Đang tiến hành đăng nhập" : "Đăng nhập"}
                         </Button>
