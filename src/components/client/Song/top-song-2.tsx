@@ -1,4 +1,4 @@
-import RectangleSkeleton from "@/components/common/Skeleton/vertical-rectangle-skeleton";
+import VerticalRectangleSkeleton from "@/components/common/Skeleton/vertical-rectangle-skeleton";
 import { useToast } from "@/hooks/useToast";
 import { useStartPlayer } from "@/queries/usePlayerQuery";
 import { useSongLeaderboard } from "@/queries/useSongQuery";
@@ -44,7 +44,7 @@ export default function TopSong2() {
 
 
     if (isLoading) {
-        return <RectangleSkeleton />;
+        return <VerticalRectangleSkeleton />;
     }
 
     if (topSongs.length === 0) return null;
