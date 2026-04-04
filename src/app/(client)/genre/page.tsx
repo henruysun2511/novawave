@@ -1,7 +1,8 @@
 "use client";
-import Footer from "@/components/client/footer/footer";
-import SongCard from "@/components/client/SongList/song-card";
-import { default as SquareSkeleton } from "@/components/common/skeleton/square-skeleton";
+import Footer from "@/components/client/Layout/footer";
+import SongCard from "@/components/client/Song/song-card";
+import { EmptyState } from "@/components/common/empty";
+import { default as SquareSkeleton } from "@/components/common/Skeleton/square-skeleton";
 import Title from "@/components/common/title";
 import { useGenreList } from "@/queries/useGenreQuery";
 import { useSettings } from "@/queries/useSettingQuery";
@@ -140,9 +141,8 @@ export default function GenrePage() {
                         </div>
                     </>
                 ) : (
-                    <div className="text-text-primary text-base">
-                        Không có bài hát thuộc thể loại này
-                    </div>
+                    <EmptyState title="Không có bài hát nào thuộc thể loại này" />
+
                 )}
 
             </div>

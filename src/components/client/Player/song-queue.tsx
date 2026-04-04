@@ -4,7 +4,7 @@ import { useSidebarStore } from "@/stores/useSidebarStore";
 import { Song } from "@/types/object.type";
 import { DownSquareOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
-import NewSongCard from "../NewSongList/newsong-card";
+import NewSongCard from "./song-queue-card";
 
 export default function SongQueue() {
     const hidePanel = useSidebarStore((s) => s.hideRightPanel);

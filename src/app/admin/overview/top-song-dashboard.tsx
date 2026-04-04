@@ -1,4 +1,4 @@
-import TopSong1 from "@/components/client/SongList/top-song-1";
+import TopSong1 from "@/components/client/Song/top-song-1";
 import Title from "@/components/common/title";
 import { useSongLeaderboard } from "@/queries/useSongQuery";
 import { Spin } from "antd";

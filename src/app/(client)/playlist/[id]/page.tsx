@@ -1,5 +1,5 @@
 "use client";
-import Footer from "@/components/client/footer/footer";
+import Footer from "@/components/client/Layout/footer";
 import PlaylistAddSongModal from "@/components/client/Playlist/playlist-add-song-modal";
 import ReportModal from "@/components/client/Report/report-modal";
 import Loading from "@/components/common/loading";

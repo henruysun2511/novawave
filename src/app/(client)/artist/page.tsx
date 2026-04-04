@@ -1,6 +1,7 @@
 "use client";
-import ArtistCard from "@/components/client/ArtistList/artist-card";
-import CircleSkeleton from "@/components/common/skeleton/circle-skeleton";
+import ArtistCard from "@/components/client/Artist/artist-card";
+import { EmptyState } from "@/components/common/empty";
+import CircleSkeleton from "@/components/common/Skeleton/circle-skeleton";
 import Title from "@/components/common/title";
 import { useArtistList } from "@/queries/useArtistQuery";
 import { useSettings } from "@/queries/useSettingQuery";
@@ -77,9 +78,7 @@ export default function ArtistPage() {
                         </div>
                     </>
                 ) : (
-                    <div className="text-text-primary text-base">
-                        Chưa có nghệ sĩ nào
-                    </div>
+                    <EmptyState title="Chưa có nghệ sĩ nào" />
                 )}
             </div>
 

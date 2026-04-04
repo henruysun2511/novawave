@@ -1,12 +1,11 @@
 "use client";
-import Footer from "@/components/client/footer/footer";
+import Footer from "@/components/client/Layout/footer";
 import { useGetUserInfoQuery } from "@/queries/useAuthQuery";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { Avatar, Tabs } from "antd";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import ChangePassword from "./change-password";
-import "./profile.css";
 import UserFollow from "./user-follow";
 import UserInfo from "./user-info";
 import UserLike from "./user-like";
@@ -89,7 +88,7 @@ export default function ProfilePage() {
                 size="middle"
                 style={{ marginBottom: 32 }}
                 items={items}
-                className="profile-tabs"
+                className="custom-room-tabs"
             />
 
             <Footer />

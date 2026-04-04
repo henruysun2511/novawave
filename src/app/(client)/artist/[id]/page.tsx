@@ -1,8 +1,8 @@
 "use client";
-import AlbumCard from "@/components/client/AlbumList/album-card";
-import Footer from "@/components/client/footer/footer";
+import AlbumCard from "@/components/client/Album/album-card";
+import Footer from "@/components/client/Layout/footer";
 import ReportModal from "@/components/client/Report/report-modal";
-import SongList from "@/components/client/SongList/song-list";
+import SongList from "@/components/client/Song/song-list";
 import Loading from "@/components/common/loading";
 import NotFoundUI from "@/components/common/not-found-ui";
 import Title from "@/components/common/title";

@@ -1,9 +1,9 @@
 "use client";
-import Header from "@/components/client/header/header";
-import SideBar from "@/components/client/sidebar/sidebar";
-import SongBar from "@/components/client/SongBar/song-bar";
-import SongInfo from "@/components/client/SongInfo/song-info";
-import SongQueue from "@/components/client/SongQueue/song-queue";
+import Header from "@/components/client/Layout/header";
+import SideBar from "@/components/client/Layout/sidebar";
+import SongBar from "@/components/client/Player/song-bar";
+import SongInfo from "@/components/client/Player/song-info";
+import SongQueue from "@/components/client/Player/song-queue";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useSidebarStore } from "@/stores/useSidebarStore";

@@ -7,7 +7,6 @@ import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { RoomStatusChip } from "@/components/client/Room/room-chip";
-import { BackToRoomsButton } from "@/components/client/Room/room-ui";
 import Loading from "@/components/common/loading";
 import { useRoomSocket } from "@/hooks/useRoomSocket";
 import { useToast } from "@/hooks/useToast";
@@ -451,7 +450,7 @@ export default function RoomDetailPage() {
           </p>
 
           <div className="mt-8 flex justify-center">
-            <BackToRoomsButton />
+            <Button type="primary" className="bg-emerald-500" onClick={() => router.push("/room")}>Quay ve danh sach phong</Button>
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 "use client";
-import Footer from "@/components/client/footer/footer";
+import Footer from "@/components/client/Layout/footer";
 import ProductCard from "@/components/client/Product/product-card";
+import SquareSkeleton from "@/components/common/Skeleton/square-skeleton";
 import { useProductList } from "@/queries/useProductQuery";
 import { useSettings } from "@/queries/useSettingQuery";
 import { Product } from "@/types/object.type";
@@ -96,7 +97,7 @@ export default function ProductPage() {
 
 
                 {isPending ? (
-                    <div className="mt-5">Đang tải...</div>
+                    <SquareSkeleton />
                 ) : (
                     <>
                         {/* Danh sách sản phẩm */}

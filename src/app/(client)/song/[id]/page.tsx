@@ -1,7 +1,7 @@
 "use client";
 
-import AlbumCard from "@/components/client/AlbumList/album-card";
-import ArtistCard from "@/components/client/ArtistList/artist-card";
+import AlbumCard from "@/components/client/Album/album-card";
+import ArtistCard from "@/components/client/Artist/artist-card";
 import ReportModal from "@/components/client/Report/report-modal";
 import WavePlayer from "@/components/client/WavePlayer/wave-player";
 import Loading from "@/components/common/loading";

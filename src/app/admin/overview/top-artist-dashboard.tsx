@@ -1,4 +1,4 @@
-import TopArtist from "@/components/client/ArtistList/top-artist";
+import TopArtist from "@/components/client/Artist/top-artist";
 import Title from "@/components/common/title";
 import { useTopArtists } from "@/queries/useArtistQuery";
 import { Spin } from "antd";

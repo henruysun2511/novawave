@@ -1,5 +1,6 @@
 "use client";
-import Footer from "@/components/client/footer/footer";
+import Footer from "@/components/client/Layout/footer";
+import { EmptyState } from "@/components/common/empty";
 import Title from "@/components/common/title";
 import { useToast } from "@/hooks/useToast";
 import { usePaymentPlan } from "@/queries/usePaymentQuery";
@@ -151,9 +152,8 @@ export default function PlanPage() {
                 )}
 
                 {!isLoading && !isError && plans.length === 0 && (
-                    <div className="text-center py-10 text-white text-xl">
-                        Hiện chưa có gói dịch vụ nào được tạo.
-                    </div>
+                    <EmptyState title="Hiện chưa có gói dịch vụ nào" />
+
                 )}
             </div>
 

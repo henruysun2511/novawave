@@ -5,10 +5,10 @@ import { Button, Input, Segmented, Skeleton } from "antd";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
+import Footer from "@/components/client/Layout/footer";
 import { RoomCard } from "@/components/client/Room/room-card";
 import { RoomStatusChip } from "@/components/client/Room/room-chip";
-import { EmptyRoomState } from "@/components/client/Room/room-ui";
-import Footer from "@/components/client/footer/footer";
+import { EmptyState } from "@/components/common/empty";
 import Title from "@/components/common/title";
 import { useMyRoomList, useRoomList } from "@/queries/useRoomQuery";
 import { useSettings } from "@/queries/useSettingQuery";
@@ -112,7 +112,7 @@ export default function RoomPage() {
                             ))}
                         </div>
                     ) : (
-                        <EmptyRoomState
+                        <EmptyState
                             title="Bạn chưa tạo phòng nào."
                             action={
                                 <Button type="primary" className="bg-emerald-500" onClick={() => router.push("/room/createRoom")}>
@@ -161,7 +161,7 @@ export default function RoomPage() {
                             ))}
                         </div>
                     ) : (
-                        <EmptyRoomState title="Không có phòng nào khớp bộ lọc hiện tại." />
+                        <EmptyState title="Không có phòng nào khớp bộ lọc hiện tại." />
                     )}
                 </section>
             </div>

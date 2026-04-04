@@ -1,5 +1,5 @@
 "use client";
-import SideBar from "@/components/admin/sidebar/sidebar";
+import SideBar from "@/components/admin/Layout/sidebar";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { Role } from "@/types/constant.type";
 import { useRouter } from "next/navigation";

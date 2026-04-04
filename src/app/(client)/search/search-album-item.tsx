@@ -1,6 +1,6 @@
-import AlbumCard from "@/components/client/AlbumList/album-card";
-import ArtistCard from "@/components/client/ArtistList/artist-card";
-import SongList from "@/components/client/SongList/song-list";
+import AlbumCard from "@/components/client/Album/album-card";
+import ArtistCard from "@/components/client/Artist/artist-card";
+import SongList from "@/components/client/Song/song-list";
 import Title from "@/components/common/title";
 import { useSongsInAlbum } from "@/queries/useAlbumQuery";
 import { useArtistDetail } from "@/queries/useArtistQuery";

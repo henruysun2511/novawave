@@ -1,6 +1,7 @@
 import PlaylistCard from "@/components/client/Playlist/playlist-card";
 import PlaylistCreateModal from "@/components/client/Playlist/playlist-create-modal";
 import PlaylistUpdateModal from "@/components/client/Playlist/playlist-update-modal";
+import { EmptyState } from "@/components/common/empty";
 import { useToast } from "@/hooks/useToast";
 import { useDeletePlaylist, useUserPlaylists } from "@/queries/usePlaylistQuery";
 import { Playlist } from "@/types/object.type";
@@ -85,9 +86,7 @@ export default function UserPlaylist() {
                     </div>
                 </>
             ) : (
-                <div className="text-text-primary text-base">
-                    Chưa có playlist nào
-                </div>
+                <EmptyState title="Chưa có playlist nào" />
             )}
 
             <PlaylistCreateModal open={openCreate} onCancel={() => setOpenCreate(false)} />

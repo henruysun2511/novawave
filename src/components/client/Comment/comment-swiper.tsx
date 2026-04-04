@@ -1,5 +1,6 @@
 "use client";
 
+import { EmptyState } from "@/components/common/empty";
 import { useLatestComments } from "@/queries/useCommentQuery";
 import { MessageOutlined } from "@ant-design/icons";
 import { Avatar, Skeleton } from "antd";
@@ -29,7 +30,7 @@ export default function CommentSwiper() {
         );
     }
 
-    if (!comments || comments.length === 0) return null;
+    if (!comments || comments.length === 0) return <EmptyState title="Chưa có bình luận nào" />;
 
     return (
         <div className="relative group/swiper">

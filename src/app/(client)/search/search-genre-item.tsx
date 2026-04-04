@@ -1,4 +1,4 @@
-import SongList from "@/components/client/SongList/song-list";
+import SongList from "@/components/client/Song/song-list";
 import Title from "@/components/common/title";
 import { useSongList } from "@/queries/useSongQuery";
 import { getRandomColor } from "../genre/page";

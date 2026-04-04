@@ -1,6 +1,6 @@
-import AlbumList from "@/components/client/AlbumList/album-list";
-import ArtistCard from "@/components/client/ArtistList/artist-card";
-import SongList from "@/components/client/SongList/song-list";
+import AlbumList from "@/components/client/Album/album-list";
+import ArtistCard from "@/components/client/Artist/artist-card";
+import SongList from "@/components/client/Song/song-list";
 import Title from "@/components/common/title";
 import { useAlbumListByArtist } from "@/queries/useAlbumQuery";
 import { useSongListByArtist } from "@/queries/useSongQuery";

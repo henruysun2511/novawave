@@ -180,7 +180,7 @@ body {
 }
 
 
-
+/*room tabs*/
 .custom-room-tabs {
   border-radius: 24px;
   overflow: hidden;
@@ -259,4 +259,206 @@ body {
 /* Tùy chỉnh thanh cuộn bên trong tab nếu cần */
 .custom-room-tabs .ant-tabs-tabpane {
   outline: none;
+}
+
+
+
+/*menu*/
+.ant-menu-item-selected {
+  background-color: var(--color-green) !important;
+}
+
+.ant-menu-item:hover {
+  background-color: rgba(168, 207, 168, 0.777) !important;
+}
+
+
+.ant-segmented {
+background-color: transparent;
+}
+
+.ant-segmented-item {
+color: white;
+font-weight: 500;
+}
+
+.ant-segmented-item-selected {
+background-color: var(--color-green); 
+color: black;
+}
+
+.ant-menu-sub {
+background: #1a1a1a !important;
+}
+
+
+/*search*/
+.custom-search .ant-input-affix-wrapper {
+  background-color: var(--background-secondary) !important;
+  border: 1px solid #333 !important;
+}
+
+/* INPUT BÊN TRONG */
+.custom-search .ant-input-affix-wrapper input.ant-input {
+  background-color: var(--background-secondary) !important;
+  color: white !important;           /* Màu chữ */
+}
+
+/* Placeholder */
+.custom-search .ant-input-affix-wrapper input.ant-input::placeholder {
+  color: #9ca3af !important;
+}
+
+/* Hover */
+.custom-search .ant-input-affix-wrapper:hover {
+  border-color: var(--color-green) !important;
+}
+
+/* Focus */
+.custom-search .ant-input-affix-wrapper-focused {
+  border-color: var(--color-green) !important;
+  box-shadow: 0 0 0 2px #4ade8040 !important;
+}
+
+
+
+
+/*dropdown*/
+/* --- CUSTOM ANTD DROPDOWN --- */
+
+/* 1. Màu nền và bo góc của menu dropdown */
+.ant-dropdown .ant-dropdown-menu {
+  background-color: var(--background-tertiary) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 12px !important;
+  padding: 6px !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* 2. Style cho từng item trong menu */
+.ant-dropdown .ant-dropdown-menu-item {
+  color: var(--color-text-secondary) !important;
+  border-radius: 8px !important;
+  padding: 8px 12px !important;
+  transition: all 0.2s ease !important;
+}
+
+/* 3. Hiệu ứng Hover item */
+.ant-dropdown .ant-dropdown-menu-item-hover,
+.ant-dropdown .ant-dropdown-menu-item:hover {
+  background-color: rgba(37, 162, 106, 0.15) !important; /* Màu xanh emerald nhạt */
+  color: var(--color-green) !important;
+}
+
+/* 4. Item đang được chọn (nếu có) */
+.ant-dropdown .ant-dropdown-menu-item-selected {
+  background-color: var(--color-green) !important;
+  color: white !important;
+}
+
+/* 5. Icon bên trong item */
+.ant-dropdown .ant-dropdown-menu-item .anticon {
+  font-size: 14px !important;
+  margin-right: 8px !important;
+}
+
+/* 6. Đường kẻ chia cách (Divider) */
+.ant-dropdown .ant-dropdown-menu-item-divider {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  margin: 4px 0 !important;
+}
+
+/* 7. Mũi tên của dropdown (nếu showArrow={true}) */
+.ant-dropdown .ant-dropdown-arrow::before {
+  background-color: var(--background-tertiary) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+/* 8. Chữ Danger (ví dụ nút Xoá/Đăng xuất) */
+.ant-dropdown .ant-dropdown-menu-item-danger {
+  color: #ff4d4f !important;
+}
+
+.ant-dropdown .ant-dropdown-menu-item-danger:hover {
+  background-color: rgba(255, 77, 79, 0.1) !important;
+  color: #ff4d4f !important;
+}
+
+
+
+/*notification*/
+/* --- CUSTOM ANTD NOTIFICATION (Dành cho thông báo yêu cầu bài hát) --- */
+
+/* 1. Container chính của thông báo */
+.ant-notification-notice {
+  background: rgba(28, 28, 28, 0.8) !important; /* Nền tối có độ trong suốt */
+  backdrop-filter: blur(16px) !important;       /* Hiệu ứng kính mờ */
+  border: 1px solid rgba(37, 162, 106, 0.3) !important; /* Viền xanh emerald mờ */
+  border-radius: 24px !important;               /* Bo góc lớn đồng bộ với UI */
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4) !important;
+  padding: 20px !important;
+  overflow: hidden;
+}
+
+/* 2. Tiêu đề thông báo (Message) */
+.ant-notification-notice-message {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  margin-bottom: 12px !important;
+  padding-right: 24px;
+}
+
+/* 3. Nội dung mô tả (Description) */
+.ant-notification-notice-description {
+  color: rgba(255, 255, 255, 0.65) !important;
+}
+
+/* 4. Nút đóng (Close icon) */
+.ant-notification-notice-close {
+  color: rgba(255, 255, 255, 0.4) !important;
+  top: 20px !important;
+  right: 20px !important;
+}
+
+.ant-notification-notice-close:hover {
+  color: #25a26a !important; /* Đổi sang xanh khi hover */
+}
+
+/* 5. Tùy chỉnh các phần tử bên trong thông báo (dựa trên cấu trúc JSX trong file page.tsx của bạn) */
+
+/* Tên bài hát trong thông báo */
+.ant-notification-notice-description .font-semibold {
+  color: #ffffff !important;
+  font-size: 15px;
+}
+
+/* Tên nghệ sĩ */
+.ant-notification-notice-description .text-black\/55 {
+  color: rgba(255, 255, 255, 0.45) !important; /* Fix lỗi text đen trên nền tối */
+}
+
+/* Chỉnh lại các Button Action trong thông báo */
+.ant-notification-notice-description .mt-3.flex.gap-2 button {
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+  height: 32px !important;
+}
+
+/* Nút "Chấp nhận" (Màu xanh) */
+.ant-notification-notice-description button.bg-emerald-500 {
+  background-color: #25a26a !important;
+  box-shadow: 0 4px 12px rgba(37, 162, 106, 0.2) !important;
+}
+
+/* Nút "Từ chối" (Màu đỏ mờ) */
+.ant-notification-notice-description button.ant-btn-dangerous {
+  background: rgba(244, 63, 94, 0.1) !important;
+  border: 1px solid rgba(244, 63, 94, 0.2) !important;
+  color: #fb7185 !important;
+}
+
+.ant-notification-notice-description button.ant-btn-dangerous:hover {
+  background: #e11d48 !important;
+  color: white !important;
 }

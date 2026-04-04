@@ -1,7 +1,8 @@
 "use client";
 
+import { QueueItemCard } from "@/components/client/Room/queue-item-card";
 import { RoomQueueStatusChip } from "@/components/client/Room/room-chip";
-import { EmptyRoomState, QueueItemCard } from "@/components/client/Room/room-ui";
+import { EmptyState } from "@/components/common/empty";
 import { formatDuration, formatTime } from "@/libs/fomat";
 import { RoomControlAction, RoomQueueItemStatus, RoomStatus } from "@/types/constant.type";
 import { RoomDetail, RoomQueueItem } from "@/types/object.type";
@@ -164,7 +165,7 @@ export function RoomInfoPanel({
                           ) : null}
                         />
                       ))
-                    ) : <EmptyRoomState title="Hàng đợi chưa có bài hát nào." />}
+                    ) : <EmptyState title="Hàng đợi chưa có bài hát nào." />}
                   </div>
                 ),
               },
@@ -188,7 +189,7 @@ export function RoomInfoPanel({
                           ) : <RoomQueueStatusChip status={item.status} />}
                         />
                       ))
-                    ) : <EmptyRoomState title="Chưa có yêu cầu nào được gửi tới phòng." />}
+                    ) : <EmptyState title="Chưa có yêu cầu nào được gửi tới phòng." />}
                   </div>
                 ),
               },

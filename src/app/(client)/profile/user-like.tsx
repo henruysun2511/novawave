@@ -1,5 +1,6 @@
-import SongCard from "@/components/client/SongList/song-card";
-import SquareSkeleton from "@/components/common/skeleton/square-skeleton";
+import SongCard from "@/components/client/Song/song-card";
+import { EmptyState } from "@/components/common/empty";
+import SquareSkeleton from "@/components/common/Skeleton/square-skeleton";
 import { useUserLike } from "@/queries/useLikeQuery";
 import { Pagination } from "antd";
 import { useState } from "react";
@@ -42,9 +43,7 @@ export default function UserLike() {
                         </div>
                     </>
                 ) : (
-                    <div className="text-text-primary text-base">
-                        Chưa có nghệ sĩ nào
-                    </div>
+                    <EmptyState title="Chưa có bài hát nào" />
                 )}
             </div>
         </>

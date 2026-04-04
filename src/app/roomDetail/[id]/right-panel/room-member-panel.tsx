@@ -1,6 +1,6 @@
 "use client";
 
-import { ParticipantStatusTag } from "@/components/client/Room/room-ui";
+import { ParticipantStatusTag } from "@/components/client/Room/room-tag";
 import { formatTime } from "@/libs/fomat";
 import { RoomModerationAction, RoomParticipantRole } from "@/types/constant.type";
 import { RoomParticipant } from "@/types/object.type";

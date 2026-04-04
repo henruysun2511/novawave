@@ -1,7 +1,8 @@
 "use client";
-import AlbumCard from "@/components/client/AlbumList/album-card";
-import Footer from "@/components/client/footer/footer";
-import SquareSkeleton from "@/components/common/skeleton/square-skeleton";
+import AlbumCard from "@/components/client/Album/album-card";
+import Footer from "@/components/client/Layout/footer";
+import { EmptyState } from "@/components/common/empty";
+import SquareSkeleton from "@/components/common/Skeleton/square-skeleton";
 import Title from "@/components/common/title";
 import { useAlbumList } from "@/queries/useAlbumQuery";
 import { useSettings } from "@/queries/useSettingQuery";
@@ -75,9 +76,7 @@ export default function GenrePage() {
                         </div>
                     </>
                 ) : (
-                    <div className="text-text-primary text-base">
-                        Chưa có album nào
-                    </div>
+                    <EmptyState title="Không có album nào" />
                 )}
             </div>
 

@@ -1,5 +1,5 @@
 "use client";
-import TextEditor from "@/components/common/text-editor";
+import TextEditor from "@/components/admin/TextEditor/text-editor";
 import { useToast } from "@/hooks/useToast";
 import { useUploadFile } from "@/hooks/useUploadFIle";
 import { useUpdateNews } from "@/queries/useNewsQuery";

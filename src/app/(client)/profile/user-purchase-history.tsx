@@ -1,5 +1,7 @@
+import { EmptyState } from "@/components/common/empty";
+import HorizontalRectangleSkeleton from "@/components/common/Skeleton/horizontal-rectangle-skeleton";
 import { usePurchaseHistory } from "@/queries/usePurchaseHistoryQuery";
-import { Card, Col, Divider, Row, Spin, Typography } from "antd";
+import { Card, Col, Divider, Row, Typography } from "antd";
 const { Title, Text } = Typography;
 
 
@@ -13,13 +15,11 @@ export default function UserPurchaseHistory() {
     ? [rawData]
     : [];
 
-  if (isLoading) return <Spin />;
+  if (isLoading) return <HorizontalRectangleSkeleton />;
 
   if (history.length === 0) {
     return (
-      <div className="text-text-primary text-center">
-        Chưa có đơn hàng
-      </div>
+      <EmptyState title="Bạn chưa có đơn hàng nào" />
     );
   }
 

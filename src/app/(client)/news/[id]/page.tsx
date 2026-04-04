@@ -1,7 +1,7 @@
 "use client";
 
-import NewsList from "@/components/client/NewsList/news-list";
-import Footer from "@/components/client/footer/footer";
+import NewsList from "@/components/client/News/news-list";
+import Footer from "@/components/client/Layout/footer";
 import Loading from "@/components/common/loading";
 import NotFoundUI from "@/components/common/not-found-ui";
 import Title from "@/components/common/title";

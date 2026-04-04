@@ -1,7 +1,8 @@
 "use client";
 
-import NewsList from "@/components/client/NewsList/news-list";
-import HorizontalRectangleSkeleton from "@/components/common/skeleton/horizontal-rectangle-skeleton";
+import NewsList from "@/components/client/News/news-list";
+import { EmptyState } from "@/components/common/empty";
+import HorizontalRectangleSkeleton from "@/components/common/Skeleton/horizontal-rectangle-skeleton";
 import Title from "@/components/common/title";
 import { useNewsList } from "@/queries/useNewsQuery";
 import { useSettings } from "@/queries/useSettingQuery";
@@ -78,9 +79,8 @@ export default function NewsPage() {
                         </div>
                     </>
                 ) : (
-                    <div className="text-text-primary text-base py-10">
-                        Chưa có tin tức nào được cập nhật
-                    </div>
+                    <EmptyState title="Chưa có tin tức nào được cập nhật" />
+
                 )}
             </div>
         </>

@@ -7,7 +7,6 @@ import { AudioOutlined, BookOutlined, FileTextOutlined, FormatPainterOutlined, H
 import { Button, Menu, MenuProps } from "antd";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import "../../client/sidebar/sidebar.css";
 
 type MenuItem = Required<MenuProps>['items'][number];
 

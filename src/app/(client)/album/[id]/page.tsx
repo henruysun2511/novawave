@@ -1,6 +1,6 @@
 "use client";
 
-import ArtistCard from "@/components/client/ArtistList/artist-card";
+import ArtistCard from "@/components/client/Artist/artist-card";
 import ReportModal from "@/components/client/Report/report-modal";
 import Loading from "@/components/common/loading";
 import NotFoundUI from "@/components/common/not-found-ui";
@@ -31,7 +31,6 @@ export default function AlbumDetailPage() {
 
     const { data: artistRes, isPending } = useArtistDetail(album?.artist ?? "");
     const artist = artistRes?.data;
-    console.log(artist);
 
     const { data: songRes } = useSongsInAlbum(id);
     const songs = songRes?.data;

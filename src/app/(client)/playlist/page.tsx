@@ -1,7 +1,8 @@
 "use client";
-import Footer from "@/components/client/footer/footer";
+import Footer from "@/components/client/Layout/footer";
 import PlaylistCard from "@/components/client/Playlist/playlist-card";
-import SquareSkeleton from "@/components/common/skeleton/square-skeleton";
+import { EmptyState } from "@/components/common/empty";
+import SquareSkeleton from "@/components/common/Skeleton/square-skeleton";
 import Title from "@/components/common/title";
 import { usePlaylistList } from "@/queries/usePlaylistQuery";
 import { useSettings } from "@/queries/useSettingQuery";
@@ -76,9 +77,8 @@ export default function PlaylistPage() {
                         </div>
                     </>
                 ) : (
-                    <div className="text-text-primary text-base">
-                        Chưa có playlist nào
-                    </div>
+                    <EmptyState title="Chưa có playlist nào" />
+
                 )}
             </div>
 

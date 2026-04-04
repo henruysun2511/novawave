@@ -30,6 +30,7 @@ export default function MenuBar() {
                 items={items}
                 onClick={onClick}
                 className='bg-transparent'
+                inlineIndent={12} 
             />
         </>
     )

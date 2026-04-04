@@ -1,6 +1,6 @@
 "use client";
 
-import { EmptyRoomState } from "@/components/client/Room/room-ui";
+import { EmptyState } from "@/components/common/empty";
 import { SearchOutlined } from "@ant-design/icons";
 import { Button, Input, Skeleton } from "antd";
 import { SearchSongItem } from "../room-detail-helpers";
@@ -68,7 +68,7 @@ export function SongSearchPanel({
           ))
         ) : (
           <div className="mt-10">
-            <EmptyRoomState title={emptyTitle} />
+            <EmptyState title={emptyTitle} />
           </div>
         )}
       </div>
