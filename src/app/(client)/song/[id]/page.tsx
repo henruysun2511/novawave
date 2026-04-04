@@ -3,7 +3,7 @@
 import AlbumCard from "@/components/client/Album/album-card";
 import ArtistCard from "@/components/client/Artist/artist-card";
 import ReportModal from "@/components/client/Report/report-modal";
-import WavePlayer from "@/components/client/WavePlayer/wave-player";
+// import WavePlayer from "@/components/client/WavePlayer/wave-player";
 import Loading from "@/components/common/loading";
 import NotFoundUI from "@/components/common/not-found-ui";
 import Title from "@/components/common/title";
@@ -17,13 +17,16 @@ import { usePlayerStore } from "@/stores/usePlayerStore";
 import { PlaySongType, ReportTargetType } from "@/types/constant.type";
 import type { Comment } from "@/types/object.type";
 import { CaretRightFilled, FlagOutlined, HeartFilled, HeartOutlined, LoadingOutlined, PlusOutlined } from "@ant-design/icons";
-import { Input } from 'antd';
+import dynamic from 'next/dynamic';
 import { useParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import LyricsPreview from "../lyrics-preview";
 import SongAddPlaylistModal from "./song-add-playlist-modal";
 import SongComment from "./song-comment";
-const { TextArea } = Input;
+
+const WavePlayer = dynamic(() => import('@/components/client/WavePlayer/wave-player'), { 
+  ssr: false 
+});
 
 export default function SongDetailPage() {
     const [isMounted, setIsMounted] = useState(false);

@@ -47,6 +47,12 @@ const WavePlayer: React.FC<WavePlayerProps> = ({
   }, [onSeek]);
 
   useEffect(() => {
+    if (typeof window === "undefined" || !shouldInitWave || !waveformRef.current) return;
+
+    if (waveformRef.current) {
+      waveformRef.current.innerHTML = '';
+    }
+
     if (!shouldInitWave || !waveformRef.current) return;
 
     const ws = WaveSurfer.create({
@@ -64,7 +70,7 @@ const WavePlayer: React.FC<WavePlayerProps> = ({
       interact: true,
       dragToSeek: true,
     });
-
+    ws.on('error', (err) => console.error("WaveSurfer Error:", err));
     wavesurferRef.current = ws;
 
     const unsubReady = ws.on("ready", () => {
@@ -102,6 +108,7 @@ const WavePlayer: React.FC<WavePlayerProps> = ({
   }, [audioRef, isPlaying, isThisSongPlaying]);
 
   useEffect(() => {
+
     const ws = wavesurferRef.current;
     if (!ws || !ws.getDuration() || !isThisSongPlaying) return;
 
