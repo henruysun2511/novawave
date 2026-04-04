@@ -6,7 +6,7 @@ import { jwtDecode, } from "jwt-decode";
 import { useEffect, useState } from "react";
 
 
-export default function AuthInitializer({
+export default function AuthInitializerProvider({
   children,
 }: {
   children: React.ReactNode;
