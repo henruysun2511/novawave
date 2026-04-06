@@ -32,7 +32,8 @@ export default function LoginPage() {
     };
 
     const handleGoogleLogin = () => {
-        window.location.href = `${baseURL}/auth/google`;
+        // window.location.href = `${baseURL}/auth/google`;
+        toast.error("Chức năng đăng nhập bằng Google hiện đang được phát triển. Vui lòng sử dụng phương thức đăng nhập thông thường.");
     }
 
     return (
