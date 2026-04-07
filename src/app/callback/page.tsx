@@ -1,5 +1,6 @@
 "use client";
 
+import { getCookieValue } from "@/libs/getCookieValue";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { UserJwtPayload } from "@/types/body.type";
 import { jwtDecode } from "jwt-decode";
@@ -12,18 +13,21 @@ export default function GoogleCallbackPage() {
   const setAuth = useAuthStore((s) => s.setAuth);
 
   useEffect(() => {
-    const token = params.get("token");
+
+    const token = getCookieValue("accessToken");
+
     if (!token) {
       router.push("/auth/login");
       return;
     }
 
-    sessionStorage.setItem("accessToken", token);
-
-    const user = jwtDecode<UserJwtPayload>(token);
-    setAuth(token, user);
-
-    router.replace("/");
+    try {
+      const user = jwtDecode<UserJwtPayload>(token);
+      setAuth(token, user);
+      router.replace("/");
+    } catch {
+      router.push("/auth/login");
+    }
   }, []);
 
   return null;
