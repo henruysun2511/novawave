@@ -26,7 +26,7 @@ interface RoomDetailRightPanelProps {
   requestKeyword: string;
   requestSongs: SearchSongItem[];
   requestSearching: boolean;
-  addingQueueItem: boolean;
+  requestingSongId: string | null;
   setCommentInput: (value: string) => void;
   emitComment: () => void;
   handleModerate: (participantUserId: string, action: RoomModerationAction) => void;

@@ -1,7 +1,7 @@
 "use client";
 
 import { getSocket } from "@/libs/socket";
-import { ArrowLeftOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined, AudioOutlined } from "@ant-design/icons";
 import { Button, Modal, notification } from "antd";
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -89,6 +89,7 @@ export default function RoomDetailPage() {
   const [commentInput, setCommentInput] = useState("");
   const [requestKeyword, setRequestKeyword] = useState("");
   const [requestSearchKeyword, setRequestSearchKeyword] = useState("");
+  const [requestingSongId, setRequestingSongId] = useState<string | null>(null);
   const [moderationState, setModerationState] = useState<RoomParticipantStatus | null>(null);
   const [moderationReason, setModerationReason] = useState("");
   const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
@@ -253,16 +254,19 @@ export default function RoomDetailPage() {
   };
 
   const handleRequestSong = useCallback((songId: string) => {
+    setRequestingSongId(songId);
     addQueueItem(
       { id: roomId, data: { songId } },
       {
         onSuccess: () => {
-          toast.success(isHost ? "Da them bai hat vao hang doi" : "Da gui yeu cau bai hat");
+          toast.success(isHost ? "Đã thêm bài hát vào hàng đợi" : "Đã gửi yêu cầu bài hát");
           setRequestKeyword("");
           setRequestSearchKeyword("");
+          setRequestingSongId(null);
         },
         onError: (error: unknown) => {
-          toast.error(getErrorMessage(error, "Co loi xay ra"));
+          toast.error(getErrorMessage(error, "Có lỗi xảy ra"));
+          setRequestingSongId(null);
         },
       }
     );
@@ -355,24 +359,37 @@ export default function RoomDetailPage() {
         ].slice(0, 30));
 
         if (isHost) {
-          notifyApi.open({
+          notifyApi.info({
+            key: payload._id,
             placement: "bottomRight",
-            duration: 5,
-            message: `${getUserName(payload.requestedBy)} da gui yeu cau moi`,
+            duration: 10,
+            icon: <></>,
+            className: "!bg-[#18181b]/80 !backdrop-blur-xl !border !border-white/10 !rounded-2xl !p-0 overflow-hidden transform transition-all",
+            message: null,
             description: (
-              <div className="flex items-start gap-3">
-                <img src={payload.songId?.imageUrl} alt={payload.songId?.name} className="h-14 w-14 rounded-2xl object-cover" />
-                <div className="min-w-0 flex-1">
-                  <div className="font-semibold">{payload.songId?.name}</div>
-                  <div className="text-xs text-black/55">{payload.songId?.artistId?.name}</div>
-                  <div className="mt-3 flex gap-2">
-                    <Button size="small" type="primary" className="border-none bg-emerald-500" onClick={() => handleResolveRequest(payload._id, RoomQueueItemStatus.APPROVED)}>
-                      Chap nhan
-                    </Button>
-                    <Button size="small" danger onClick={() => handleResolveRequest(payload._id, RoomQueueItemStatus.REJECTED)}>
-                      Tu choi
-                    </Button>
+              <div className="p-4 bg-gradient-to-br from-[rgba(16,185,129,0.15)] to-transparent">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="h-7 w-7 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                    <AudioOutlined className="text-emerald-400 text-sm" />
                   </div>
+                  <div className="text-sm font-semibold text-emerald-400">
+                    {getUserName(payload.requestedBy)} <span className="text-white/60 font-medium">muốn thêm bài hát</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 bg-black/40 rounded-xl p-2.5 border border-white/5">
+                  <img src={payload.songId?.imageUrl} alt={payload.songId?.name} className="h-12 w-12 rounded-lg object-cover shadow-md" />
+                  <div className="min-w-0 flex-1">
+                    <div className="font-bold text-white text-[14px] truncate">{payload.songId?.name}</div>
+                    <div className="text-xs text-white/50 truncate mt-0.5">{payload.songId?.artistId?.name}</div>
+                  </div>
+                </div>
+                <div className="mt-4 flex gap-2">
+                    <Button type="primary" className="flex-1 bg-emerald-500 hover:!bg-emerald-400 border-none font-semibold h-9 rounded-lg" onClick={() => { handleResolveRequest(payload._id, RoomQueueItemStatus.APPROVED); notifyApi.destroy(payload._id); }}>
+                      Chấp nhận
+                    </Button>
+                    <Button className="flex-1 bg-white/5 hover:!bg-rose-500 hover:!text-white hover:!border-rose-500 border-white/10 text-white/70 font-semibold h-9 rounded-lg transition-all" onClick={() => { handleResolveRequest(payload._id, RoomQueueItemStatus.REJECTED); notifyApi.destroy(payload._id); }}>
+                      Từ chối
+                    </Button>
                 </div>
               </div>
             ),
@@ -507,7 +524,7 @@ export default function RoomDetailPage() {
             requestKeyword={requestKeyword}
             requestSongs={requestSongs}
             requestSearching={requestSearching}
-            addingQueueItem={addingQueueItem}
+            requestingSongId={requestingSongId}
             setCommentInput={setCommentInput}
             emitComment={emitComment}
             handleModerate={handleModerate}

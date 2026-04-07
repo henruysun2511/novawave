@@ -11,7 +11,7 @@ interface SongSearchPanelProps {
   setRequestSearchKeyword: (value: string) => void;
   requestSearching: boolean;
   requestSongs: SearchSongItem[];
-  addingQueueItem: boolean;
+  requestingSongId: string | null;
   handleRequestSong: (songId: string) => void;
   actionLabel: string;
   placeholder: string;
@@ -24,7 +24,7 @@ export function SongSearchPanel({
   setRequestSearchKeyword,
   requestSearching,
   requestSongs,
-  addingQueueItem,
+  requestingSongId,
   handleRequestSong,
   actionLabel,
   placeholder,
@@ -59,7 +59,7 @@ export function SongSearchPanel({
               <Button 
                 type="primary" 
                 className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 hover:!bg-emerald-500 hover:!text-white font-bold rounded-xl"
-                loading={addingQueueItem} 
+                loading={requestingSongId === song._id} 
                 onClick={() => handleRequestSong(song._id)}
               >
                 {actionLabel}
