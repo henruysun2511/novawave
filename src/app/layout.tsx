@@ -79,7 +79,7 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
   category: "music",
   verification: {
-    google: "googlef840f40cb9bebfdb",
+    google: "xDEvHQlti5yGybXRoWu8DnQBiF0710mHHsqVMG1AZkc",
   },
 };
 
