@@ -78,6 +78,9 @@ export const metadata: Metadata = {
   },
   manifest: "/site.webmanifest",
   category: "music",
+  verification: {
+    google: "googlef840f40cb9bebfdb",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
