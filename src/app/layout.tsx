@@ -10,18 +10,18 @@ import { App as AntdApp, ConfigProvider } from "antd";
 import { LayoutClient } from "./layout-client";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://novawave.vercel.app"),
+  // metadataBase: new URL("https://novawave.vercel.app"),
   title: {
     default: "Novawave - Nền tảng nghe nhạc trực tuyến & Phòng stream chung",
     template: "%s | Novawave"
   },
   description: "Trải nghiệm âm nhạc chất lượng cao, tạo phòng nghe nhạc cùng bạn bè và khám phá những album mới nhất trên Novawave. Kết nối cộng đồng yêu nhạc đỉnh cao.",
   keywords: [
-    "music streaming", 
-    "nghe nhạc trực tuyến", 
-    "phòng nghe nhạc", 
-    "novawave", 
-    "listen together", 
+    "music streaming",
+    "nghe nhạc trực tuyến",
+    "phòng nghe nhạc",
+    "novawave",
+    "listen together",
     "âm nhạc chất lượng cao",
     "social music",
     "tạo playlist"
@@ -88,7 +88,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ConfigProvider
             theme={{
               token: {
-                colorPrimary: "#10b981", 
+                colorPrimary: "#10b981",
                 borderRadius: 12,
               },
             }}
