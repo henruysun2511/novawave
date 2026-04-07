@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { UserJwtPayload } from './types/body.type';
 
 // Define public routes that don't require authentication
-const publicContentRoutes = ['/song', '/album', '/artist', '/genre', '/playlist', '/search', '/news'];
+const publicContentRoutes = ['/song', '/album', '/artist', '/genre', '/playlist', '/search', '/news', '/about'];
 const authRoutes = ['/auth/login', '/auth/register', '/auth/forgot-password', '/auth/verify-otp', '/auth/reset-password'];
 
 export function middleware(request: NextRequest) {
