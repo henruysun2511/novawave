@@ -10,29 +10,39 @@ import { App as AntdApp, ConfigProvider } from "antd";
 import { LayoutClient } from "./layout-client";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://novawave.vercel.app"),
   title: {
     default: "Novawave - Nền tảng nghe nhạc trực tuyến & Phòng stream chung",
     template: "%s | Novawave"
   },
-  description: "Trải nghiệm âm nhạc chất lượng cao, tạo phòng nghe nhạc cùng bạn bè và khám phá những album mới nhất trên Novawave.",
+  description: "Trải nghiệm âm nhạc chất lượng cao, tạo phòng nghe nhạc cùng bạn bè và khám phá những album mới nhất trên Novawave. Kết nối cộng đồng yêu nhạc đỉnh cao.",
   keywords: [
     "music streaming", 
     "nghe nhạc trực tuyến", 
     "phòng nghe nhạc", 
     "novawave", 
     "listen together", 
-    "tạo album"
+    "âm nhạc chất lượng cao",
+    "social music",
+    "tạo playlist"
   ],
-  authors: [{ name: "Novawave Team" }],
+  authors: [{ name: "Novawave Team", url: "https://novawave.vercel.app" }],
   creator: "Novawave",
-  metadataBase: new URL("https://novawave.vercel.app"),
-
+  publisher: "Novawave",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     type: "website",
     locale: "vi_VN",
     url: "https://novawave.vercel.app",
     title: "Novawave - Kết nối đam mê âm nhạc",
-    description: "Nền tảng nghe nhạc trực tuyến hỗ trợ tạo phòng nghe chung thời gian thực.",
+    description: "Nền tảng nghe nhạc trực tuyến hàng đầu hỗ trợ tạo phòng nghe chung thời gian thực.",
     siteName: "Novawave",
     images: [
       {
@@ -43,34 +53,31 @@ export const metadata: Metadata = {
       },
     ],
   },
-
   twitter: {
     card: "summary_large_image",
     title: "Novawave - Music Streaming",
-    description: "Listen to music together with your friends.",
+    description: "Listen to music together with your friends in real-time.",
     images: ["/images/logo.png"],
+    creator: "@novawave",
   },
-
   robots: {
     index: true,
     follow: true,
     googleBot: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
   },
-  
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon-16x16.png",
     apple: "/apple-touch-icon.png",
   },
-  other: {
-    "Content-Security-Policy": "upgrade-insecure-requests",
-  },
+  manifest: "/site.webmanifest",
+  category: "music",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
