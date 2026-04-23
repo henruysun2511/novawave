@@ -1,36 +1,254 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<div align="center">
 
-## Getting Started
+# 🎵 NOVAWAVE
 
-First, run the development server:
+### *A Modern Music Streaming Platform*
+
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4-06B6D4?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com/)
+[![Ant Design](https://img.shields.io/badge/Ant%20Design-5-0170FE?style=for-the-badge&logo=antdesign)](https://ant.design/)
+
+NOVAWAVE là nền tảng nghe nhạc trực tuyến hiện đại, hỗ trợ phát nhạc, phòng nghe nhạc cùng nhau theo thời gian thực, quản lý playlist, và nhiều tính năng hơn nữa.
+
+</div>
+
+---
+
+## 📋 Mục lục
+
+- [✨ Tính năng](#-tính-năng)
+- [🛠️ Công nghệ sử dụng](#️-công-nghệ-sử-dụng)
+- [📁 Cấu trúc dự án](#-cấu-trúc-dự-án)
+- [🚀 Cài đặt & Chạy dự án](#-cài-đặt--chạy-dự-án)
+- [⚙️ Biến môi trường](#️-biến-môi-trường)
+- [📄 Các trang chính](#-các-trang-chính)
+- [🔐 Xác thực & Phân quyền](#-xác-thực--phân-quyền)
+
+---
+
+## ✨ Tính năng
+
+- 🎵 **Phát nhạc** – Trình phát nhạc mượt mà với giao diện trực quan (waveform, thanh tiến trình)
+- 🎤 **Quản lý nghệ sĩ / album / thể loại** – Duyệt và khám phá âm nhạc theo danh mục
+- 📋 **Playlist cá nhân** – Tạo, chỉnh sửa và quản lý danh sách bài hát
+- 🏠 **Phòng nghe nhạc (Room)** – Nghe nhạc cùng nhau theo thời gian thực qua WebSocket
+- 🔍 **Tìm kiếm** – Tìm kiếm bài hát, nghệ sĩ, album nhanh chóng
+- 🛒 **Giỏ hàng & Thanh toán** – Mua nhạc / gói Premium
+- 📰 **Tin tức** – Cập nhật tin tức âm nhạc mới nhất
+- 👤 **Hồ sơ cá nhân** – Quản lý thông tin tài khoản
+- 🔐 **Xác thực đầy đủ** – Đăng nhập, đăng ký, quên mật khẩu, xác minh OTP
+- 🛡️ **Bảng quản trị (Admin)** – Quản lý toàn bộ nền tảng
+
+---
+
+## 🛠️ Công nghệ sử dụng
+
+| Công nghệ | Phiên bản | Mô tả |
+|---|---|---|
+| [Next.js](https://nextjs.org/) | 16+ | Framework React với App Router |
+| [React](https://reactjs.org/) | 19 | UI Library |
+| [TypeScript](https://www.typescriptlang.org/) | 5+ | Type-safe JavaScript |
+| [TailwindCSS](https://tailwindcss.com/) | 4 | Utility-first CSS framework |
+| [Ant Design](https://ant.design/) | 5 | Component UI library |
+| [Redux Toolkit](https://redux-toolkit.js.org/) | 2 | Global state management |
+| [Zustand](https://zustand-demo.pmnd.rs/) | 5 | Lightweight state management |
+| [TanStack Query](https://tanstack.com/query) | 5 | Server state & caching |
+| [Axios](https://axios-http.com/) | 1 | HTTP client |
+| [Socket.IO Client](https://socket.io/) | 4 | Real-time communication |
+| [WaveSurfer.js](https://wavesurfer.xyz/) | 7 | Audio waveform visualization |
+| [Ant Design Charts](https://charts.ant.design/) | 2 | Data visualization |
+| [TinyMCE React](https://www.tiny.cloud/) | 6 | Rich text editor |
+| [Swiper](https://swiperjs.com/) | 12 | Touch slider / carousel |
+| [jwt-decode](https://github.com/auth0/jwt-decode) | 4 | JWT token decoding |
+
+---
+
+## 📁 Cấu trúc dự án
+
+```
+novawave_fe/
+├── public/                    # Static assets (images, icons, videos)
+├── src/
+│   ├── app/                   # Next.js App Router
+│   │   ├── (client)/          # Layout nhóm cho client
+│   │   │   ├── (home)/        # Trang chủ
+│   │   │   ├── about/         # Trang giới thiệu
+│   │   │   ├── album/         # Trang album
+│   │   │   ├── artist/        # Trang nghệ sĩ
+│   │   │   ├── cart/          # Giỏ hàng
+│   │   │   ├── genre/         # Thể loại nhạc
+│   │   │   ├── news/          # Tin tức
+│   │   │   ├── payment/       # Thanh toán
+│   │   │   ├── plan/          # Gói dịch vụ
+│   │   │   ├── playlist/      # Playlist
+│   │   │   ├── product/       # Sản phẩm
+│   │   │   ├── profile/       # Hồ sơ cá nhân
+│   │   │   ├── room/          # Phòng nghe nhạc
+│   │   │   ├── search/        # Tìm kiếm
+│   │   │   └── song/          # Bài hát
+│   │   ├── admin/             # Bảng quản trị
+│   │   ├── auth/              # Xác thực (login, register, ...)
+│   │   ├── callback/          # OAuth callback
+│   │   ├── roomDetail/        # Chi tiết phòng nhạc [id]
+│   │   ├── layout.tsx         # Root layout
+│   │   └── globals.css        # Global styles
+│   ├── components/
+│   │   ├── admin/             # Components cho admin
+│   │   ├── client/            # Components cho client
+│   │   ├── common/            # Components dùng chung
+│   │   └── provider/          # Context / Provider components
+│   ├── hooks/                 # Custom React hooks
+│   ├── libs/                  # Cấu hình thư viện (axios, ...)
+│   ├── queries/               # TanStack Query hooks
+│   ├── services/              # API service functions
+│   ├── stores/                # Zustand / Redux stores
+│   ├── types/                 # TypeScript type definitions
+│   └── middleware.ts          # Next.js middleware (auth guard)
+├── .env                       # Biến môi trường (local)
+├── next.config.ts             # Cấu hình Next.js
+├── package.json
+└── tsconfig.json
+```
+
+---
+
+## 🚀 Cài đặt & Chạy dự án
+
+### Yêu cầu hệ thống
+
+- **Node.js** >= 18.x
+- **npm** >= 9.x hoặc **yarn** >= 1.22.x
+
+### Bước 1: Clone dự án
+
+```bash
+git clone https://github.com/henruysun2511/novawave.git
+cd novawave_fe
+```
+
+### Bước 2: Cài đặt dependencies
+
+```bash
+npm install
+```
+
+### Bước 3: Cấu hình biến môi trường
+
+Tạo file `.env` tại thư mục gốc (copy từ `.env.example` nếu có):
+
+```bash
+cp .env.example .env
+```
+
+Sau đó cập nhật các giá trị trong file `.env` (xem phần [Biến môi trường](#️-biến-môi-trường)).
+
+### Bước 4: Chạy môi trường phát triển
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Ứng dụng sẽ chạy tại: **http://localhost:3001** (hoặc port khác nếu 3001 đã bị chiếm)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Build cho Production
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm run start
+```
 
-## Learn More
+### Lint code
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run lint
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## ⚙️ Biến môi trường
 
-## Deploy on Vercel
+Tạo file `.env` ở thư mục gốc dự án với nội dung sau:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```env
+# URL API của backend
+NEXT_PUBLIC_API_URL=http://localhost:3000/api/v1
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# API Key của TinyMCE (rich text editor)
+NEXT_PUBLIC_TINY_API_KEY=your_tinymce_api_key_here
+
+# URL Socket.IO server (thường trùng với backend URL không có /api/v1)
+NEXT_PUBLIC_SOCKET_URL=http://localhost:3000
+```
+
+| Biến | Mô tả | Ví dụ |
+|---|---|---|
+| `NEXT_PUBLIC_API_URL` | Base URL của REST API backend | `http://localhost:3000/api/v1` |
+| `NEXT_PUBLIC_TINY_API_KEY` | API Key từ [TinyMCE Cloud](https://www.tiny.cloud/) | `abc123...` |
+| `NEXT_PUBLIC_SOCKET_URL` | URL server Socket.IO cho real-time | `http://localhost:3000` |
+
+> **Lưu ý:** Các biến có tiền tố `NEXT_PUBLIC_` sẽ được expose ra phía client. Không đặt thông tin nhạy cảm vào các biến này.
+
+---
+
+## 📄 Các trang chính
+
+| Route | Mô tả | Yêu cầu đăng nhập |
+|---|---|---|
+| `/` | Trang chủ | ❌ |
+| `/song/[id]` | Chi tiết bài hát | ❌ |
+| `/album/[id]` | Chi tiết album | ❌ |
+| `/artist/[id]` | Trang nghệ sĩ | ❌ |
+| `/genre/[id]` | Thể loại nhạc | ❌ |
+| `/playlist/[id]` | Chi tiết playlist | ❌ |
+| `/search` | Tìm kiếm | ❌ |
+| `/news` | Tin tức | ❌ |
+| `/about` | Giới thiệu | ❌ |
+| `/room` | Danh sách phòng nhạc | ✅ |
+| `/roomDetail/[id]` | Phòng nghe nhạc cùng nhau | ✅ |
+| `/playlist` | Playlist của tôi | ✅ |
+| `/profile` | Hồ sơ cá nhân | ✅ |
+| `/cart` | Giỏ hàng | ✅ |
+| `/plan` | Gói dịch vụ | ✅ |
+| `/payment` | Thanh toán | ✅ |
+| `/admin` | Bảng quản trị | ✅ (Admin) |
+| `/auth/login` | Đăng nhập | ❌ |
+| `/auth/register` | Đăng ký | ❌ |
+| `/auth/forgot-password` | Quên mật khẩu | ❌ |
+| `/auth/verify-otp` | Xác minh OTP | ❌ |
+| `/auth/reset-password` | Đặt lại mật khẩu | ❌ |
+
+---
+
+## 🔐 Xác thực & Phân quyền
+
+Dự án sử dụng **JWT (JSON Web Token)** lưu trong cookie (`accessToken`) để xác thực người dùng.
+
+### Luồng xác thực (Middleware)
+
+```
+Request đến
+    │
+    ├─ Trang Auth (Login/Register) + Có token hợp lệ → Redirect về "/"
+    │
+    ├─ Trang Public (/, /song, /album, /artist, /genre, /playlist, /search, /news, /about) → Cho qua
+    │
+    ├─ Không có token → Redirect về "/auth/login"
+    │
+    └─ Có token nhưng hết hạn → Xóa cookie + Redirect về "/auth/login"
+```
+
+### Phân quyền
+
+- **Guest** – Xem trang chủ, duyệt nhạc, tìm kiếm, xem tin tức
+- **User** – Tất cả tính năng Guest + phòng nghe nhạc, playlist, thanh toán, hồ sơ
+- **Admin** – Toàn quyền + truy cập bảng quản trị `/admin`
+
+---
+
+<div align="center">
+
+Made with ❤️ by the **NOVAWAVE Team**
+
+</div>

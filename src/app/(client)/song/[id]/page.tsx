@@ -24,8 +24,8 @@ import LyricsPreview from "../lyrics-preview";
 import SongAddPlaylistModal from "./song-add-playlist-modal";
 import SongComment from "./song-comment";
 
-const WavePlayer = dynamic(() => import('@/components/client/WavePlayer/wave-player'), { 
-  ssr: false 
+const WavePlayer = dynamic(() => import('@/components/client/WavePlayer/wave-player'), {
+    ssr: false
 });
 
 export default function SongDetailPage() {
@@ -63,22 +63,59 @@ export default function SongDetailPage() {
     const isLiked = likeRes?.data?.some((l: any) => l.songId?._id === song?._id);
     const isCurrentAd = nowPlayingType === PlaySongType.ADVERTISEMENT;
 
-    const handleToggleLike = () => {
-        if (!user) {
-            toast.error("Vui lòng đăng nhập");
-            return;
-        }
-        if (!song) return; // Bảo vệ nếu song chưa load
+    // const handleToggleLike = () => {
+    //     if (!user) {
+    //         toast.error("Vui lòng đăng nhập");
+    //         return;
+    //     }
+    //     if (!song) return; // Bảo vệ nếu song chưa load
 
-        if (isLiked) {
+    //     if (isLiked) {
+    //         unlikeSong(song._id, {
+    //             onSuccess: (res: any) => toast.success(res?.data?.message || "Đã bỏ thích"),
+    //             onError: (err: any) => toast.error(err?.response?.data?.message || "Bỏ thích thất bại"),
+    //         });
+    //     } else {
+    //         likeSong(song._id, {
+    //             onSuccess: (res: any) => toast.success(res?.data?.message || "Đã thích bài hát"),
+    //             onError: (err: any) => toast.error(err?.response?.data?.message || "Thích bài hát thất bại"),
+    //         });
+    //     }
+    // };
+
+    const [optimisticLiked, setOptimisticLiked] = useState(false);
+    const [optimisticCount, setOptimisticCount] = useState(0);
+
+    useEffect(() => {
+        setOptimisticLiked(isLiked ?? false);
+        setOptimisticCount(song?.likesCount ?? 0);
+    }, [isLiked, song?.likesCount]);
+
+    const handleToggleLike = () => {
+        if (!user) { toast.error("Vui lòng đăng nhập"); return; }
+        if (!song) return;
+
+        if (optimisticLiked) {
+            // Optimistic unlike
+            setOptimisticLiked(false);
+            setOptimisticCount(prev => prev - 1);
             unlikeSong(song._id, {
-                onSuccess: (res: any) => toast.success(res?.data?.message || "Đã bỏ thích"),
-                onError: (err: any) => toast.error(err?.response?.data?.message || "Bỏ thích thất bại"),
+                onError: (err: any) => {
+                    setOptimisticLiked(true);       // rollback
+                    setOptimisticCount(prev => prev + 1);
+                    toast.error(err?.response?.data?.message || "Thất bại");
+                }
             });
         } else {
+            // Optimistic like
+            setOptimisticLiked(true);
+            setOptimisticCount(prev => prev + 1);
             likeSong(song._id, {
-                onSuccess: (res: any) => toast.success(res?.data?.message || "Đã thích bài hát"),
-                onError: (err: any) => toast.error(err?.response?.data?.message || "Thích bài hát thất bại"),
+                onError: (err: any) => {
+                    setOptimisticLiked(false);      // rollback
+                    setOptimisticCount(prev => prev - 1);
+                    toast.error(err?.response?.data?.message || "Thất bại");
+                }
             });
         }
     };

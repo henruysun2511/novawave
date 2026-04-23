@@ -26,7 +26,6 @@ import { useRouter } from "next/navigation";
 export default function HomePage() {
   const router = useRouter();
 
-  // --- FETCH DATA ---
   const { data: settingsRes } = useSettings();
   const miniBanners = settingsRes?.data?.miniBanner || [];
 

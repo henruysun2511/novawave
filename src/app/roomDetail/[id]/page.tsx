@@ -11,7 +11,6 @@ import Loading from "@/components/common/loading";
 import { useRoomSocket } from "@/hooks/useRoomSocket";
 import { useToast } from "@/hooks/useToast";
 import {
-  ROOM_MESSAGE_QUERY_KEY,
   ROOM_QUERY_KEY,
   useAddRoomQueueItem,
   useCreateRoomMessage,
@@ -19,7 +18,7 @@ import {
   useRoomDetail,
   useRoomMessages,
   useRoomParticipants,
-  useUpdateRoomQueueItem,
+  useUpdateRoomQueueItem
 } from "@/queries/useRoomQuery";
 import { useSearch } from "@/queries/useSearchQuery";
 import { useAuthStore } from "@/stores/useAuthStore";
@@ -235,21 +234,65 @@ export default function RoomDetailPage() {
     emitHostControl(RoomControlAction.NEXT);
   }, [emitHostControl, isHost]);
 
+  const lastCommentTimeRef = useRef<number>(0);
+
+  // const emitComment = async () => {
+  //   if (!commentInput.trim()) return;
+
+  //   const now = Date.now();
+  //   if (now - lastCommentTimeRef.current < 2000) {
+  //     toast.error("Vui lòng chờ 2 giây trước khi gửi tiếp");
+  //     return; // Chặn ngay tại client, không tốn 1 request nào
+  //   }
+  //   lastCommentTimeRef.current = now;
+
+  //   const content = commentInput.trim();
+  //   try {
+  //     const response = await createMessage({ id: roomId, data: { content } });
+  //     const payload = (response.data?.data ?? response.data) as RoomMessage | undefined;
+
+  //     if (payload?._id) {
+  //       setMessages((prev) => upsertMessage(prev, payload).slice(0, 50));
+  //     }
+
+  //     setCommentInput("");
+  //     await queryClient.invalidateQueries({ queryKey: [...ROOM_MESSAGE_QUERY_KEY, roomId] });
+  //   } catch (error: unknown) {
+  //     toast.error(getErrorMessage(error, "Khong the gui binh luan"));
+  //   }
+  // };
+
   const emitComment = async () => {
     if (!commentInput.trim()) return;
+
     const content = commentInput.trim();
+
+    // Hiển thị comment ngay lập tức, không chờ server
+    const tempMessage: RoomMessage = {
+      _id: `temp_${Date.now()}`,
+      content,
+      userId: currentUser?.sub ?? "",
+      roomId: roomId,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    setMessages((prev) => upsertMessage(prev, tempMessage).slice(0, 50));
+    setCommentInput("");
+
     try {
       const response = await createMessage({ id: roomId, data: { content } });
-      const payload = (response.data?.data ?? response.data) as RoomMessage | undefined;
-
+      const payload = (response.data?.data ?? response.data) as RoomMessage;
+      // Thay message tạm bằng message thật từ server
       if (payload?._id) {
-        setMessages((prev) => upsertMessage(prev, payload).slice(0, 50));
+        setMessages((prev) =>
+          prev.map(m => m._id === tempMessage._id ? payload : m)
+        );
       }
-
-      setCommentInput("");
-      await queryClient.invalidateQueries({ queryKey: [...ROOM_MESSAGE_QUERY_KEY, roomId] });
-    } catch (error: unknown) {
-      toast.error(getErrorMessage(error, "Khong the gui binh luan"));
+    } catch (error) {
+      // Rollback nếu thất bại
+      setMessages((prev) => prev.filter(m => m._id !== tempMessage._id));
+      toast.error(getErrorMessage(error, "Không thể gửi bình luận"));
+      setCommentInput(content);
     }
   };
 
@@ -384,12 +427,12 @@ export default function RoomDetailPage() {
                   </div>
                 </div>
                 <div className="mt-4 flex gap-2">
-                    <Button type="primary" className="flex-1 bg-emerald-500 hover:!bg-emerald-400 border-none font-semibold h-9 rounded-lg" onClick={() => { handleResolveRequest(payload._id, RoomQueueItemStatus.APPROVED); notifyApi.destroy(payload._id); }}>
-                      Chấp nhận
-                    </Button>
-                    <Button className="flex-1 bg-white/5 hover:!bg-rose-500 hover:!text-white hover:!border-rose-500 border-white/10 text-white/70 font-semibold h-9 rounded-lg transition-all" onClick={() => { handleResolveRequest(payload._id, RoomQueueItemStatus.REJECTED); notifyApi.destroy(payload._id); }}>
-                      Từ chối
-                    </Button>
+                  <Button type="primary" className="flex-1 bg-emerald-500 hover:!bg-emerald-400 border-none font-semibold h-9 rounded-lg" onClick={() => { handleResolveRequest(payload._id, RoomQueueItemStatus.APPROVED); notifyApi.destroy(payload._id); }}>
+                    Chấp nhận
+                  </Button>
+                  <Button className="flex-1 bg-white/5 hover:!bg-rose-500 hover:!text-white hover:!border-rose-500 border-white/10 text-white/70 font-semibold h-9 rounded-lg transition-all" onClick={() => { handleResolveRequest(payload._id, RoomQueueItemStatus.REJECTED); notifyApi.destroy(payload._id); }}>
+                    Từ chối
+                  </Button>
                 </div>
               </div>
             ),
