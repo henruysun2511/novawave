@@ -230,39 +230,44 @@ Dự án sử dụng **JWT (JSON Web Token)** lưu trong cookie (`accessToken`) 
 
 ### Luồng xác thực (Middleware)
 
-```
-Request đến
-    │
-    ├─ Trang Auth (Login/Register) + Có token hợp lệ → Redirect về "/"
-    │
-    ├─ Trang Public (/, /song, /album, /artist, /genre, /playlist, /search, /news, /about) → Cho qua
-    │
-    ├─ Không có token → Redirect về "/auth/login"
-    │
-    └─ Có token nhưng hết hạn → Xóa cookie + Redirect về "/auth/login"
-```
+| Điều kiện | Hành động |
+|-----------|-----------|
+| Request đến | Kiểm tra token trong cookie |
+| Trang Auth (Login/Register) + Có token hợp lệ | Redirect về `/` |
+| Trang Public (`/`, `/song`, `/album`, `/artist`, `/genre`, `/playlist`, `/search`, `/news`, `/about`) | Cho phép truy cập |
+| Không có token | Redirect về `/auth/login` |
+| Có token nhưng hết hạn | Xóa cookie + Redirect về `/auth/login` |
 
 ### Phân quyền
 
-- **Guest** – Xem trang chủ, duyệt nhạc, tìm kiếm, xem tin tức
-- **User** – Tất cả tính năng Guest + phòng nghe nhạc, playlist, thanh toán, hồ sơ
-- **Artist** – Upload file nhạc, quản lý bài hát, album
-- **Admin** – Toàn quyền + truy cập bảng quản trị `/admin`
+| Vai trò | Quyền hạn |
+|---------|-----------|
+| **Guest** | Xem trang chủ, duyệt nhạc, tìm kiếm, xem tin tức |
+| **User** | Tất cả tính năng Guest + phòng nghe nhạc, playlist, thanh toán, hồ sơ |
+| **Artist** | Upload file nhạc, quản lý bài hát, album |
+| **Admin** | Toàn quyền + truy cập bảng quản trị `/admin` |
 
 ---
 
 ## 🎤 Nghe nhạc
+
 Chức năng nghe nhạc là chức năng cốt lõi của NovaWave, cho phép người dùng thưởng thức âm nhạc một cách liền mạch và cá nhân hóa. Hệ thống hỗ trợ đầy đủ các thao tác điều khiển như phát/tạm dừng, tua bài hát, chuyển bài tiếp theo hoặc quay lại bài hát trước. Ngoài ra, nền tảng còn cung cấp nhiều chế độ phát nhạc khác nhau nhằm đáp ứng đa dạng nhu cầu sử dụng của người dùng.
+
+<div align="center">
+  <img src="public/images/homepage.png" alt="Homepage" width="800">
+</div>
 
 ### 🎮 Điều khiển phát nhạc
 
 Người dùng có thể thực hiện các thao tác:
 
-- Phát hoặc tạm dừng bài hát.
-- Tua nhanh hoặc tua lùi đến vị trí mong muốn.
-- Chuyển sang bài hát tiếp theo.
-- Quay lại bài hát trước đó.
-- Điều chỉnh âm lượng phát nhạc.
+| # | Thao tác |
+|---|----------|
+| 1 | Phát hoặc tạm dừng bài hát |
+| 2 | Tua nhanh hoặc tua lùi đến vị trí mong muốn |
+| 3 | Chuyển sang bài hát tiếp theo |
+| 4 | Quay lại bài hát trước đó |
+| 5 | Điều chỉnh âm lượng phát nhạc |
 
 ### 💎 Trải nghiệm Premium
 
@@ -272,53 +277,262 @@ Hệ thống hỗ trợ hai loại trải nghiệm:
 |------------------|-------------------|
 | Sau mỗi 3 bài hát sẽ xuất hiện 1 quảng cáo | Không xuất hiện quảng cáo |
 | Không thể bỏ qua quảng cáo | Nghe nhạc liên tục |
-| Trải nghiệm cơ bản | Trải nghiệm đầy đủ |
 
 > **Lưu ý:** Quảng cáo không cho phép tua hoặc bỏ qua nhằm đảm bảo hiệu quả quảng bá nội dung.
 
 ### 🔀 Các chế độ phát nhạc
 
-#### Nghe nhạc đơn
-
-Khi người dùng phát một bài hát riêng lẻ, hệ thống sẽ tự động đề xuất và phát ngẫu nhiên bài hát tiếp theo sau khi bài hát hiện tại kết thúc.
-
-#### 📀 Nghe theo Album hoặc Playlist
-
-Các bài hát sẽ được phát tuần tự theo danh sách đã được định nghĩa trong Album hoặc Playlist mà người dùng lựa chọn.
-
-#### 📋 Phát từ hàng đợi (Queue)
-
-Hệ thống phát nhạc theo đúng thứ tự trong danh sách hàng đợi do người dùng thiết lập và giữ nguyên cấu trúc của danh sách này trong suốt quá trình phát.
+| Chế độ | Mô tả |
+|--------|-------|
+| **Nghe nhạc đơn** | Khi người dùng phát một bài hát riêng lẻ, hệ thống sẽ tự động đề xuất và phát ngẫu nhiên bài hát tiếp theo sau khi bài hát hiện tại kết thúc |
+| **Nghe theo Album / Playlist** | Các bài hát sẽ được phát tuần tự theo danh sách đã được định nghĩa trong Album hoặc Playlist mà người dùng lựa chọn |
+| **Phát từ hàng đợi (Queue)** | Hệ thống phát nhạc theo đúng thứ tự trong danh sách hàng đợi do người dùng thiết lập và giữ nguyên cấu trúc của danh sách này trong suốt quá trình phát |
 
 ### 🌊 Đồng bộ sóng nhạc (Waveform)
 
 NovaWave hỗ trợ đồng bộ hai chiều giữa thanh tiến trình và sóng âm thanh:
 
-- Kéo **Song Bar** sẽ cập nhật vị trí tương ứng trên sóng nhạc.
-- Tương tác trực tiếp trên **Waveform** sẽ thay đổi thời điểm phát của bài hát.
-- Mọi thay đổi đều được cập nhật theo thời gian thực nhằm mang lại trải nghiệm trực quan và chính xác.
+| Tương tác | Kết quả |
+|-----------|---------|
+| Kéo **Song Bar** | Cập nhật vị trí tương ứng trên sóng nhạc |
+| Tương tác trực tiếp trên **Waveform** | Thay đổi thời điểm phát của bài hát |
+| Mọi thay đổi | Cập nhật theo thời gian thực, mang lại trải nghiệm trực quan và chính xác |
+
+<div align="center">
+  <img src="public/images/songwave.png" alt="Homepage" width="800">
+</div>
 
 ### 🎵 Đồng bộ Sidebar
 
 Sidebar luôn hiển thị thông tin của bài hát đang phát theo thời gian thực, bao gồm:
 
-- Ảnh bìa bài hát.
-- Tên bài hát.
-- Nghệ sĩ thể hiện.
-- Album liên quan.
+| Thông tin | Mô tả |
+|-----------|-------|
+| 🖼️ | Ảnh bìa bài hát |
+| 🎵 | Tên bài hát |
+| 👤 | Nghệ sĩ thể hiện |
+| 💿 | Album liên quan |
 
 Tại đây, người dùng cũng có thể thực hiện thao tác **Follow** hoặc **Unfollow** nghệ sĩ mà không cần chuyển sang trang thông tin nghệ sĩ.
 
 ## 💬 Bình luận nhạc đồng bộ với sóng âm
 
-## ❤️ Thả tim bài hát
-## 🏠 Phòng nghe nhạc chung
-## 🔍 Tìm kiếm nâng cao
-## 🚀 Nghệ sĩ & Upload file nhạc
-## 💳 Đăng ký prenium
-## 🎵 Tạo playlist
-## Cấu hình website
+NovaWave cung cấp tính năng bình luận theo thời gian thực gắn liền với nội dung bài hát, giúp người dùng tương tác trực tiếp với từng khoảnh khắc trong bản nhạc.
 
+### ⏱️ Bình luận theo mốc thời gian
+
+Khi người dùng gửi bình luận, hệ thống sẽ tự động lưu lại thời điểm hiện tại của bài hát và liên kết thời gian đó với nội dung bình luận.
+
+| Tính năng | Mô tả |
+|-----------|-------|
+| 📌 | Mỗi bình luận đều hiển thị kèm mốc thời gian tương ứng |
+| 👆 | Nhấn vào mốc thời gian để chuyển ngay đến đoạn nhạc được bình luận |
+| 🔄 | Thanh tiến trình và sóng nhạc được cập nhật đồng bộ theo vị trí được chọn |
+
+<div align="center">
+  <img src="public/images/comment1.png" alt="Homepage" width="800">
+</div>
+
+### 🌊 Hiển thị trên sóng nhạc
+
+Để tăng tính trực quan, avatar của người dùng sẽ được hiển thị trực tiếp trên sóng nhạc tại vị trí mà bình luận được tạo.
+
+| Lợi ích | Mô tả |
+|---------|-------|
+| 🔍 | Dễ dàng nhận biết các đoạn nhạc có nhiều tương tác |
+| ⚡ | Nhanh chóng truy cập đến các cuộc thảo luận nổi bật |
+| 🎯 | Tạo trải nghiệm nghe nhạc mang tính cộng đồng và tương tác cao |
+
+<div align="center">
+  <img src="public/images/comment2.png" alt="Homepage" width="800">
+</div>
+
+## ❤️ Thả tim bài hát
+
+NovaWave cho phép người dùng lưu lại các bài hát yêu thích thông qua chức năng thả tim, giúp xây dựng thư viện âm nhạc cá nhân một cách thuận tiện.
+
+### 🎵 Quản lý bài hát yêu thích
+
+Người dùng có thể:
+
+| Thao tác | Mô tả |
+|----------|-------|
+| ❤️ | Thả tim để thêm bài hát vào danh sách yêu thích |
+| 💔 | Hủy thả tim để xóa bài hát khỏi danh sách yêu thích |
+| 📂 | Truy cập nhanh các bài hát đã yêu thích trong thư viện cá nhân |
+
+### ⚡ Optimistic UI
+
+Để mang lại trải nghiệm mượt mà, hệ thống sử dụng kỹ thuật **Optimistic UI**:
+
+| Ưu điểm | Mô tả |
+|---------|-------|
+| 🚀 | Giao diện được cập nhật ngay sau khi người dùng nhấn thả tim |
+| ⏳ | Không cần chờ phản hồi từ máy chủ để hiển thị kết quả |
+| 🎯 | Giảm độ trễ cảm nhận và tăng tính tương tác của ứng dụng |
+
+### 🔄 Đồng bộ dữ liệu
+
+Sau khi giao diện được cập nhật, hệ thống sẽ gửi yêu cầu đến máy chủ để lưu trạng thái yêu thích.
+
+| Kết quả | Hành động |
+|---------|-----------|
+| ✅ Yêu cầu thành công | Trạng thái được giữ nguyên |
+| ❌ Xảy ra lỗi | Giao diện tự động hoàn tác về trạng thái trước đó |
+| 🔔 Thất bại | Người dùng nhận được thông báo tương ứng |
+
+## 🏠 Phòng nghe nhạc chung
+
+NovaWave cho phép nhiều người dùng cùng tham gia một phòng nghe nhạc và thưởng thức âm nhạc đồng bộ theo thời gian thực.
+
+### 🎵 Tạo và quản lý phòng nhạc
+
+| Mục | Chi tiết |
+|-----|----------|
+| **Nguồn phát** | Bài hát đơn lẻ, Album, Playlist cá nhân hoặc công khai |
+| **Chủ phòng** | ▶️ Bắt đầu / ⏸️ Tạm dừng / ⏹️ Kết thúc phiên nghe nhạc |
+
+<div align="center">
+  <img src="public/images/room2.png" alt="Homepage" width="800">
+</div>
+
+Mọi thay đổi đều được cập nhật tức thời đến tất cả thành viên trong phòng.
+
+### ⚡ Đồng bộ phát nhạc Realtime
+
+NovaWave sử dụng **WebSocket** để đồng bộ trạng thái phát nhạc giữa các thành viên.
+
+| Tính năng | Mô tả |
+|-----------|-------|
+| ⏩ | Tua bài hát theo thời gian thực |
+| ⏪ | Chuyển bài tiếp theo hoặc bài trước |
+| ⏯️ | Đồng bộ trạng thái phát/tạm dừng |
+| 🎯 | Đảm bảo tất cả thành viên cùng nghe một nội dung tại cùng thời điểm |
+
+<div align="center">
+  <img src="public/images/room3.png" alt="Homepage" width="800">
+</div>
+
+### 👥 Thành viên tham gia Realtime
+
+Khi có người tham gia hoặc rời khỏi phòng:
+
+| Thay đổi | Kết quả |
+|----------|---------|
+| 👤 Tham gia / Rời đi | Danh sách thành viên được cập nhật ngay lập tức |
+| 🖼️ | Avatar và thông tin người dùng hiển thị theo thời gian thực |
+| 👁️ | Chủ phòng dễ dàng theo dõi trạng thái hoạt động của phòng |
+
+### 💬 Trò chuyện trực tiếp
+
+Các thành viên có thể trao đổi và tương tác thông qua hệ thống bình luận thời gian thực.
+
+| Tính năng | Mô tả |
+|-----------|-------|
+| ✉️ | Gửi tin nhắn ngay trong phòng nghe nhạc |
+| 🔄 | Nhận phản hồi tức thời từ các thành viên khác |
+| 🌐 | Tạo không gian nghe nhạc mang tính cộng đồng |
+
+### 🎶 Yêu cầu bài hát
+
+Thành viên có thể gửi yêu cầu phát bài hát đến chủ phòng.
+
+| Bước | Mô tả |
+|------|-------|
+| 1 | Gửi đề xuất bài hát yêu thích |
+| 2 | Chủ phòng xem xét và phê duyệt yêu cầu |
+| 3 | Bài hát được thêm vào hàng đợi sau khi được chấp nhận |
+
+### 🛡️ Quản lý thành viên
+
+Để duy trì môi trường nghe nhạc lành mạnh, chủ phòng có thể:
+
+| Hành động | Mô tả |
+|-----------|-------|
+| 🚪 | Kick thành viên khỏi phòng |
+| 🚫 | Ban thành viên vi phạm |
+| 🔐 | Quản lý quyền tham gia phòng nghe nhạc |
+
+Tất cả thay đổi đều được đồng bộ theo thời gian thực nhằm mang lại trải nghiệm cộng đồng mượt mà và liền mạch.
+
+## 🔍 Tìm kiếm nâng cao
+
+NovaWave cung cấp hệ thống tìm kiếm thông minh giúp người dùng không chỉ tìm thấy nội dung mong muốn mà còn khám phá các thông tin liên quan một cách nhanh chóng.
+
+<div align="center">
+  <img src="public/images/search.png" alt="search" width="800">
+</div>
+
+| Loại tìm kiếm | Kết quả trả về |
+|---------------|----------------|
+| 🎵 **Bài hát** | Bài hát phù hợp với từ khóa, Nghệ sĩ thể hiện, Album chứa bài hát, Danh sách thể loại |
+| 💿 **Album** | Album phù hợp với từ khóa, Nghệ sĩ sở hữu hoặc phát hành Album |
+| 🎤 **Nghệ sĩ** | Thông tin nghệ sĩ, Danh sách bài hát, Danh sách Album |
+| 🎼 **Thể loại** | Thông tin thể loại, Danh sách bài hát thuộc thể loại đó |
+
+Nhờ cơ chế liên kết dữ liệu giữa bài hát, nghệ sĩ, album và thể loại, người dùng có thể dễ dàng khám phá thêm các nội dung liên quan chỉ với một lần tìm kiếm, mang lại trải nghiệm duyệt nhạc trực quan và thuận tiện hơn.
+
+## 🚀 Nghệ sĩ & Upload file nhạc
+
+NovaWave hỗ trợ cơ chế đăng ký tài khoản nghệ sĩ, cho phép người dùng phát hành và quản lý nội dung âm nhạc của riêng mình trên nền tảng.
+
+### 📝 Đăng ký trở thành nghệ sĩ
+
+Để được cấp quyền nghệ sĩ, người dùng cần cung cấp các thông tin xác thực:
+
+| Thông tin | Mô tả |
+|-----------|-------|
+| 👤 | Họ và tên |
+| 🆔 | Số CCCD/CMND |
+| 📋 | Thông tin định danh theo yêu cầu của hệ thống |
+
+Sau khi gửi yêu cầu:
+
+| Bước | Mô tả |
+|------|-------|
+| 1 | Hồ sơ được chuyển đến hệ thống quản trị |
+| 2 | Admin tiến hành kiểm tra và xác minh thông tin |
+| 3 | Tài khoản được nâng cấp thành Artist sau khi được phê duyệt |
+
+### 🎵 Quản lý bài hát
+
+Nghệ sĩ có thể:
+
+| Thao tác | Mô tả |
+|----------|-------|
+| ➕ | Tạo mới bài hát |
+| ✏️ | Chỉnh sửa thông tin bài hát |
+| 🗑️ | Xóa bài hát khỏi nền tảng |
+| 📂 | Quản lý danh sách các bài hát đã phát hành |
+
+### ☁️ Upload và lưu trữ nhạc
+
+Các tệp âm thanh được xử lý thông qua **Cloudinary** nhằm đảm bảo khả năng lưu trữ và phân phối hiệu quả.
+
+| Tính năng | Mô tả |
+|-----------|-------|
+| 📤 | Upload file nhạc trực tiếp từ giao diện nghệ sĩ |
+| 💾 | Tự động lưu trữ trên Cloudinary |
+| 🔗 | Quản lý URL và metadata của bài hát |
+| ⚡ | Tối ưu tốc độ truy cập và phát nhạc trên toàn hệ thống |
+
+### 🛡️ Kiểm duyệt nội dung
+
+Mọi tài khoản nghệ sĩ đều phải trải qua bước xác thực và phê duyệt bởi Admin trước khi được phép phát hành nội dung, giúp đảm bảo tính minh bạch và chất lượng của nền tảng.
+
+## 📌 Các chức năng khác
+
+| Nhóm | Chức năng |
+|------|-----------|
+| 🎶 | Tạo playlist |
+| 🚨 | Report bài hát |
+| 👤 | Follow / Unfollow nghệ sĩ |
+| 🔔 | Thông báo realtime |
+| 💎 | Đăng ký gói Premium qua PayOS |
+| 🛒 | Mua bán / Giỏ hàng |
+| 🛡️ | Admin: duyệt nghệ sĩ, quản lý tài khoản, thể loại, tin tức, quảng cáo, sản phẩm, cấu hình website |
+
+---
 
 <div align="center">
 
