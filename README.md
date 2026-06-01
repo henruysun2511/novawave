@@ -252,60 +252,62 @@ Request đến
 ---
 
 ## 🎤 Nghe nhạc
-Chức năng nghe nhạc là chức năng trọng tâm của nền tảng NovaWave, cho phép người dùng trải nghiệm âm nhạc một cách thuận tiện, liên tục và cá nhân hóa. Hệ thống hỗ trợ đầy đủ các thao tác điều khiển cơ bản như phát/tạm dừng bài hát, tua nhanh, tua lùi, chuyển sang bài hát tiếp theo hoặc quay lại bài hát trước.
+Chức năng nghe nhạc là chức năng cốt lõi của NovaWave, cho phép người dùng thưởng thức âm nhạc một cách liền mạch và cá nhân hóa. Hệ thống hỗ trợ đầy đủ các thao tác điều khiển như phát/tạm dừng, tua bài hát, chuyển bài tiếp theo hoặc quay lại bài hát trước. Ngoài ra, nền tảng còn cung cấp nhiều chế độ phát nhạc khác nhau nhằm đáp ứng đa dạng nhu cầu sử dụng của người dùng.
 
-Điều khiển phát nhạc
+### 🎮 Điều khiển phát nhạc
 
-Người dùng có thể:
+Người dùng có thể thực hiện các thao tác:
 
-▶️ Phát hoặc tạm dừng bài hát.
-⏩ Tua nhanh hoặc tua lùi đến vị trí mong muốn.
-⏭️ Chuyển sang bài hát tiếp theo.
-⏮️ Quay lại bài hát trước đó.
-🔊 Điều chỉnh âm lượng phát nhạc.
-Chính sách quảng cáo và Premium
+- Phát hoặc tạm dừng bài hát.
+- Tua nhanh hoặc tua lùi đến vị trí mong muốn.
+- Chuyển sang bài hát tiếp theo.
+- Quay lại bài hát trước đó.
+- Điều chỉnh âm lượng phát nhạc.
 
-Hệ thống phân biệt trải nghiệm giữa người dùng thường và người dùng Premium:
+### 💎 Trải nghiệm Premium
 
-Người dùng Premium: Được nghe nhạc liên tục không giới hạn và không xuất hiện quảng cáo.
-Người dùng thường: Sau mỗi ba bài hát được phát, hệ thống sẽ tự động phát một quảng cáo. Quảng cáo không cho phép tua hoặc bỏ qua nhằm đảm bảo hiệu quả quảng bá nội dung.
-Các chế độ phát nhạc
+Hệ thống hỗ trợ hai loại trải nghiệm:
 
-NovaWave hỗ trợ nhiều chế độ phát nhạc nhằm đáp ứng các nhu cầu sử dụng khác nhau:
+| Người dùng thường | Người dùng Premium |
+|------------------|-------------------|
+| Sau mỗi 3 bài hát sẽ xuất hiện 1 quảng cáo | Không xuất hiện quảng cáo |
+| Không thể bỏ qua quảng cáo | Nghe nhạc liên tục |
+| Trải nghiệm cơ bản | Trải nghiệm đầy đủ |
 
-1. Nghe nhạc đơn
+> **Lưu ý:** Quảng cáo không cho phép tua hoặc bỏ qua nhằm đảm bảo hiệu quả quảng bá nội dung.
 
-Khi người dùng mở một bài hát riêng lẻ, sau khi bài hát kết thúc, hệ thống sẽ tự động lựa chọn và phát ngẫu nhiên một bài hát khác dựa trên cơ chế đề xuất.
+### 🔀 Các chế độ phát nhạc
 
-2. Nghe nhạc theo Album hoặc Playlist
+#### Nghe nhạc đơn
 
-Khi phát từ Album hoặc Playlist, các bài hát sẽ được phát tuần tự theo danh sách đã được định nghĩa sẵn. Người dùng có thể chuyển bài, phát lại hoặc thay đổi thứ tự phát tùy theo quyền được hỗ trợ.
+Khi người dùng phát một bài hát riêng lẻ, hệ thống sẽ tự động đề xuất và phát ngẫu nhiên bài hát tiếp theo sau khi bài hát hiện tại kết thúc.
 
-3. Phát nhạc từ hàng đợi (Queue)
+#### 📀 Nghe theo Album hoặc Playlist
 
-Người dùng có thể tự xây dựng danh sách hàng đợi phát nhạc. Trong chế độ này, hệ thống sẽ phát các bài hát theo đúng thứ tự trong hàng đợi và duy trì nguyên vẹn cấu trúc danh sách cho đến khi người dùng thay đổi.
+Các bài hát sẽ được phát tuần tự theo danh sách đã được định nghĩa trong Album hoặc Playlist mà người dùng lựa chọn.
 
-Đồng bộ sóng nhạc (Waveform)
+#### 📋 Phát từ hàng đợi (Queue)
 
-NovaWave sử dụng cơ chế đồng bộ hai chiều giữa thanh tiến trình bài hát và sóng âm thanh:
+Hệ thống phát nhạc theo đúng thứ tự trong danh sách hàng đợi do người dùng thiết lập và giữ nguyên cấu trúc của danh sách này trong suốt quá trình phát.
 
-Khi người dùng kéo thanh tiến trình (Song Bar), vị trí hiển thị trên sóng nhạc sẽ được cập nhật tương ứng.
-Khi người dùng tương tác trực tiếp trên sóng nhạc, thời điểm phát của bài hát cũng được thay đổi theo vị trí được chọn.
+### 🌊 Đồng bộ sóng nhạc (Waveform)
 
-Tính năng này giúp người dùng dễ dàng xác định và di chuyển đến các đoạn mong muốn trong bài hát một cách trực quan.
+NovaWave hỗ trợ đồng bộ hai chiều giữa thanh tiến trình và sóng âm thanh:
 
-Đồng bộ với Sidebar
+- Kéo **Song Bar** sẽ cập nhật vị trí tương ứng trên sóng nhạc.
+- Tương tác trực tiếp trên **Waveform** sẽ thay đổi thời điểm phát của bài hát.
+- Mọi thay đổi đều được cập nhật theo thời gian thực nhằm mang lại trải nghiệm trực quan và chính xác.
 
-Thông tin bài hát đang phát được cập nhật theo thời gian thực trên Sidebar của hệ thống.
+### 🎵 Đồng bộ Sidebar
 
-Các thông tin được hiển thị bao gồm:
+Sidebar luôn hiển thị thông tin của bài hát đang phát theo thời gian thực, bao gồm:
 
-Ảnh bìa bài hát.
-Tên bài hát.
-Tên nghệ sĩ thể hiện.
-Thông tin Album (nếu có).
+- Ảnh bìa bài hát.
+- Tên bài hát.
+- Nghệ sĩ thể hiện.
+- Album liên quan.
 
-Ngoài ra, người dùng có thể thực hiện thao tác Follow hoặc Unfollow nghệ sĩ ngay tại Sidebar mà không cần chuyển sang trang thông tin nghệ sĩ, giúp tăng tính thuận tiện trong quá trình sử dụng.
+Tại đây, người dùng cũng có thể thực hiện thao tác **Follow** hoặc **Unfollow** nghệ sĩ mà không cần chuyển sang trang thông tin nghệ sĩ.
 
 ## 💬 Bình luận nhạc đồng bộ với sóng âm
 
