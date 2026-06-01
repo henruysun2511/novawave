@@ -431,7 +431,7 @@ Tất cả thay đổi đều được đồng bộ theo thời gian thực nh�
 ## 🔍 Tìm kiếm nâng cao
 NovaWave cung cấp hệ thống tìm kiếm thông minh giúp người dùng không chỉ tìm thấy nội dung mong muốn mà còn khám phá các thông tin liên quan một cách nhanh chóng.
 
-<img src="public/images/search.png" alt="search" width="500">
+<img src="public/images/search.png" alt="search" width="800">
 
 🎵 Tìm kiếm bài hát
 Khi tìm kiếm một bài hát, hệ thống sẽ trả về:
@@ -499,6 +499,22 @@ Tối ưu tốc độ truy cập và phát nhạc trên toàn hệ thống.
 🛡️ Kiểm duyệt nội dung
 
 Mọi tài khoản nghệ sĩ đều phải trải qua bước xác thực và phê duyệt bởi Admin trước khi được phép phát hành nội dung, giúp đảm bảo tính minh bạch và chất lượng của nền tảng.
+
+## Các chức năng khác
+- Tạo playlist
+- Report bài hát
+- Follow/unfollow nghệ sĩ
+- Thông báo realtime
+- Đăng kí gói prenium qua PayOS
+- Mua bán/giỏ hàng
+- Admin: duyệt nghệ sĩ, quảng lý tài khoản, thể loại, tin tức, quảng cáo, sản phẩm, cấu hình website
+
+
+<div align="center">
+
+Made by **NHAT HUY**
+
+</div>
 
 ## Các chức năng khác
 - Tạo playlist
