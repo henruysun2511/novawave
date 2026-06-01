@@ -10,7 +10,8 @@
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4-06B6D4?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com/)
 [![Ant Design](https://img.shields.io/badge/Ant%20Design-5-0170FE?style=for-the-badge&logo=antdesign)](https://ant.design/)
 
-NOVAWAVE là nền tảng nghe nhạc trực tuyến hiện đại, hỗ trợ phát nhạc, phòng nghe nhạc cùng nhau theo thời gian thực, quản lý playlist, và nhiều tính năng hơn nữa.
+NovaWave là một nền tảng nghe nhạc trực tuyến (music streaming platform) được phát triển với mục tiêu cung cấp trải nghiệm thưởng thức âm nhạc toàn diện cho người dùng. Ứng dụng tích hợp đầy đủ các chức năng từ phát nhạc, quản lý thư viện cá nhân cho đến các tính năng cộng đồng như nghe nhạc cùng nhau theo thời gian thực, mua nhạc, đăng ký gói Premium và hệ thống quản trị nội dung. 
+
 
 </div>
 
@@ -30,11 +31,13 @@ NOVAWAVE là nền tảng nghe nhạc trực tuyến hiện đại, hỗ trợ p
 
 ## ✨ Tính năng
 
-- 🎵 **Phát nhạc** – Trình phát nhạc mượt mà với giao diện trực quan (waveform, thanh tiến trình)
-- 🎤 **Quản lý nghệ sĩ / album / thể loại** – Duyệt và khám phá âm nhạc theo danh mục
+- 🎵 **Phát nhạc** – Trình phát nhạc đồng bộ với sóng nhạc và các component liên quan
+- 💬 **Bình luận nhạc** - Bình luận bài hát
+- ❤️ **Thả tim bài hát** - Thả tim bài hát
+- 🎤 **Quản lý nghệ sĩ / album / thể loại** – Nghệ sĩ sau khi đăng ký sẽ được upload nhạc, album.
 - 📋 **Playlist cá nhân** – Tạo, chỉnh sửa và quản lý danh sách bài hát
 - 🏠 **Phòng nghe nhạc (Room)** – Nghe nhạc cùng nhau theo thời gian thực qua WebSocket
-- 🔍 **Tìm kiếm** – Tìm kiếm bài hát, nghệ sĩ, album nhanh chóng
+- 🔍 **Tìm kiếm** – Tìm kiếm bài hát, nghệ sĩ, album, playlist, thể loại nhanh chóng
 - 🛒 **Giỏ hàng & Thanh toán** – Mua nhạc / gói Premium
 - 📰 **Tin tức** – Cập nhật tin tức âm nhạc mới nhất
 - 👤 **Hồ sơ cá nhân** – Quản lý thông tin tài khoản
@@ -243,12 +246,80 @@ Request đến
 
 - **Guest** – Xem trang chủ, duyệt nhạc, tìm kiếm, xem tin tức
 - **User** – Tất cả tính năng Guest + phòng nghe nhạc, playlist, thanh toán, hồ sơ
+- **Artist** – Upload file nhạc, quản lý bài hát, album
 - **Admin** – Toàn quyền + truy cập bảng quản trị `/admin`
 
 ---
 
+## 🎤 Nghe nhạc
+Chức năng nghe nhạc là chức năng trọng tâm của nền tảng NovaWave, cho phép người dùng trải nghiệm âm nhạc một cách thuận tiện, liên tục và cá nhân hóa. Hệ thống hỗ trợ đầy đủ các thao tác điều khiển cơ bản như phát/tạm dừng bài hát, tua nhanh, tua lùi, chuyển sang bài hát tiếp theo hoặc quay lại bài hát trước.
+
+Điều khiển phát nhạc
+
+Người dùng có thể:
+
+▶️ Phát hoặc tạm dừng bài hát.
+⏩ Tua nhanh hoặc tua lùi đến vị trí mong muốn.
+⏭️ Chuyển sang bài hát tiếp theo.
+⏮️ Quay lại bài hát trước đó.
+🔊 Điều chỉnh âm lượng phát nhạc.
+Chính sách quảng cáo và Premium
+
+Hệ thống phân biệt trải nghiệm giữa người dùng thường và người dùng Premium:
+
+Người dùng Premium: Được nghe nhạc liên tục không giới hạn và không xuất hiện quảng cáo.
+Người dùng thường: Sau mỗi ba bài hát được phát, hệ thống sẽ tự động phát một quảng cáo. Quảng cáo không cho phép tua hoặc bỏ qua nhằm đảm bảo hiệu quả quảng bá nội dung.
+Các chế độ phát nhạc
+
+NovaWave hỗ trợ nhiều chế độ phát nhạc nhằm đáp ứng các nhu cầu sử dụng khác nhau:
+
+1. Nghe nhạc đơn
+
+Khi người dùng mở một bài hát riêng lẻ, sau khi bài hát kết thúc, hệ thống sẽ tự động lựa chọn và phát ngẫu nhiên một bài hát khác dựa trên cơ chế đề xuất.
+
+2. Nghe nhạc theo Album hoặc Playlist
+
+Khi phát từ Album hoặc Playlist, các bài hát sẽ được phát tuần tự theo danh sách đã được định nghĩa sẵn. Người dùng có thể chuyển bài, phát lại hoặc thay đổi thứ tự phát tùy theo quyền được hỗ trợ.
+
+3. Phát nhạc từ hàng đợi (Queue)
+
+Người dùng có thể tự xây dựng danh sách hàng đợi phát nhạc. Trong chế độ này, hệ thống sẽ phát các bài hát theo đúng thứ tự trong hàng đợi và duy trì nguyên vẹn cấu trúc danh sách cho đến khi người dùng thay đổi.
+
+Đồng bộ sóng nhạc (Waveform)
+
+NovaWave sử dụng cơ chế đồng bộ hai chiều giữa thanh tiến trình bài hát và sóng âm thanh:
+
+Khi người dùng kéo thanh tiến trình (Song Bar), vị trí hiển thị trên sóng nhạc sẽ được cập nhật tương ứng.
+Khi người dùng tương tác trực tiếp trên sóng nhạc, thời điểm phát của bài hát cũng được thay đổi theo vị trí được chọn.
+
+Tính năng này giúp người dùng dễ dàng xác định và di chuyển đến các đoạn mong muốn trong bài hát một cách trực quan.
+
+Đồng bộ với Sidebar
+
+Thông tin bài hát đang phát được cập nhật theo thời gian thực trên Sidebar của hệ thống.
+
+Các thông tin được hiển thị bao gồm:
+
+Ảnh bìa bài hát.
+Tên bài hát.
+Tên nghệ sĩ thể hiện.
+Thông tin Album (nếu có).
+
+Ngoài ra, người dùng có thể thực hiện thao tác Follow hoặc Unfollow nghệ sĩ ngay tại Sidebar mà không cần chuyển sang trang thông tin nghệ sĩ, giúp tăng tính thuận tiện trong quá trình sử dụng.
+
+## 💬 Bình luận nhạc đồng bộ với sóng âm
+
+## ❤️ Thả tim bài hát
+## 🏠 Phòng nghe nhạc chung
+## 🔍 Tìm kiếm nâng cao
+## 🚀 Nghệ sĩ & Upload file nhạc
+## 💳 Đăng ký prenium
+## 🎵 Tạo playlist
+## Cấu hình website
+
+
 <div align="center">
 
-Made with ❤️ by the **NOVAWAVE Team**
+Made by **NHAT HUY**
 
 </div>
