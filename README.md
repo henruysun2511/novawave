@@ -431,7 +431,7 @@ Tất cả thay đổi đều được đồng bộ theo thời gian thực nh�
 ## 🔍 Tìm kiếm nâng cao
 NovaWave cung cấp hệ thống tìm kiếm thông minh giúp người dùng không chỉ tìm thấy nội dung mong muốn mà còn khám phá các thông tin liên quan một cách nhanh chóng.
 
-<img src="public/images/search.png" alt="search" width="800">
+<img src="public/images/search.png" alt="search" width="500">
 
 🎵 Tìm kiếm bài hát
 Khi tìm kiếm một bài hát, hệ thống sẽ trả về:
