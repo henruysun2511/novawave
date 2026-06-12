@@ -11,6 +11,7 @@ import Loading from "@/components/common/loading";
 import { useRoomSocket } from "@/hooks/useRoomSocket";
 import { useToast } from "@/hooks/useToast";
 import {
+  ROOM_PARTICIPANT_QUERY_KEY,
   ROOM_QUERY_KEY,
   useAddRoomQueueItem,
   useCreateRoomMessage,
@@ -83,6 +84,17 @@ export default function RoomDetailPage() {
   const [room, setRoom] = useState<RoomDetail | null>(null);
   const [messages, setMessages] = useState<RoomMessage[]>([]);
   const [participants, setParticipants] = useState<RoomParticipant[]>([]);
+  const userMapRef = useRef<Map<string, { username: string; avatar?: string }>>(new Map());
+
+  useEffect(() => {
+    const map = new Map<string, { username: string; avatar?: string }>();
+    for (const p of participants) {
+      if (typeof p.userId !== "string") {
+        map.set(p.userId._id, { username: p.userId.username, avatar: p.userId.avatar });
+      }
+    }
+    userMapRef.current = map;
+  }, [participants]);
   const [activityFeed, setActivityFeed] = useState<RoomRealtimeNotification[]>([]);
   const [selectedQueueItemId, setSelectedQueueItemId] = useState<string | null>(null);
   const [commentInput, setCommentInput] = useState("");
@@ -377,10 +389,14 @@ export default function RoomDetailPage() {
       },
       USER_JOINED: (payload: RoomParticipant) => {
         setParticipants((prev) => upsertParticipant(prev, payload));
+        const userName = typeof payload.userId !== "string"
+          ? payload.userId.username
+          : (userMapRef.current.get(getUserId(payload.userId))?.username ?? null);
         setActivityFeed((prev) => [
-          createRealtimeMessage("join", `${getUserName(payload.userId)} da tham gia phong.`),
+          createRealtimeMessage("join", `${userName || "Moi"} da tham gia phong.`),
           ...prev,
         ].slice(0, 30));
+        void queryClient.invalidateQueries({ queryKey: [...ROOM_PARTICIPANT_QUERY_KEY, roomId] });
       },
       USER_LEFT: (payload: { userId: string }) => {
         setParticipants((prev) => prev.filter((item) => getUserId(item.userId) !== payload.userId));
@@ -406,33 +422,72 @@ export default function RoomDetailPage() {
             key: payload._id,
             placement: "bottomRight",
             duration: 10,
-            icon: <></>,
-            className: "!bg-[#18181b]/80 !backdrop-blur-xl !border !border-white/10 !rounded-2xl !p-0 overflow-hidden transform transition-all",
+            icon: null,
+            closeIcon: null,
+            className: "custom-music-notification",
+            style: {
+              padding: 0,
+              width: 360,
+              background: 'transparent'
+            },
             message: null,
             description: (
-              <div className="p-4 bg-gradient-to-br from-[rgba(16,185,129,0.15)] to-transparent">
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="h-7 w-7 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                    <AudioOutlined className="text-emerald-400 text-sm" />
+              <div className="w-full bg-[#141414]/95 backdrop-blur-2xl shadow-2xl shadow-black/80 border border-white/10 rounded-2xl overflow-hidden">
+                {/* Top accent bar */}
+                <div className="h-[3px] w-full bg-gradient-to-r from-emerald-500 via-emerald-400 to-teal-400" />
+
+                <div className="p-4 pt-3.5">
+                  {/* Header: avatar + text */}
+                  <div className="flex items-center gap-3 mb-3.5">
+                    <div className="relative shrink-0">
+                      <div className="size-9 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-emerald-500/30">
+                        {getUserName(payload.requestedBy)?.[0]?.toUpperCase() ?? "?"}
+                      </div>
+                      <span className="absolute -bottom-0.5 -right-0.5 size-3.5 rounded-full bg-emerald-400 border-2 border-[#141414] shadow shadow-emerald-400/50" />
+                    </div>
+                    <div className="leading-tight">
+                      <p className="text-sm text-white font-semibold leading-snug">
+                        {getUserName(payload.requestedBy)}
+                      </p>
+                      <p className="text-xs text-zinc-400 mt-0.5">muốn thêm bài hát vào hàng đợi</p>
+                    </div>
                   </div>
-                  <div className="text-sm font-semibold text-emerald-400">
-                    {getUserName(payload.requestedBy)} <span className="text-white/60 font-medium">muốn thêm bài hát</span>
+
+                  {/* Song card */}
+                  <div className="flex items-center gap-3 bg-white/[0.05] rounded-xl p-2.5 border border-white/5 mb-3.5 relative overflow-hidden group">
+                    <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-emerald-500/10 to-transparent pointer-events-none" />
+                    <img
+                      src={payload.songId?.imageUrl}
+                      alt={payload.songId?.name}
+                      className="size-11 rounded-lg object-cover shadow-lg shrink-0 ring-1 ring-white/10"
+                    />
+                    <div className="min-w-0 flex-1 z-10">
+                      <div className="font-semibold text-white text-sm truncate leading-snug">{payload.songId?.name}</div>
+                      <div className="text-xs text-zinc-500 truncate mt-0.5">{(payload.songId?.artistId as any)?.name}</div>
+                    </div>
+                    {/* Pulse indicator */}
+                    <div className="relative shrink-0 z-10">
+                      <div className="size-2.5 rounded-full bg-emerald-400 shadow shadow-emerald-500/60" />
+                      <div className="absolute inset-0 size-2.5 rounded-full bg-emerald-400 animate-ping opacity-60" />
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-center gap-3 bg-black/40 rounded-xl p-2.5 border border-white/5">
-                  <img src={payload.songId?.imageUrl} alt={payload.songId?.name} className="h-12 w-12 rounded-lg object-cover shadow-md" />
-                  <div className="min-w-0 flex-1">
-                    <div className="font-bold text-white text-[14px] truncate">{payload.songId?.name}</div>
-                    <div className="text-xs text-white/50 truncate mt-0.5">{payload.songId?.artistId?.name}</div>
+
+                  {/* Action buttons */}
+                  <div className="flex gap-2">
+                    <Button
+                      type="primary"
+                      className="flex-1 h-9 rounded-xl !bg-gradient-to-r !from-emerald-500 !to-emerald-600 hover:!from-emerald-400 hover:!to-emerald-500 !border-none !text-white !text-sm !font-semibold !shadow-lg !shadow-emerald-500/30 transition-all"
+                      onClick={() => { handleResolveRequest(payload._id, RoomQueueItemStatus.APPROVED); notifyApi.destroy(payload._id); }}
+                    >
+                      ✓ Chấp nhận
+                    </Button>
+                    <Button
+                      className="flex-1 h-9 rounded-xl !bg-white/5 hover:!bg-red-500/15 !border !border-white/10 hover:!border-red-500/40 !text-zinc-400 hover:!text-red-400 !text-sm !font-medium transition-all"
+                      onClick={() => { handleResolveRequest(payload._id, RoomQueueItemStatus.REJECTED); notifyApi.destroy(payload._id); }}
+                    >
+                      ✕ Từ chối
+                    </Button>
                   </div>
-                </div>
-                <div className="mt-4 flex gap-2">
-                  <Button type="primary" className="flex-1 bg-emerald-500 hover:!bg-emerald-400 border-none font-semibold h-9 rounded-lg" onClick={() => { handleResolveRequest(payload._id, RoomQueueItemStatus.APPROVED); notifyApi.destroy(payload._id); }}>
-                    Chấp nhận
-                  </Button>
-                  <Button className="flex-1 bg-white/5 hover:!bg-rose-500 hover:!text-white hover:!border-rose-500 border-white/10 text-white/70 font-semibold h-9 rounded-lg transition-all" onClick={() => { handleResolveRequest(payload._id, RoomQueueItemStatus.REJECTED); notifyApi.destroy(payload._id); }}>
-                    Từ chối
-                  </Button>
                 </div>
               </div>
             ),

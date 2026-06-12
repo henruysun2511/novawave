@@ -14,8 +14,8 @@ export default function PlaylistList({ playlists }: { playlists: Playlist[] }) {
 
     return (
         <Swiper
-            slidesPerView={6}
-            spaceBetween={20}
+            slidesPerView={2}
+            spaceBetween={12}
             slidesPerGroup={1}
             navigation
             modules={[Navigation, Autoplay]}
@@ -27,8 +27,8 @@ export default function PlaylistList({ playlists }: { playlists: Playlist[] }) {
                 disableOnInteraction: false,
             }}
             breakpoints={{
-                320: { slidesPerView: 2, spaceBetween: 10 },
-                640: { slidesPerView: 3, spaceBetween: 15 },
+                480: { slidesPerView: 3, spaceBetween: 16 },
+                768: { slidesPerView: 4, spaceBetween: 16 },
                 1024: { slidesPerView: 5, spaceBetween: 20 },
                 1280: { slidesPerView: 6, spaceBetween: 20 },
             }}

@@ -144,20 +144,18 @@ export default function CreateRoomPage() {
       </div>
 
       <div className="mx-auto max-w-7xl space-y-8 px-4 py-8">
-        {/* Nút quay lại với hiệu ứng Glassmorphism nhẹ */}
         <Button
           icon={<ArrowLeftOutlined />}
           onClick={() => router.push("/room")}
-          className="border-white/10 bg-white/5 text-white hover:!bg-white/10 hover:!border-emerald-500/50"
+          className="bg-emerald-500 border-none"
         >
-          Quay lại danh sách phòng
+          Danh sách phòng
         </Button>
 
         <div className="grid gap-8 xl:grid-cols-[1.2fr_0.8fr]">
           {/* CỘT TRÁI: FORM NHẬP LIỆU */}
           <Card
-            className="rounded-[32px] border-white/10 bg-[#121212]/60 backdrop-blur-xl shadow-2xl"
-
+            className="rounded-2xl border-[#333] bg-[var(--background-secondary)] shadow-lg"
           >
             <div className="mb-10">
               <div className="inline-block rounded-full bg-emerald-500/10 px-4 py-1 text-[10px] font-bold uppercase tracking-[0.25em] text-emerald-400 border border-emerald-500/20">
@@ -176,28 +174,28 @@ export default function CreateRoomPage() {
             >
               <div className="grid gap-6 md:grid-cols-2">
                 <Form.Item
-                  label={<span className="text-xs font-bold uppercase tracking-wider text-white/60">Tên phòng</span>}
+                  label={<span className="text-white text-base">Tên phòng</span>}
                   name="name"
                   rules={[{ required: true, message: "Vui lòng nhập tên phòng" }]}
                 >
-                  <Input size="large" placeholder="Ví dụ: Lofi ban đêm..." className="h-12 rounded-xl border-white/10 bg-white/5 text-white focus:bg-white/10" />
+                  <Input size="large" className="text-white" placeholder="Ví dụ: Lofi ban đêm..." />
                 </Form.Item>
 
                 <Form.Item
-                  label={<span className="text-xs font-bold uppercase tracking-wider text-white/60">Lịch bắt đầu</span>}
+                  label={<span className="text-white text-base">Lịch bắt đầu</span>}
                   name="scheduledAt"
                 >
-                  <Input size="large" type="datetime-local" prefix={<CalendarOutlined className="text-emerald-400" />} className="h-12 rounded-xl border-white/10 bg-white/5 text-white focus:bg-white/10" />
+                  <Input size="large" type="datetime-local" prefix={<CalendarOutlined className="text-emerald-400" />} className="text-white" />
                 </Form.Item>
               </div>
 
-              <Form.Item label={<span className="text-xs font-bold uppercase tracking-wider text-white/60">Mô tả phòng</span>} name="description">
-                <Input.TextArea rows={3} placeholder="Chia sẻ một chút về phong cách nhạc của phòng này..." className="rounded-xl border-white/10 bg-white/5 text-white focus:bg-white/10" />
+              <Form.Item label={<span className="text-white text-base">Mô tả phòng</span>} name="description">
+                <Input.TextArea rows={3} className="text-white" placeholder="Chia sẻ một chút về phong cách nhạc của phòng này..." />
               </Form.Item>
 
-              <Form.Item label={<span className="text-xs font-bold uppercase tracking-wider text-white/60">Chọn nguồn phát âm nhạc</span>} required>
+              <Form.Item label={<span className="text-white text-base">Chọn nguồn phát âm nhạc</span>} required>
                 <div className="space-y-4">
-                  <div className="rounded-2xl bg-white/5 p-1.5 border border-white/5">
+                  <div className="rounded-2xl bg-white/5 p-1.5 border border-[#333]">
                     <Segmented
                       block
                       className="custom-segmented-create bg-transparent"
@@ -217,10 +215,9 @@ export default function CreateRoomPage() {
                     prefix={<SearchOutlined className="text-emerald-400" />}
                     placeholder={`Tìm ${sourceType === RoomSourceType.SONG ? "bài hát" : sourceType === RoomSourceType.ALBUM ? "album" : "playlist"}...`}
                     onChange={(event) => setKeyword(event.target.value)}
-                    className="h-12 rounded-xl border-white/10 bg-white/5 text-black focus:bg-white/10"
+                    className="text-white"
                   />
 
-                  {/* List kết quả tìm kiếm được cải tiến */}
                   <div className="max-h-[380px] space-y-2 overflow-y-auto rounded-2xl bg-black/20 p-2 scrollbar-thin scrollbar-thumb-white/10">
                     {isFetching ? (
                       <div className="flex flex-col items-center py-10 gap-3">
@@ -281,6 +278,8 @@ export default function CreateRoomPage() {
               </div>
             </Form>
           </Card>
+
+          {/* CỘT PHẢI: PREVIEW CARD */}
 
           {/* CỘT PHẢI: PREVIEW CARD */}
           <div className="sticky top-8 space-y-6">

@@ -56,20 +56,20 @@ export default function SongCard({ song }: Props) {
 
     return (
         <>
-            <div className="group flex flex-col cursor-pointer my-2 w-[180px] rounded-xl hover:bg-[var(--background-tertiary)] p-2 transition">
+            <div className="group flex flex-col cursor-pointer my-2 w-full rounded-xl hover:bg-[var(--background-tertiary)] p-2 transition">
 
                 {/* Ảnh */}
-                <div className="relative w-full h-full">
+                <div className="relative w-full">
 
                     {song.imageUrl ? (
                         <img
-                            className="w-[180px] h-[180px] object-cover rounded-xl"
+                            className="w-full aspect-square object-cover rounded-xl"
                             src={song.imageUrl}
                             alt={song.name}
                         />
                     ) : (
                         <div
-                            className="w-[160px] h-[180px] rounded-xl flex items-center justify-center bg-gray-600 text-white text-7xl font-bold"
+                            className="w-full aspect-square rounded-xl flex items-center justify-center bg-gray-600 text-white text-5xl font-bold"
                             title={song.name}
                         >
                             {song.name ? song.name.charAt(0).toUpperCase() : '?'}

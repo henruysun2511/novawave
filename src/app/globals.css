@@ -85,51 +85,51 @@ body {
 
 
 #waveform {
-    width: 100%;
+  width: 100%;
 }
 
 
 .ant-pagination-item {
-    background-color: var(--background-tertiary) !important;
-    border-color: #333333 !important;
+  background-color: var(--background-tertiary) !important;
+  border-color: #333333 !important;
 }
 
 .ant-pagination-item a {
-    color: var(--color-text-secondary) !important;
+  color: var(--color-text-secondary) !important;
 }
 
 /* Màu cho nút đang được chọn (Active) */
 .ant-pagination-item-active {
-    background-color: var(--color-green) !important;
-    border-color: var(--color-green) !important;
+  background-color: var(--color-green) !important;
+  border-color: var(--color-green) !important;
 }
 
 .ant-pagination-item-active a {
-    color: white !important;
+  color: white !important;
 }
 
 /* Các nút điều hướng (Next/Prev) */
 .ant-pagination-prev .ant-pagination-item-link,
 .ant-pagination-next .ant-pagination-item-link {
-    background-color: var(--background-tertiary) !important;
-    border-color: #333333 !important;
-    color: white !important;
+  background-color: var(--background-tertiary) !important;
+  border-color: #333333 !important;
+  color: white !important;
 }
 
 /* Hiệu ứng Hover */
-.ant-pagination-item:hover, 
-.ant-pagination-prev:hover .ant-pagination-item-link, 
+.ant-pagination-item:hover,
+.ant-pagination-prev:hover .ant-pagination-item-link,
 .ant-pagination-next:hover .ant-pagination-item-link {
-    border-color: var(--color-green) !important;
+  border-color: var(--color-green) !important;
 }
 
 .ant-pagination-item:hover a {
-    color: var(--color-green) !important;
+  color: var(--color-green) !important;
 }
 
 /* Màu cho các dấu chấm (...) */
 .ant-pagination-item-ellipsis {
-    color: var(--color-text-secondary) !important;
+  color: var(--color-text-secondary) !important;
 }
 
 /*song-bar*/
@@ -149,7 +149,7 @@ body {
 }
 
 .custom-audio-player .rhap_progress-indicator {
-  background-color: var(--color-green) !important; 
+  background-color: var(--color-green) !important;
 }
 
 .custom-audio-player .rhap_time,
@@ -176,7 +176,7 @@ body {
 }
 
 .custom-audio-player.ad-mode .rhap_progress-indicator {
-  background-color: #888; 
+  background-color: #888;
 }
 
 
@@ -208,7 +208,8 @@ body {
   height: 3px !important;
   border-radius: 3px 3px 0 0;
   box-shadow: 0 -2px 10px rgba(37, 162, 106, 0.8);
-  bottom: 0 !important; /* Đảm bảo nó nằm sát mép dưới */
+  bottom: 0 !important;
+  /* Đảm bảo nó nằm sát mép dưới */
 }
 
 /* Các tab riêng lẻ */
@@ -234,11 +235,13 @@ body {
 
 /* Tab đang Active */
 .custom-room-tabs .ant-tabs-tab-active {
-  background: rgba(37, 162, 106, 0.05) !important; /* Màu xanh emerald nhạt */
+  background: rgba(37, 162, 106, 0.05) !important;
+  /* Màu xanh emerald nhạt */
 }
 
 .custom-room-tabs .ant-tabs-tab-active .ant-tabs-tab-btn {
-  color: #25a26a !important; /* var(--color-green) */
+  color: #25a26a !important;
+  /* var(--color-green) */
   text-shadow: 0 0 15px rgba(37, 162, 106, 0.4);
 }
 
@@ -274,21 +277,21 @@ body {
 
 
 .ant-segmented {
-background-color: transparent;
+  background-color: transparent;
 }
 
 .ant-segmented-item {
-color: white;
-font-weight: 500;
+  color: white;
+  font-weight: 500;
 }
 
 .ant-segmented-item-selected {
-background-color: var(--color-green); 
-color: black;
+  background-color: var(--color-green);
+  color: black;
 }
 
 .ant-menu-sub {
-background: #1a1a1a !important;
+  background: #1a1a1a !important;
 }
 
 
@@ -301,7 +304,8 @@ background: #1a1a1a !important;
 /* INPUT BÊN TRONG */
 .custom-search .ant-input-affix-wrapper input.ant-input {
   background-color: var(--background-secondary) !important;
-  color: white !important;           /* Màu chữ */
+  color: white !important;
+  /* Màu chữ */
 }
 
 /* Placeholder */
@@ -346,7 +350,8 @@ background: #1a1a1a !important;
 /* 3. Hiệu ứng Hover item */
 .ant-dropdown .ant-dropdown-menu-item-hover,
 .ant-dropdown .ant-dropdown-menu-item:hover {
-  background-color: rgba(37, 162, 106, 0.15) !important; /* Màu xanh emerald nhạt */
+  background-color: rgba(37, 162, 106, 0.15) !important;
+  /* Màu xanh emerald nhạt */
   color: var(--color-green) !important;
 }
 
@@ -391,10 +396,14 @@ background: #1a1a1a !important;
 
 /* 1. Container chính của thông báo */
 .ant-notification-notice {
-  background: rgba(28, 28, 28, 0.8) !important; /* Nền tối có độ trong suốt */
-  backdrop-filter: blur(16px) !important;       /* Hiệu ứng kính mờ */
-  border: 1px solid rgba(37, 162, 106, 0.3) !important; /* Viền xanh emerald mờ */
-  border-radius: 24px !important;               /* Bo góc lớn đồng bộ với UI */
+  background: rgba(28, 28, 28, 0.8) !important;
+  /* Nền tối có độ trong suốt */
+  backdrop-filter: blur(16px) !important;
+  /* Hiệu ứng kính mờ */
+  border: 1px solid rgba(37, 162, 106, 0.3) !important;
+  /* Viền xanh emerald mờ */
+  border-radius: 24px !important;
+  /* Bo góc lớn đồng bộ với UI */
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4) !important;
   padding: 20px !important;
   overflow: hidden;
@@ -422,7 +431,8 @@ background: #1a1a1a !important;
 }
 
 .ant-notification-notice-close:hover {
-  color: #25a26a !important; /* Đổi sang xanh khi hover */
+  color: #25a26a !important;
+  /* Đổi sang xanh khi hover */
 }
 
 /* 5. Tùy chỉnh các phần tử bên trong thông báo (dựa trên cấu trúc JSX trong file page.tsx của bạn) */
@@ -435,7 +445,8 @@ background: #1a1a1a !important;
 
 /* Tên nghệ sĩ */
 .ant-notification-notice-description .text-black\/55 {
-  color: rgba(255, 255, 255, 0.45) !important; /* Fix lỗi text đen trên nền tối */
+  color: rgba(255, 255, 255, 0.45) !important;
+  /* Fix lỗi text đen trên nền tối */
 }
 
 /* Chỉnh lại các Button Action trong thông báo */
@@ -476,10 +487,13 @@ background: #1a1a1a !important;
 
 /* Tùy chỉnh container chứa thông báo */
 .ant-message-notice-content {
-  background: rgba(18, 18, 18, 0.8) !important; /* Nền tối trong suốt */
-  backdrop-filter: blur(12px) !important;       /* Hiệu ứng kính */
+  background: rgba(18, 18, 18, 0.8) !important;
+  /* Nền tối trong suốt */
+  backdrop-filter: blur(12px) !important;
+  /* Hiệu ứng kính */
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  border-radius: 16px !important;              /* Bo góc mạnh */
+  border-radius: 16px !important;
+  /* Bo góc mạnh */
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
   padding: 12px 20px !important;
 }
@@ -493,13 +507,30 @@ background: #1a1a1a !important;
 
 /* Tùy chỉnh màu sắc riêng cho từng loại icon */
 .ant-message-success .anticon {
-  color: #10b981 !important; /* Màu xanh emerald-500 */
+  color: #10b981 !important;
+  /* Màu xanh emerald-500 */
 }
 
 .ant-message-error .anticon {
-  color: #ef4444 !important; /* Màu đỏ */
+  color: #ef4444 !important;
+  /* Màu đỏ */
 }
 
 .ant-message-warning .anticon {
-  color: #f59e0b !important; /* Màu vàng */
+  color: #f59e0b !important;
+  /* Màu vàng */
+}
+
+.custom-music-notification {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  /* Xóa khoảng trống thừa gây lộ viền xám bẩn */
+}
+
+.custom-music-notification .ant-notification-notice-content {
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
 }

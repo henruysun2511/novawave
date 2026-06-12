@@ -20,9 +20,8 @@ export default function LoginPage() {
         mutate(values, {
             onSuccess: () => {
                 toast.success("Đăng nhập thành công");
-                setTimeout(() => {
-                    router.push("/");
-                }, 2000);
+                router.refresh();
+                router.push("/");
             },
             onError: (error) => {
                 const err = error as any;

@@ -6,10 +6,13 @@ import Title from "@/components/common/title";
 import { useArtistList } from "@/queries/useArtistQuery";
 import { useSettings } from "@/queries/useSettingQuery";
 import { Artist } from "@/types/object.type";
-import { Pagination } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+import { Button, Pagination } from "antd";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function ArtistPage() {
+    const router = useRouter();
     const [params, setParams] = useState({
         page: 1,
         size: 10
@@ -51,7 +54,17 @@ export default function ArtistPage() {
             </div>
 
             <div className="p-4 md:p-6">
-                <Title>Danh sách nghệ sĩ</Title>
+                <div className="flex items-center justify-between">
+                    <Title>Danh sách nghệ sĩ</Title>
+                    <Button
+                        type="primary"
+                        icon={<PlusOutlined />}
+                        onClick={() => router.push("/artist/createArtist")}
+                        className="bg-emerald-500 border-none font-semibold rounded-xl"
+                    >
+                        Đăng ký nghệ sĩ
+                    </Button>
+                </div>
                 {isArtistPending ? (
                     <CircleSkeleton />
                 ) : artists && artists.length > 0 ? (

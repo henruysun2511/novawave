@@ -282,7 +282,7 @@ export default function AdminSettingPage() {
                     type="primary"
                     icon={<SaveOutlined />}
                     size="large"
-                    className="h-12 px-8 bg-green-600 hover:bg-green-500 border-none shadow-lg shadow-green-900/20"
+                    className="h-12 px-8 bg-emerald-500 hover:bg-emerald-400 border-none"
                     onClick={() => form.submit()}
                     loading={updateSettingsMutation.isPending}
                 >
@@ -293,8 +293,7 @@ export default function AdminSettingPage() {
             <Form form={form} layout="vertical" onFinish={onFinish} requiredMark={false}>
                 <Tabs
                     defaultActiveKey="1"
-                    type="card"
-                    className="custom-settings-tabs"
+                    className="custom-room-tabs"
                     items={[
                         { key: "1", label: "Thông tin chung", children: renderGeneralTab() },
                         { key: "2", label: "Quản lý Banner", children: renderBannerTab() },
@@ -312,10 +311,6 @@ export default function AdminSettingPage() {
             </Form>
 
             <style jsx global>{`
-                .custom-settings-tabs .ant-tabs-nav::before { border-bottom-color: #303030 !important; }
-                .custom-settings-tabs .ant-tabs-tab { background: #141414 !important; border-color: #303030 !important; }
-                .custom-settings-tabs .ant-tabs-tab-active { background: #1F1F1F !important; border-bottom-color: #1F1F1F !important; }
-                .custom-settings-tabs .ant-tabs-tab-active .ant-tabs-tab-btn { color: #25A26A !important; }
                 .ant-form-item-label label { color: #a3a3a3 !important; font-size: 13px !important; }
                 .ant-input { background-color: #141414 !important; border-color: #303030 !important; color: white !important; }
                 .ant-input:hover, .ant-input:focus { border-color: #25A26A !important; }

@@ -30,7 +30,12 @@ export function upsertParticipant(items: RoomParticipant[], incoming: RoomPartic
   const index = items.findIndex((item) => item._id === incoming._id || getUserId(item.userId) === getUserId(incoming.userId));
   if (index === -1) return [incoming, ...items];
   const next = [...items];
-  next[index] = incoming;
+  const existing = next[index];
+  if (typeof incoming.userId === "string" && typeof existing.userId !== "string") {
+    next[index] = { ...incoming, userId: existing.userId };
+  } else {
+    next[index] = incoming;
+  }
   return next;
 }
 

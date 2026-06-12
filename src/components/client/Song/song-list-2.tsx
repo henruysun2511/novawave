@@ -7,7 +7,7 @@ export default function SongList2({ songs }: { songs: Song[] | undefined }) {
   }
 
   return (
-    <div className="flex flex-wrap gap-4">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
       {songs.map((song) => (
         <SongCard key={song._id} song={song} />
       ))}

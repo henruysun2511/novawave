@@ -12,8 +12,8 @@ export default function AlbumList({albums} : {albums : Album[]}) {
     return (
         <>
             <Swiper
-                slidesPerView={6}
-                spaceBetween={20}
+                slidesPerView={2}
+                spaceBetween={12}
                 slidesPerGroup={1}  
                 navigation
                 modules={[Navigation, Autoplay]}
@@ -23,6 +23,12 @@ export default function AlbumList({albums} : {albums : Album[]}) {
                 autoplay={{
                     delay: 3000,
                     disableOnInteraction: false,
+                }}
+                breakpoints={{
+                    480: { slidesPerView: 3, spaceBetween: 16 },
+                    768: { slidesPerView: 4, spaceBetween: 16 },
+                    1024: { slidesPerView: 5, spaceBetween: 20 },
+                    1280: { slidesPerView: 6, spaceBetween: 20 },
                 }}
             >
                 {albums?.map((album) => (
